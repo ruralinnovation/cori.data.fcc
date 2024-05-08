@@ -2,19 +2,19 @@
 % Please edit documentation in R/check_frn.R
 \name{check_frn}
 \alias{check_frn}
-\title{Get info on 1 frn}
+\title{Get info on one frn}
 \usage{
 check_frn(frn)
 }
 \arguments{
-\item{frn}{}
+\item{frn}{a FCC FRN, it can be a number or a string}
 }
 \value{
 a table with info on FRN
 }
 \description{
-Get info on 1 frn
+Get info on one frn
 }
 \examples{
-check_frn(8181448)
+check_frn(81814488181448)
 }
