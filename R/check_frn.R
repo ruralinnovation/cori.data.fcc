@@ -1,6 +1,6 @@
-#' Get info on one frn
+#' Get info on one or nor FRN
 #'
-#' @param frn a FCC FRN, it can be a number or a string
+#' @param frn one or more FCC FRN, it can be a number or a string
 #'
 #' @return a table with info on FRN
 #' @export
@@ -10,5 +10,7 @@
 
 check_frn <- function(frn) {
   frn_pad <- sprintf("%010s", frn)
-  fcc_provider[fcc_provider[["FRN"]] == frn_pad, ]
+  filter <- fcc_provider[["FRN"]] %in% frn_pad
+  dat <- fcc_provider[filter, ]
+  return(dat)
 }
