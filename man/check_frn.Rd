@@ -16,5 +16,5 @@ a table with info on FRN
 Get info on one or nor FRN
 }
 \examples{
-check_frn(81814488181448)
+check_frn(8181448)
 }

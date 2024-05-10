@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-#' check_frn(81814488181448)
+#' check_frn(8181448)
 
 check_frn <- function(frn) {
   frn_pad <- sprintf("%010s", frn)
