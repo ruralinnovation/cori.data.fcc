@@ -9,7 +9,7 @@
 #'   \item{Affiliation}{Affiliation}
 #'   \item{Operation.Type}{ILEC or not}
 #'   \item{FRN}{FCC Registration Number, number of the entity that submited the data}
-#'   \item{Provider.ID}{Provider ID} 
+#'   \item{Provider.ID}{Provider ID}
 #' }
 #' @source <https://us-fcc.app.box.com/v/bdcprovideridtable>
 "fcc_provider"

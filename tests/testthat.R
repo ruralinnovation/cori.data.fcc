@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(fcc.utils)
+library(cori.data.fcc)
 
-test_check("fcc.utils")
+test_check("cori.data.fcc")
