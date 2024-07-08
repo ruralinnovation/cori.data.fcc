@@ -2,18 +2,20 @@
 #'
 #' Just a draft of a function that download all NBM data related to CORI works
 #' It motsly works in my setup (download in ~/data_swamp)
-#' 
+#'
 #' @param path_to_dl a string by default "~/data_swamp"
-#' @param release_date a string can be "December 31, 2023" or "June 30, 2023" 
+#' @param release_date a string can be "December 31, 2023" or "June 30, 2023"
 #' @param data_type a string "Fixed Broadband"
 #' @param data_category a string "Nationwide"
-#' 
-#' @return A lot of zipped file 
+#'
+#' @return A lot of zipped file
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' system("mkdir -p  ~/data_swamp")
 #' nbm_data <- dl_nbm(release_date = "June 30, 2023")
+#' }
 
 
 dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
@@ -33,11 +35,9 @@ dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
   all_data_to_dl <- get_nbm_available()
   one_release_to_dl <- all_data_to_dl[all_data_to_dl$release == release_date, ]
   one_release_to_dl <-
-    one_release_to_dl[one_release_to_dl$data_type == data_type, ] 
+    one_release_to_dl[one_release_to_dl$data_type == data_type, ]
   one_release_to_dl <-
     one_release_to_dl[one_release_to_dl$data_category == data_category, ]
-
-  print(str(one_release_to_dl))
 
   for (i in seq_len(nrow(one_release_to_dl))) {
 
