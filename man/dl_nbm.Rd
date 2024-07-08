@@ -28,6 +28,8 @@ Just a draft of a function that download all NBM data related to CORI works
 It motsly works in my setup (download in ~/data_swamp)
 }
 \examples{
+\dontrun{
 system("mkdir -p  ~/data_swamp")
 nbm_data <- dl_nbm(release_date = "June 30, 2023")
+}
 }
