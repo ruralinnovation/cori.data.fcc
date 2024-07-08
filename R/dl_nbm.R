@@ -50,7 +50,7 @@ dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
       next
     }
 
-    try(download.file(url = paste0(base_url, one_release_to_dl$id[i], "/1"),
+    try(utils::download.file(url = paste0(base_url, one_release_to_dl$id[i], "/1"),
                       destfile =  dest_file,
                       headers = c("User-Agent" = user_agent)))
   }

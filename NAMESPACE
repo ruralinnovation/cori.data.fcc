@@ -2,5 +2,8 @@
 
 export(check_frn)
 export(dl_nbm)
+export(fcc_to_parquet)
 export(get_nbm_available)
 export(get_nbm_release)
+import(DBI)
+import(duckdb)
