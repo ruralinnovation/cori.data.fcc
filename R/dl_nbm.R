@@ -14,7 +14,7 @@
 #' @examples
 #' \dontrun{
 #' system("mkdir -p  ~/data_swamp")
-#' nbm_data <- dl_nbm(release_date = "June 30, 2023")
+#' dl_nbm(release_date = "June 30, 2023")
 #' }
 
 
