@@ -3,7 +3,7 @@ Title: Pot Pourri FCC Data (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
     person("Olivier", "Leroy", , "olivier.leroy@ruralinnovation.us", role = c("aut", "cre"))
-Description: Some functions usefull when dealing with FCC data.
+Description: Some functions useful when dealing with FCC data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
