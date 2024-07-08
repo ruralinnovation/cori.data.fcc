@@ -26,7 +26,7 @@ get_nbm_available <- function(get_data_url = "https://broadbandmap.fcc.gov/nbm/m
 
   all_data <- do.call(rbind, big_list)
 
-  col_to_keep <- c("release", "data_type", "technology_code",
+  col_to_keep <- c("id", "release", "data_type", "technology_code",
                    "state_fips", "provider_id", "file_name", "file_type",
                    "data_category")
 
