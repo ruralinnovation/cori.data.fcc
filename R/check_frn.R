@@ -10,7 +10,7 @@
 
 check_frn <- function(frn) {
   frn_pad <- sprintf("%010s", frn)
-  filter <- cori.data.fcc::fcc_provider[["FRN"]] %in% frn_pad
+  filter <- cori.data.fcc::fcc_provider[["frn"]] %in% frn_pad
   dat <- cori.data.fcc::fcc_provider[filter, ]
   return(dat)
 }
