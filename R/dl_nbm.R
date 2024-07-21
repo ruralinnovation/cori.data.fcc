@@ -40,6 +40,7 @@ dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
   one_release_to_dl <-
     one_release_to_dl[one_release_to_dl$data_category == data_category, ]
 
+  # def should be refactored ..
   for (i in seq_len(nrow(one_release_to_dl))) {
 
     dest_file <- paste0(path_to_dl, "/",
@@ -53,6 +54,6 @@ dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
 
     try(utils::download.file(url = paste0(base_url, one_release_to_dl$id[i], "/1"),
                       destfile =  dest_file,
-                      headers = c("User-Agent" = user_agent)), ...)
+                      headers = c("User-Agent" = user_agent), ...))
   }
 }
