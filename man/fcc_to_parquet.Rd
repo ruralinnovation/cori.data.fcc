@@ -25,6 +25,7 @@ fcc_to_parquet(
 }
 \description{
 Draft version of converting a lot of FCC NBM CSVs into a parquet file system
+DuckDB is quite greedy on your system (but fast)
 }
 \examples{
 \dontrun{

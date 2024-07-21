@@ -1,6 +1,7 @@
 #' Convert CSVs to parquet for NBM data
 #'
 #' Draft version of converting a lot of FCC NBM CSVs into a parquet file system
+#' DuckDB is quite greedy on your system (but fast)
 #'
 #' @param parquet_name a path were the parquet files should be stored
 #' @param src_directory a directory containing only the csv needed
