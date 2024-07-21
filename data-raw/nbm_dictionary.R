@@ -26,6 +26,7 @@ names(bb_sum_geo)
 nbm_dictionary <- data.frame(data_type = rep(data_type,
                                              length(names(bb_sum_geo))),
                              data_category = "Nationwide",
-                             field = names(bb_sum_geo))
+                             field = names(bb_sum_geo),
+                             description = "")
 
 usethis::use_data(nbm_dictionary , overwrite = TRUE)
