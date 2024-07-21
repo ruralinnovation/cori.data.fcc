@@ -9,11 +9,11 @@
 
 A data frame with 4,341 rows and 5 columns:
 \describe{
-\item{Provider.Name}{Provider name}
-\item{Affiliation}{Affiliation}
-\item{Operation.Type}{ILEC or not}
-\item{FRN}{FCC Registration Number, number of the entity that submited the data}
-\item{Provider.ID}{Provider ID}
+\item{provider_name}{Provider name}
+\item{ffiliation}{Affiliation}
+\item{operation_type}{ILEC or not}
+\item{frn}{FCC Registration Number, number of the entity that submited the data}
+\item{provider_i}{Provider ID}
 }
 }
 }
