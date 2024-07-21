@@ -8,7 +8,8 @@ dl_nbm(
   path_to_dl = "~/data_swamp",
   release_date = "June 30, 2023",
   data_type = "Fixed Broadband",
-  data_category = "Nationwide"
+  data_category = "Nationwide",
+  ...
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ dl_nbm(
 \item{data_type}{a string "Fixed Broadband"}
 
 \item{data_category}{a string "Nationwide"}
+
+\item{...}{additional parameters for download.file()}
 }
 \value{
 A lot of zipped file
@@ -30,6 +33,6 @@ It motsly works in my setup (download in ~/data_swamp)
 \examples{
 \dontrun{
 system("mkdir -p  ~/data_swamp")
-nbm_data <- dl_nbm(release_date = "June 30, 2023")
+dl_nbm(release_date = "June 30, 2023")
 }
 }

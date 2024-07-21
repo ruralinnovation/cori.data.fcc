@@ -7,6 +7,7 @@
 #' @param release_date a string can be "December 31, 2023" or "June 30, 2023"
 #' @param data_type a string "Fixed Broadband"
 #' @param data_category a string "Nationwide"
+#' @param ... additional parameters for download.file()
 #'
 #' @return A lot of zipped file
 #' @export
@@ -20,10 +21,10 @@
 
 dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
                    data_type = "Fixed Broadband",
-                   data_category = "Nationwide") {
+                   data_category = "Nationwide", ...) {
   # clean my mess
   prev_timeout <- getOption("timeout")
-  on.exit(options(timeout = prev_timeout))
+  on.exit(options(timeout = prev_timeout), add = TRUE)
   options(timeout = max(360, getOption("timeout")))
 
 
@@ -52,6 +53,6 @@ dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
 
     try(utils::download.file(url = paste0(base_url, one_release_to_dl$id[i], "/1"),
                       destfile =  dest_file,
-                      headers = c("User-Agent" = user_agent)))
+                      headers = c("User-Agent" = user_agent)), ...)
   }
 }
