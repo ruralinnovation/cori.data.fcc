@@ -4,6 +4,9 @@
 # cori.data.fcc
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/ruralinnovation/cori.data.fcc/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ruralinnovation/cori.data.fcc?branch=main)
 <!-- badges: end -->
 
 The goal of cori.data.fcc is to facilate the discovery, the download and
