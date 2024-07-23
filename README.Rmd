@@ -1,0 +1,71 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# cori.data.fcc
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of cori.data.fcc is to facilate the discovery, the download and the use of FCC's National Broadband Map [(NBM)](https://broadbandmap.fcc.gov/home) data.
+
+## Installation
+
+You can install the development version of cori.data.fcc from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("ruralinnovation/cori.data.fcc")
+```
+
+## Example
+
+This is a basic example which shows some basic workflow:
+
+```{r example-release}
+library(cori.data.fcc)
+
+release <- get_nbm_release() # get the available releases
+release
+```
+
+You can also inspect what is available:
+
+```{r example-available}
+nbm <- get_nbm_available() # get what data is available
+# if we are intrested in  "Fixed Broadband" / "Nationwide" / released "June 30, 2023"
+nbm_filter <- nbm[which(nbm$release == "June 30, 2023" &
+                        nbm$data_type == "Fixed Broadband" &
+                        nbm$data_category == "Nationwide"), ]
+rownames(nbm_filter) <- NULL
+
+
+# or
+nbm_dplyr_filter <- nbm |> dplyr::filter(release == "June 30, 2023" &
+                                         data_type == "Fixed Broadband" &
+                                         data_category == "Nationwide")
+all.equal(nbm_filter, nbm_dplyr_filter)
+head(nbm_filter)
+```
+
+
+The package also provide the list of Provider ID and FRN 
+
+```{r fcc_provider}
+str(fcc_provider)
+```
+
+## Inspiration
+
+This package was imspired by https://github.com/bbcommons/bfm-explorer 
