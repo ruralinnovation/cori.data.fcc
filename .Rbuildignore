@@ -2,3 +2,4 @@
 ^data-raw$
 ^README\.Rmd$
 ^codecov\.yml$
+^\.github$

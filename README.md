@@ -7,6 +7,7 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/ruralinnovation/cori.data.fcc/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ruralinnovation/cori.data.fcc?branch=main)
+[![R-CMD-check](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of cori.data.fcc is to facilate the discovery, the download and
