@@ -1,8 +1,8 @@
 Package: cori.data.fcc
-Title: Pot Pourri FCC Data (One Line, Title Case)
+Title: Pot Pourri FCC Data 
 Version: 0.0.0.9000
 Authors@R: 
-    person("Olivier", "Leroy", , "olivier.leroy@ruralinnovation.us", role = c("aut", "cre"))
+    person(given="Olivier", family="Leroy", email="olivier.leroy@ruralinnovation.us", role = c("aut", "cre"))
 Description: Some functions useful when dealing with FCC data.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -12,14 +12,14 @@ Depends:
     R (>= 2.10)
 LazyData: true
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    pkgdown
 Config/testthat/edition: 3
 Imports: 
     curl,
     jsonlite,
     utils,
     DBI,
-    pkgdown,
     duckdb,
     stringi
 URL: https://ruralinnovation.github.io/cori.data.fcc/
