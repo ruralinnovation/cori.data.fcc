@@ -19,5 +19,7 @@ Imports:
     jsonlite,
     utils,
     DBI,
-    duckdb
+    pkgdown,
+    duckdb,
+    stringi
 URL: https://ruralinnovation.github.io/cori.data.fcc/
