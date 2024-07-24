@@ -20,3 +20,4 @@ Imports:
     utils,
     DBI,
     duckdb
+URL: https://ruralinnovation.github.io/cori.data.fcc/
