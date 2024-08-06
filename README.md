@@ -98,4 +98,4 @@ str(fcc_provider)
 
 ## Inspiration
 
-This package was imspired by <https://github.com/bbcommons/bfm-explorer>
+This package was inspired by <https://github.com/bbcommons/bfm-explorer>
