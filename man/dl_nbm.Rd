@@ -9,6 +9,7 @@ dl_nbm(
   release_date = "June 30, 2023",
   data_type = "Fixed Broadband",
   data_category = "Nationwide",
+  user_agent = the$user_agent,
   ...
 )
 }
@@ -20,6 +21,8 @@ dl_nbm(
 \item{data_type}{a string "Fixed Broadband"}
 
 \item{data_category}{a string "Nationwide"}
+
+\item{user_agent}{a string set up by default}
 
 \item{...}{additional parameters for download.file()}
 }

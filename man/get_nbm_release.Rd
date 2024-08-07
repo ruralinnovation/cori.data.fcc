@@ -6,14 +6,13 @@
 \usage{
 get_nbm_release(
   filing_url = "https://broadbandmap.fcc.gov/nbm/map/api/published/filing",
-  useragent =
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"
+  user_agent = the$user_agent
 )
 }
 \arguments{
 \item{filing_url}{a string providing NBM filing API. Default is "https://broadbandmap.fcc.gov/nbm/map/api/published/filing"}
 
-\item{useragent}{set a default user agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"}
+\item{user_agent}{set a default user agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"}
 }
 \value{
 A data frame.
