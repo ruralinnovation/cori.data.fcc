@@ -5,18 +5,25 @@
 \title{Get release available in FCC NBM}
 \usage{
 get_nbm_available(
-  get_data_url =
-    "https://broadbandmap.fcc.gov/nbm/map/api/national_map_process/nbm_get_data_download/"
+  get_data_url = paste0("https://broadbandmap.fcc.gov/nbm/map/",
+    "api/national_map_process/nbm_get_data_download/"),
+  user_agent = the$user_agent
 )
 }
 \arguments{
-\item{get_data_url}{a string providing NBM filing API. Default is "https://broadbandmap.fcc.gov/nbm/map/api/national_map_process/nbm_get_data_download/"}
+\item{get_data_url}{a string providing NBM filing API.}
+
+\item{user_agent}{a string set up by default}
 }
 \value{
 A data frame.
 }
 \description{
-Get release available in FCC NBM
+NBM's API:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{paste0("https://broadbandmap.fcc.gov/nbm/",
+       "map/api/national_map_process/nbm_get_data_download/")
+}\if{html}{\out{</div>}}
 }
 \examples{
 nbm_data <- get_nbm_available()

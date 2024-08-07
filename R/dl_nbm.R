@@ -7,6 +7,7 @@
 #' @param release_date a string can be "December 31, 2023" or "June 30, 2023"
 #' @param data_type a string "Fixed Broadband"
 #' @param data_category a string "Nationwide"
+#' @param user_agent a string set up by default
 #' @param ... additional parameters for download.file()
 #'
 #' @return A lot of zipped file
@@ -19,9 +20,11 @@
 #' }
 
 
-dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
+dl_nbm <- function(path_to_dl = "~/data_swamp",
+                   release_date = "June 30, 2023",
                    data_type = "Fixed Broadband",
-                   data_category = "Nationwide", ...) {
+                   data_category = "Nationwide",
+                   user_agent = the$user_agent, ...) {
   # clean my mess
   prev_timeout <- getOption("timeout")
   on.exit(options(timeout = prev_timeout), add = TRUE)
@@ -29,9 +32,6 @@ dl_nbm <- function(path_to_dl = "~/data_swamp", release_date = "June 30, 2023",
 
 
   base_url <- "https://broadbandmap.fcc.gov/nbm/map/api/getNBMDataDownloadFile/"
-  user_agent <- paste0("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
-                       " AppleWebKit/537.36 (KHTML, like Gecko)",
-                       " Chrome/112.0.0.0 Safari/537.36")
 
   all_data_to_dl <- get_nbm_available()
   one_release_to_dl <- all_data_to_dl[all_data_to_dl$release == release_date, ]
