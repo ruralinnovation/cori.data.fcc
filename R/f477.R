@@ -39,7 +39,7 @@ get_f477 <- function(us_states) {
                        from  
                       read_parquet(
                       's3://fcc-data-cori/f477/*/*/*.parquet')
-                      where StateAbbr = '%s' limit 100;", us_states)
+                      where StateAbbr = '%s';", us_states)
 
   DBI::dbGetQuery(con, statement)
 
