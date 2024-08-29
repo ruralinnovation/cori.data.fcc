@@ -9,17 +9,41 @@ knitr::opts_chunk$set(
 )
 ```
 
+## About FCC Form 477
+
 FCC was reporting on Form 477 about Fixed Broadband deployement. 
 Broadband providers were required to fill this form: 
 
-> All facilities-based broadband providers are required to file data with the FCC twice a year (Form 477) on where they offer Internet access service at speeds exceeding 200 kbps in at least one direction.  
-Fixed providers file lists of census blocks in which they can or do offer service to at least one location, with additional information about the service.
+> **All** facilities-based broadband providers are required to file data with the FCC twice a year (Form 477) on where they offer Internet access service at speeds exceeding 200 kbps in at least one direction.  
+> **Fixed** providers file lists of census blocks in which they can or do offer service to at least one location, with additional information about the service.
 
 Source: https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477
 
 The census block mentioned are from **US census blocks** and from the **2010 vintage**.
+Water only census blocks are also removed. 
+
+The time period covered go from December 2014 and then have an update in June and December for every next year until december 2021.  
 
 <hr>
 **NOTE**
 A provider is just required to tell if he provides a specific services in a block and is not required to provide how much in that block he is covering with it.   
 <hr>
+
+### License and attribution 
+
+> Broadband data from FCC Form 477, and data from the U.S. Census Bureau that are presented on this site are offered free and not subject to copyright restriction. 
+
+FCC is asking for proper credit to be give: 
+
+* Source data: FCC Form 477
+
+If you are using these data please follow those simple guidelines.
+
+Source: https://broadband477map.fcc.gov/#/about
+
+## Our opinionated version: 
+
+This is a complicated data set that have seen relative small change in its structure and can have multiple version per release. 
+
+
+For our purpose it make sense to only care about *Fixed without satellite*. We also took the decision 

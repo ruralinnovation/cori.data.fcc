@@ -1,5 +1,6 @@
 #' Load part of f477 estimates data from s3 bucket
 #'
+#' Source data: FCC Form 477
 #'
 #' @param us_states a directory containing only the csv needed
 #'

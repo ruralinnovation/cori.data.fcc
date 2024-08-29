@@ -13,7 +13,7 @@ get_f477(us_states)
 a data frame
 }
 \description{
-Load part of f477 estimates data from s3 bucket
+Source data: FCC Form 477
 }
 \examples{
 \dontrun{
