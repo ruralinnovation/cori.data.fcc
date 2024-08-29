@@ -23,3 +23,4 @@ Imports:
     duckdb,
     stringi
 URL: https://ruralinnovation.github.io/cori.data.fcc/
+Config/Needs/website: rmarkdown
