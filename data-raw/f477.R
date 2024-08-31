@@ -62,6 +62,9 @@ list.files("data_swamp/", pattern = "*.csv")
 # [14] "fbd_us_without_satellite_jun2020_v2.csv"
 # [15] "fbd_us_without_satellite_jun2021_v1.csv"
 
+# weird encoding to fix
+
+
 # Magic of duckDB
 # FCC is not always very strict in following their data type
 # lot of time spend testing and adjusting to it
@@ -93,10 +96,10 @@ COPY
       MaxAdDown,
       MaxAdUp,
       Business,
-      strptime(split_part(filename, '_', 5), '%b%Y') as Date
+      strptime(split_part(filename, '_', 6), '%b%Y') as Date
     FROM 
     read_csv(
-             '/Users/olivierleroy/Documents/data-f477/data/clean/*.csv',
+             'data_swamp/*.csv',
               types = { 'LogRecNo': 'BIGINT',
                         'Provider_Id' : 'TEXT',
                         'FRN' : 'TEXT',
@@ -108,10 +111,10 @@ COPY
                         'StateAbbr': 'CHAR(2)',
                         'BlockCode': 'CHAR(15)',
                         'TechCode': 'VARCHAR(2)',
-                        'Consumer': 'BIGINT',
-                        'MaxAdDown': 'BIGINT',
-                        'MaxAdUp': 'BIGINT',
-                        'Business': 'BIGINT'},            
+                        'Consumer': 'BOOLEAN',
+                        'MaxAdDown': 'SMALLINT',
+                        'MaxAdUp': 'SMALLINT',
+                        'Business': 'BOOLEAN'},            
               delim=',', quote='\"',
               new_line='\\n', skip=0, 
               header=true, filename=true))
