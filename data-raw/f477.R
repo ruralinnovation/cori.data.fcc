@@ -124,3 +124,94 @@ COPY
 DBI::dbExecute(con, copy_stat)
 
 DBI::dbDisconnect(con)
+
+# require uchardet
+encoding <- system("uchardet data_swamp/*.csv", intern = TRUE)
+
+# data_swamp/fbd_us_without_satellite_dec2014_v3.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_dec2015_v4.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_dec2016_v2.csv: UTF-8
+# data_swamp/fbd_us_without_satellite_dec2017_v3.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_dec2018_v3.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_dec2019_v1.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_dec2020_v1.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_dec2021_v1.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_jun2015_v5.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_jun2016_v4.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_jun2017_v3.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_jun2018_v1.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_jun2019_v2.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_jun2020_v2.csv: ISO-8859-2
+# data_swamp/fbd_us_without_satellite_jun2021_v1.csv: WINDOWS-1250
+
+
+system("mkdir -p data_swamp/clean/")
+
+# require iconv
+convert_to_utf8 <- function(x) {
+  l_f <- unlist(strsplit(x, ":"))
+  s <- sprintf("iconv -f %s -t UTF8 %s > data_swamp/clean/%s",
+          l_f[2], l_f[1], basename(l_f[1]))
+  print(s)
+  system(s)
+}
+
+for (i in encoding) {
+  convert_to_utf8(i)
+}
+
+
+library(duckdb)
+
+con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
+
+## I went overkill with that one, it is probably not needed
+DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
+
+copy_stat <- "
+COPY
+    (SELECT 
+      Provider_Id, 
+      FRN, 
+      ProviderName,
+      DBAName,
+      HoldingCompanyName,
+      HocoNum,
+      HocoFinal,
+      StateAbbr,
+      BlockCode,
+      TechCode,
+      Consumer,
+      MaxAdDown,
+      MaxAdUp,
+      Business,
+      strptime(split_part(filename, '_', 6), '%b%Y') as Date
+    FROM 
+    read_csv(
+             'data_swamp/clean/*.csv',
+              types = { 'LogRecNo': 'BIGINT',
+                        'Provider_Id' : 'TEXT',
+                        'FRN' : 'TEXT',
+                        'ProviderName': 'VARCHAR',
+                        'DBAName' : 'VARCHAR',
+                        'HoldingCompanyName' : 'VARCHAR',
+                        'HocoNum' : 'TEXT',
+                        'HocoFinal': 'TEXT',
+                        'StateAbbr': 'CHAR(2)',
+                        'BlockCode': 'CHAR(15)',
+                        'TechCode': 'VARCHAR(2)',
+                        'Consumer': 'BOOLEAN',
+                        'MaxAdDown': 'SMALLINT',
+                        'MaxAdUp': 'SMALLINT',
+                        'Business': 'BOOLEAN'},            
+              delim=',', quote='\"',
+              new_line='\\n', skip=0, 
+              header=true, filename=true))
+    TO 'f477' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr)
+    );"
+
+DBI::dbExecute(con, copy_stat)
+
+DBI::dbDisconnect(con)
+
+data_swamp/clean/fbd_us_without_satellite_dec2014_v3.csv
