@@ -214,4 +214,3 @@ DBI::dbExecute(con, copy_stat)
 
 DBI::dbDisconnect(con)
 
-data_swamp/clean/fbd_us_without_satellite_dec2014_v3.csv
