@@ -29,6 +29,7 @@ for (i in list_url) {
 }
 
 # then FCC started to use box and I do not want an account here:
+# and need to be downloaded manually
 
 list_box <- c(
   "https://www.fcc.gov/form-477-broadband-deployment-data-june-2019-version-2",
@@ -38,8 +39,6 @@ list_box <- c(
   "https://www.fcc.gov/form-477-broadband-deployment-data-june-2021",
   "https://us-fcc.box.com/v/US-without-Sat-Dec2021-v1"
 )
-
-# and need to be downloaded manually
 
 system(sprintf("unzip data_swamp/\\*.zip -d %s", dir_swamp))
 
@@ -64,68 +63,6 @@ list.files("data_swamp/", pattern = "*.csv")
 
 # weird encoding to fix
 
-
-# Magic of duckDB
-# FCC is not always very strict in following their data type
-# lot of time spend testing and adjusting to it
-# more can be found here: 
-# https://www.fcc.gov/general/explanation-broadband-deployment-data
-# https://www.fcc.gov/general/technology-codes-used-fixed-broadband-deployment-data
-
-library(duckdb)
-
-con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
-
-## I went overkill with that one, it is probably not needed
-DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
-
-copy_stat <- "
-COPY
-    (SELECT 
-      Provider_Id, 
-      FRN, 
-      ProviderName,
-      DBAName,
-      HoldingCompanyName,
-      HocoNum,
-      HocoFinal,
-      StateAbbr,
-      BlockCode,
-      TechCode,
-      Consumer,
-      MaxAdDown,
-      MaxAdUp,
-      Business,
-      strptime(split_part(filename, '_', 6), '%b%Y') as Date
-    FROM 
-    read_csv(
-             'data_swamp/*.csv',
-              types = { 'LogRecNo': 'BIGINT',
-                        'Provider_Id' : 'TEXT',
-                        'FRN' : 'TEXT',
-                        'ProviderName': 'VARCHAR',
-                        'DBAName' : 'VARCHAR',
-                        'HoldingCompanyName' : 'VARCHAR',
-                        'HocoNum' : 'TEXT',
-                        'HocoFinal': 'TEXT',
-                        'StateAbbr': 'CHAR(2)',
-                        'BlockCode': 'CHAR(15)',
-                        'TechCode': 'VARCHAR(2)',
-                        'Consumer': 'BOOLEAN',
-                        'MaxAdDown': 'SMALLINT',
-                        'MaxAdUp': 'SMALLINT',
-                        'Business': 'BOOLEAN'},            
-              delim=',', quote='\"',
-              new_line='\\n', skip=0, 
-              header=true, filename=true))
-    TO 'f477' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr)
-    );"
-
-DBI::dbExecute(con, copy_stat)
-
-DBI::dbDisconnect(con)
-
-# require uchardet
 encoding <- system("uchardet data_swamp/*.csv", intern = TRUE)
 
 # data_swamp/fbd_us_without_satellite_dec2014_v3.csv: ISO-8859-2
@@ -147,7 +84,8 @@ encoding <- system("uchardet data_swamp/*.csv", intern = TRUE)
 
 system("mkdir -p data_swamp/clean/")
 
-# require iconv
+# require iconv: https://linux.die.net/man/1/iconv
+
 convert_to_utf8 <- function(x) {
   l_f <- unlist(strsplit(x, ":"))
   s <- sprintf("iconv -f %s -t UTF8 %s > data_swamp/clean/%s",
@@ -160,6 +98,12 @@ for (i in encoding) {
   convert_to_utf8(i)
 }
 
+# Magic of duckDB
+# FCC is not always very strict in following their data type
+# lot of time spend testing and adjusting to it
+# more can be found here: 
+# https://www.fcc.gov/general/explanation-broadband-deployment-data
+# https://www.fcc.gov/general/technology-codes-used-fixed-broadband-deployment-dat# require uchardet
 
 library(duckdb)
 
@@ -213,4 +157,3 @@ COPY
 DBI::dbExecute(con, copy_stat)
 
 DBI::dbDisconnect(con)
-
