@@ -1,0 +1,88 @@
+---
+title: "frn_per_year"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(cori.data.fcc)
+```
+
+
+```{r query_f477}
+
+library(duckdb)
+con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
+
+query <- "select Date as year, count(distinct FRN) as cnt_frns
+          from read_parquet('f477/*/*/*.parquet') 
+          group by Date, order by Date;"
+
+sum_f477 <- DBI::dbGetQuery(con, query)
+DBI::dbDisconnect(con)
+sum_f477
+```
+
+
+I did not have december 2022 around: 
+
+```{r dldec22}
+get_nbm_release()
+system("mkdir -p data_swamp/dec22")
+dl_nbm(path_to_dl = "data_swamp/dec22",
+       release_date = "December 31, 2022")
+system("unzip data_swamp/dec22/\\*.zip -d data_swamp/dec22")
+fcc_to_parquet("dec22",
+               "data_swamp/dec22")
+```
+
+
+```{r getsumdec22}
+con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
+
+query <- "select strptime('dec2022', '%b%Y') as year, count(distinct frn ) as cnt_frns
+   from read_parquet('dec22/*/*/*.parquet');"
+sum_dec2022 <- DBI::dbGetQuery(con, query)
+
+DBI::dbDisconnect(con)
+```
+
+
+For dec23, it is in s3 bucket:
+
+
+```{r s3dec23}
+
+con <- dbConnect(duckdb(), tempfile())
+
+DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
+
+keyID <- Sys.getenv("AWS_ACCESS_KEY_ID")
+region <- Sys.getenv("AWS_DEFAULT_REGION")
+acces_key <- Sys.getenv("AWS_SECRET_ACCESS_KEY")
+
+statement_keyID <- sprintf("SET s3_access_key_id='%s'", keyID)
+statement_region <- sprintf("SET s3_region='%s'", region)
+statement_acces_key <- sprintf("SET s3_secret_access_key='%s'", acces_key)
+
+DBI::dbExecute(con, statement_keyID)
+DBI::dbExecute(con, statement_region)
+DBI::dbExecute(con, statement_acces_key)
+
+sum_dec23 <- DBI::dbGetQuery(con, "select strptime('dec2023', '%b%Y') as year, count(distinct frn ) as cnt_frns
+   from read_parquet('s3://fcc-data-cori/D23/*/*/*.parquet');")
+DBI::dbDisconnect(con)
+```   
+
+
+Combine them:
+
+```{r}
+yall_year <- rbind(sum_f477,  sum_dec2022, sum_dec23)
+write.csv(yall_year)
+```
