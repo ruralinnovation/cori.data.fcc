@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 ## About FCC Form 477
 
 FCC was reporting on Form 477 about Fixed Broadband deployement. 
-Broadband providers were required to fill this form: 
+Broadband providers were required to fill it: 
 
 > **All** facilities-based broadband providers are required to file data with the FCC twice a year (Form 477) on where they offer Internet access service at speeds exceeding 200 kbps in at least one direction.  
 > **Fixed** providers file lists of census blocks in which they can or do offer service to at least one location, with additional information about the service.
@@ -41,10 +41,11 @@ If you are using these data please follow those simple guidelines.
 
 Source: https://broadband477map.fcc.gov/#/about
 
-## Our opinionated version: 
+## Our opinionated version: a good data storytelling start with a good data history
 
-This is a complicated data set that have seen relative small change in its structure and can have multiple version per release. 
+This is a complicated data set that have seen change in its structure and can have multiple versions per release. 
 
-For our purpose it make sense to only care about *Fixed without satellite*. 
+We were only interested in *Fixed without satellite* data. 
+
 We also took the decision to only use and ingest the last release of each version.
 

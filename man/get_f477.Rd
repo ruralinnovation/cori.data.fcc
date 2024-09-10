@@ -4,10 +4,10 @@
 \alias{get_f477}
 \title{Load part of f477 estimates data from s3 bucket}
 \usage{
-get_f477(us_states)
+get_f477(state_abbr)
 }
 \arguments{
-\item{us_states}{a directory containing only the csv needed}
+\item{state_abbr}{a string matching state abbr}
 }
 \value{
 a data frame
@@ -17,6 +17,6 @@ Source data: FCC Form 477
 }
 \examples{
 \dontrun{
-NC <- get_f477(us_states = "NC")
+NC <- get_f477(state_abbr = "NC")
 }
 }
