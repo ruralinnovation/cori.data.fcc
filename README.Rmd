@@ -20,7 +20,12 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of cori.data.fcc is to facilate the discovery, the download and the use of FCC's National Broadband Map [(NBM)](https://broadbandmap.fcc.gov/home) data.
+The goal of cori.data.fcc is to facilate the discovery, the download and uses of FCC's data. 
+
+It covers:
+
+-  National Broadband Map [(NBM)](https://broadbandmap.fcc.gov/home) data  
+-  [Form 477](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) data 
 
 ## Installation
 
