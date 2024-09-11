@@ -2,17 +2,25 @@
 % Please edit documentation in R/f477.R
 \name{get_f477}
 \alias{get_f477}
-\title{Load part of f477 estimates data from s3 bucket}
+\title{Load part of Form 477 estimates data from CORI s3 bucket}
 \usage{
-get_f477(state_abbr)
+get_f477(state_abbr, frn = "all")
 }
 \arguments{
-\item{state_abbr}{a string matching state abbr}
+\item{state_abbr}{a string matching State Abbreviation ("NC", "vt")}
+
+\item{frn}{a string of 10 numbers matching FCC's FRN, default is "all"}
 }
 \value{
 a data frame
 }
 \description{
+Get all the data related to Form 477 for a US State.
+A row in this data represent a service per census block (2010 vintage).
+By default the function will return all the ISP but a specific FRN
+(10 number strings, ie "0007435902") can also be used to be nmore speific.
+}
+\details{
 Source data: FCC Form 477
 }
 \examples{

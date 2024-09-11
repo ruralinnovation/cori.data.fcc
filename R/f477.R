@@ -1,10 +1,14 @@
-#' Load part of f477 estimates data from s3 bucket
+#' Load part of Form 477 estimates data from CORI s3 bucket
 #'
-#' Get all the census block 
+#' Get all the data related to Form 477 for a US State.
+#' A row in this data represent a service per census block (2010 vintage).
+#' By default the function will return all the ISP but a specific FRN
+#' (10 number strings, ie "0007435902") can also be used to be nmore speific. 
+#' 
 #' Source data: FCC Form 477
 #'
-#' @param state_abbr a string matching state abbr
-#' @param frn a string of 10 numbers matching FCC's FRN, default is "all" 
+#' @param state_abbr a string matching State Abbreviation ("NC", "vt")
+#' @param frn a string of 10 numbers matching FCC's FRN, default is "all"
 #' 
 #' @return a data frame
 #'
