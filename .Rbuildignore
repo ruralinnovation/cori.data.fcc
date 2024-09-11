@@ -8,3 +8,6 @@
 ^codecov\.yml$
 ^\.github$
 ^vignettes/articles$
+^.*\.Rproj$
+^\.Rproj\.user$
+^data_swamp$

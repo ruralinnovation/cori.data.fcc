@@ -2,3 +2,5 @@ docs
 .DS_Store
 docs
 data_swamp/ 
+.Rproj.user
+cori.data.fcc.Rproj
