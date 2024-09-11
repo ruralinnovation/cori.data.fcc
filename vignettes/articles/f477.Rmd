@@ -1,5 +1,5 @@
 ---
-title: "FCC Form 477"
+title: "FCC's Form 477"
 ---
 
 ```{r, include = FALSE}
@@ -9,7 +9,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-## About FCC Form 477
+## FCC's Form 477
+
+### Short introduction
 
 FCC was reporting on Form 477 about Fixed Broadband deployement. 
 Broadband providers were required to fill it: 
@@ -22,7 +24,7 @@ Source: https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477
 The census block mentioned are from **US census blocks** and from the **2010 vintage**.
 Water only census blocks are also removed. 
 
-The time period covered go from December 2014 and then have an update in June and December for every next year until december 2021.  
+The time period covered goes from December 2014 and then have an update in June and December for every next year until december 2021.  
 
 <hr>
 **NOTE**
@@ -41,11 +43,17 @@ If you are using these data please follow those simple guidelines.
 
 Source: https://broadband477map.fcc.gov/#/about
 
-## Our opinionated version: a good data storytelling start with a good data history
+## Our opinionated version: 
 
-This is a complicated data set that have seen change in its structure and can have multiple versions per release. 
+We decided that satellite data were less important hence we focused in *Fixed without satellite* data.
 
-We were only interested in *Fixed without satellite* data. 
+This is a complicated data set:
+
+- it's structure has changed overtime 
+
+- it can have multiple versions per release. 
+
+
 
 We also took the decision to only use and ingest the last release of each version.
 

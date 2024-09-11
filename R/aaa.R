@@ -5,6 +5,12 @@ the$user_agent <- paste0("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
 
 #' Seting user agent for function
 #' @export
+#'
+#'@examples
+#'\dontrun{
+#' user_agent()
+#'}
+
 user_agent <- function() {
   the$user_agent
 }
