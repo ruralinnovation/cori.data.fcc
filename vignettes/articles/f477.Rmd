@@ -71,5 +71,6 @@ For that we are providing all the code used to generated this data set here: `da
 
 ### Data dictionary 
 
+TODO justify not being DBA strict on provider_id text etc 
 
 

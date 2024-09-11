@@ -9,7 +9,7 @@
 #'
 #' @param state_abbr a string matching State Abbreviation ("NC", "vt")
 #' @param frn a string of 10 numbers matching FCC's FRN, default is "all"
-#' 
+#'
 #' @return a data frame
 #'
 #' @export
@@ -42,7 +42,7 @@ get_f477 <- function(state_abbr, frn = "all") {
                         where StateAbbr = '%s';", state_abbr)
 
   } else {
- 
+
     statement <- sprintf("select *
                          from
                          read_parquet(
