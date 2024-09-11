@@ -33,6 +33,9 @@ Source: https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477
 The census block mentioned are from **US census blocks** and from the **2010 vintage**.
 Water only census blocks are also removed. 
 
+Every row in this dataset is matching a specific services provided by an ISP in a census block. 
+Hence an ISP can provides multiple services, for example different technologies or diffrent speeds in a census block. 
+
 The time period covered goes from December 2014 and then have an update in June and December for every next year until december 2021.  
 
 <hr>
