@@ -75,5 +75,6 @@ f477 <- data.frame(
   )
 )
 
+dictionary <- rbind(f477)
 
 usethis::use_data(dictionary, overwrite = TRUE)
