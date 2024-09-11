@@ -1,5 +1,10 @@
 ---
 title: "FCC's Form 477"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FCC's Form 477"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -10,6 +15,10 @@ knitr::opts_chunk$set(
 ```
 
 ## FCC's Form 477
+
+Simplifying access to data is usually a matters of opinion: what data should we kept, what should be discarded?
+
+For effectif data analysis it is important to communicate those decisions and provide the data's story. 
 
 ### Short introduction
 
@@ -28,7 +37,7 @@ The time period covered goes from December 2014 and then have an update in June 
 
 <hr>
 **NOTE**
-A provider is just required to tell if he provides a specific services in a block and is not required to provide how much in that block he is covering with it.   
+A provider is just required to tell if he provides a specific services in a block and is not required to provide how much in that block he is covering within it.   
 <hr>
 
 ### License and attribution 
@@ -45,15 +54,19 @@ Source: https://broadband477map.fcc.gov/#/about
 
 ## Our opinionated version: 
 
+From 477 data was released in multiple versions for some but not all release.
+We took the decision to only use and ingest the last release of each version. 
+We are assuming here that those versions are more consistant and only selecting teh last one will help homogeneize this dataset.
+
 We decided that satellite data were less important hence we focused in *Fixed without satellite* data.
 
-This is a complicated data set:
+Not keeping variables: .  
 
-- it's structure has changed overtime 
-
-- it can have multiple versions per release. 
-
+Our opinionated version is maybe supbotimal for you and maybe you need to look at our implementation making sure that our process is reliable.
+For that we are providing all the code used to generated this data set here: `data-raw/f477.R`   
 
 
-We also took the decision to only use and ingest the last release of each version.
+### Data dictionary 
+
+
 
