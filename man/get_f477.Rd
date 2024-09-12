@@ -18,7 +18,7 @@ a data frame
 Get all the data related to Form 477 for a US State.
 A row in this data represent a service per census block (2010 vintage).
 By default the function will return all the ISP but a specific FRN
-(10 number strings, ie "0007435902") can also be used to be nmore speific.
+(10 number strings, ie "0007435902") can also be used to be more specific.
 }
 \details{
 Source data: FCC Form 477
