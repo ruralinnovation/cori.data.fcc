@@ -12,7 +12,7 @@
 
 * Provides data story on Form 477
 
-* `fcc_dictionary()` so 
+* `fcc_dictionary()` to provide description of each fields per data set
 
 ## Minor inmprovements 
 
