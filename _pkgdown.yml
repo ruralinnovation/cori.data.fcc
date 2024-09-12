@@ -2,3 +2,24 @@ url: https://ruralinnovation.github.io/cori.data.fcc/
 template:
   bootstrap: 5
 
+reference:
+  - title: NBM 
+    contents:
+    - get_nbm_release
+    - get_nbm_available
+    - dl_nbm 
+    - fcc_to_parquet
+
+  - title: Form 477
+    contents:
+    - get_f477
+
+  - title: Environment Variables & Utilities
+    contents:
+    - fcc_dictionary
+    - dictionary
+    - fcc_provider
+    - check_frn
+    - user_agent
+    - set_user_agent
+

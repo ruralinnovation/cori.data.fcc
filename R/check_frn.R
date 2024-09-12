@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @importFrom stringi stri_pad_left
-#' 
+#'
 #' @examples
 #' check_frn(8181448)
 

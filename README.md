@@ -11,8 +11,15 @@ coverage](https://codecov.io/gh/ruralinnovation/cori.data.fcc/branch/main/graph/
 <!-- badges: end -->
 
 The goal of cori.data.fcc is to facilate the discovery, the download and
-the use of FCC’s National Broadband Map
-[(NBM)](https://broadbandmap.fcc.gov/home) data.
+uses of FCC’s data.
+
+It covers:
+
+- National Broadband Map [(NBM)](https://broadbandmap.fcc.gov/home)
+  data  
+- [Form
+  477](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477)
+  data
 
 ## Installation
 
@@ -36,13 +43,13 @@ release
 #>   filing_type_id filing_type    filing_subtype
 #> 1         100006    Biannual December 31, 2022
 #> 2         100000    Biannual     June 30, 2022
-#> 3         100011    Biannual December 31, 2023
-#> 4         100007    Biannual     June 30, 2023
+#> 3         100007    Biannual     June 30, 2023
+#> 4         100011    Biannual December 31, 2023
 #>                           process_uuid enable_bfm_link
 #> 1 bbfba324-616d-4247-ab49-933fdd97ff12            TRUE
 #> 2 7b81911a-c0cb-4be6-8e6c-63a32e8bf917            TRUE
-#> 3 22fad384-b07c-4037-ae8c-58c9f6bbf2c4            TRUE
-#> 4 09b52db9-5dab-4414-baa9-3834034be045            TRUE
+#> 3 59f1d8d7-e532-468a-b68f-826c7945f918            TRUE
+#> 4 dc5111bf-7169-40bf-bb23-f0827250cc04            TRUE
 #>   enable_challenge_download
 #> 1                      TRUE
 #> 2                      TRUE
@@ -69,19 +76,19 @@ all.equal(nbm_filter, nbm_dplyr_filter)
 #> [1] TRUE
 head(nbm_filter)
 #>       id       release       data_type technology_code state_fips provider_id
-#> 1 628517 June 30, 2023 Fixed Broadband               0         01        <NA>
-#> 2 628518 June 30, 2023 Fixed Broadband               0         04        <NA>
-#> 3 628519 June 30, 2023 Fixed Broadband               0         06        <NA>
-#> 4 628520 June 30, 2023 Fixed Broadband               0         12        <NA>
-#> 5 628521 June 30, 2023 Fixed Broadband               0         17        <NA>
-#> 6 628522 June 30, 2023 Fixed Broadband               0         18        <NA>
+#> 1 689598 June 30, 2023 Fixed Broadband               0         01        <NA>
+#> 2 689599 June 30, 2023 Fixed Broadband               0         04        <NA>
+#> 3 689600 June 30, 2023 Fixed Broadband               0         06        <NA>
+#> 4 689601 June 30, 2023 Fixed Broadband               0         12        <NA>
+#> 5 689602 June 30, 2023 Fixed Broadband               0         17        <NA>
+#> 6 689603 June 30, 2023 Fixed Broadband               0         18        <NA>
 #>                                    file_name file_type data_category
-#> 1 bdc_01_Other_fixed_broadband_J23_01jul2024       csv    Nationwide
-#> 2 bdc_04_Other_fixed_broadband_J23_01jul2024       csv    Nationwide
-#> 3 bdc_06_Other_fixed_broadband_J23_01jul2024       csv    Nationwide
-#> 4 bdc_12_Other_fixed_broadband_J23_01jul2024       csv    Nationwide
-#> 5 bdc_17_Other_fixed_broadband_J23_01jul2024       csv    Nationwide
-#> 6 bdc_18_Other_fixed_broadband_J23_01jul2024       csv    Nationwide
+#> 1 bdc_01_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
+#> 2 bdc_04_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
+#> 3 bdc_06_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
+#> 4 bdc_12_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
+#> 5 bdc_17_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
+#> 6 bdc_18_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
 ```
 
 The package also provide the list of Provider ID and FRN
@@ -98,4 +105,4 @@ str(fcc_provider)
 
 ## Inspiration
 
-This package was inspired by <https://github.com/bbcommons/bfm-explorer>
+This package was imspired by <https://github.com/bbcommons/bfm-explorer>

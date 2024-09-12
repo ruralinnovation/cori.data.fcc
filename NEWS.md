@@ -3,3 +3,17 @@
 * First functions released.
 
 * Improve functions with a user_agent defined in aaa.R #9
+
+# cori.data.fcc 0.0.1
+
+## Major Changes
+
+* Provides way to acess Form 477  
+
+* Provides data story on Form 477
+
+* `fcc_dictionary()` so 
+
+## Minor inmprovements 
+
+* Organize reference of function by themes 

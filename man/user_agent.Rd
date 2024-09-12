@@ -9,3 +9,8 @@ user_agent()
 \description{
 Seting user agent for function
 }
+\examples{
+\dontrun{
+user_agent()
+}
+}
