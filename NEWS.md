@@ -14,6 +14,6 @@
 
 * `fcc_dictionary()` to provide description of each fields per data set
 
-## Minor inmprovements 
+## Minor improvements 
 
 * Organize reference of function by themes 
