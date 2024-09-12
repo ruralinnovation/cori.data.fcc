@@ -1,6 +1,7 @@
 ---
 title: "FCC's Form 477"
 output: rmarkdown::html_vignette
+code_folding: hide
 vignette: >
   %\VignetteIndexEntry{FCC's Form 477"}
   %\VignetteEngine{knitr::rmarkdown}
@@ -34,7 +35,7 @@ The census block mentioned are from **US census blocks** and from the **2010 vin
 Water only census blocks are also removed. 
 
 Every row in this dataset is matching a specific services provided by an ISP in a census block. 
-Hence an ISP can provides multiple services, for example different technologies or diffrent speeds in a census block. 
+Hence an ISP can provides multiple services, for example different technologies or different speeds in a census block. 
 
 The time period covered goes from December 2014 and then have an update in June and December for every next year until december 2021.  
 
@@ -57,20 +58,44 @@ Source: https://broadband477map.fcc.gov/#/about
 
 ## Our opinionated version: 
 
-From 477 data was released in multiple versions for some but not all release.
+From 477 data was released in multiple versions for some but not all releases.
 We took the decision to only use and ingest the last release of each version. 
-We are assuming here that those versions are more consistant and only selecting teh last one will help homogeneize this dataset.
+We are assuming here that those versions are more consistant and only selecting the last one will help homogeneize this dataset.
 
-We decided that satellite data were less important hence we focused in *Fixed without satellite* data.
+We also decided that satellite data were less important hence we focused in *Fixed without satellite* data.
 
-Not keeping variables: .  
+As you will see in our data dictionary we did not kept  
 
-Our opinionated version is maybe supbotimal for you and maybe you need to look at our implementation making sure that our process is reliable.
+Our opinionated version is maybe supbotimal for you and perhaps you need to look at our implementation making sure that our process is reliable.
 For that we are providing all the code used to generated this data set here: `data-raw/f477.R`   
-
 
 ### Data dictionary 
 
-TODO justify not being DBA strict on provider_id text etc 
+```{r}
+library(cori.data.fcc)
+library(DT)
+
+table_with_options <- function(x){DT::datatable(x, rownames = FALSE,
+              extensions = 'Buttons',
+                options = list(
+                          dom = 'Blfrtip',
+                          buttons = list('copy', 'print', list(
+                            extend = 'collection',
+                            buttons = c('csv', 'excel'),
+                            text = 'Download')
+                                    )
+                          )
+            )}
+
+table_with_options(dictionary)
+```
+
+
+You may have notice that we could have been more strict on our data types.
+For example an FRN should be 10 numbers (with padded 0), ie `CHAR(10)` sadly our experience on previous 
+ingestions have shown that is was not a rules enforced. 
+We decided to provide the data as it is instead of removing rows with dubious value. 
+This decisions should be done by the analyst and domain expert but we could, 
+in future revisit this decisions and enforce more constraints on data. 
 
 

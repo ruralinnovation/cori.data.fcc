@@ -1,3 +1,3 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+test_that("dictionnary is a dataframe", {
+  expect_true(is.data.frame(fcc_dictionary(dataset = "f477")))
 })

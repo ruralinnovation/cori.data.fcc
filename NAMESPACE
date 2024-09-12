@@ -2,6 +2,7 @@
 
 export(check_frn)
 export(dl_nbm)
+export(fcc_dictionary)
 export(fcc_to_parquet)
 export(get_f477)
 export(get_nbm_available)

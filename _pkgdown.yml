@@ -16,7 +16,10 @@ reference:
 
   - title: Environment Variables & Utilities
     contents:
+    - fcc_dictionary
+    - dictionary
+    - fcc_provider
+    - check_frn
     - user_agent
     - set_user_agent
-    - check_frn
-    - fcc_provider
+
