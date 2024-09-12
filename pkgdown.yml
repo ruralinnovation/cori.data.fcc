@@ -3,7 +3,7 @@ pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   articles/f477: f477.html
-last_built: 2024-09-12T12:26Z
+last_built: 2024-09-12T13:56Z
 urls:
   reference: https://ruralinnovation.github.io/cori.data.fcc/reference
   article: https://ruralinnovation.github.io/cori.data.fcc/articles
