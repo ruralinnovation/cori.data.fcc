@@ -1,7 +1,9 @@
 ## code to prepare `dictionary` dataset goes here
 
 ### F477
-# source https://www.fcc.gov/general/explanation-broadband-deployment-data
+# Source: https://www.fcc.gov/general/explanation-broadband-deployment-data
+### NBM
+# Source: https://us-fcc.app.box.com/v/bdc-data-downloads-output
 
 f477 <- data.frame(
   dataset = "f477",
@@ -75,6 +77,14 @@ f477 <- data.frame(
   )
 )
 
-dictionary <- rbind(f477)
+nbm_raw <- data.frame(
+  dataset = "nbm_raw",
+  var_name = c("frn"),
+  var_type = c("CHAR(10)"),
+  var_description = c("10-digit FCC Registration Number (FRN) of the entitythat submitted the data"),
+  var_example = c("0032176356")
+)
+
+dictionary <- rbind(f477, nbm_raw)
 
 usethis::use_data(dictionary, overwrite = TRUE)
