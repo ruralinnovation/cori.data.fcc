@@ -4,3 +4,4 @@ docs
 data_swamp/ 
 .Rproj.user
 cori.data.fcc.Rproj
+*.parquet
