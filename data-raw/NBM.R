@@ -88,8 +88,7 @@ COPY
       substring(block_geoid, 1, 5) as geoid_co,
       strptime(split_part(split_part(filename, '_', 8), '.', 1), '%d%b%Y')::DATE
        as file_time_stamp,
-       
- 
+      strptime(split_part(filename, '_', 7), '%B%Y')::DATE as release 
     FROM 
     read_csv(
              'data_swamp/nbm/raw/*.csv',
@@ -110,9 +109,11 @@ COPY
               delim=',', quote='\"',
               new_line='\\n', skip=0, 
               header=true, filename=true))
-    TO 'nbm_raw' (FORMAT 'parquet', PARTITION_BY(state_usps, technology)
+    TO 'nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology)
     );"
 
 DBI::dbExecute(con, copy_stat)
 
 DBI::dbDisconnect(con)
+
+system("aws s3 nbm_raw s3://cori.data.fcc/nbm_raw")
