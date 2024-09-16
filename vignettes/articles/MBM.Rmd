@@ -1,0 +1,107 @@
+---
+title: "National Broadband Map (NBM)"
+output: rmarkdown::html_vignette
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(cori.data.fcc)
+```
+
+## License and Attribution
+
+The license can be found [here](https://broadbandmap.fcc.gov/about):
+
+> Broadband availability data from the BDC, and data from the U.S. Census Bureau that are presented on this site, are offered free and not subject to copyright restriction. Data and content created by government employees within the scope of their employment are not subject to domestic copyright protection under 17 U.S.C. § 105. See, e.g., [U.S. Government Works](https://www.usa.gov/government-copyright).
+>
+> While not required, when using in your own work content, data, documentation, code, and related materials from fcc.gov or broadbandmap.fcc.gov, we ask that you provide proper attribution of the data. Examples include:
+>
+>    Source data: FCC Broadband Data Collection
+>    Map layer based on FCC BDC
+>
+> CostQuest Associates, Inc. and its third-party licensors, as applicable, own all right, title, and interest, including all intellectual property rights, in and to the data for locations reflected in the Fabric (including the Location ID, latitude and longitude, address, unit count, and building type code for each location in the Fabric). CostQuest is granted certain rights to Fabric correction submissions for the purpose of correcting or otherwise modifying BDC Fabric data. Broadband service providers, governmental entities, and other third parties are able to license Fabric data, including any changes to Fabric data that have been made as a result of challenges, at no cost for purposes of their participation in the FCC's Broadband Data Collection.
+
+
+## What is the National Broadband Map (NBM) data set
+
+NBM was started by the FCC in November 2022[^fcc_nbm_start] and is following Form 477. 
+
+[^fcc_nbm_start]: [https://www.fcc.gov/news-events/notes/2022/11/18/new-broadband-maps-are-finally-here](https://www.fcc.gov/news-events/notes/2022/11/18/new-broadband-maps-are-finally-here)
+
+The NBM provides information at the scale of a "service" - a location covered by a provider by a technology with specifics maximum speeds.
+
+Every location is characterized by:
+
+- Who is providing those services (`frn`, `provider_id`, and `brand_name`)
+- A description of each services (`technology`, `max_advertised_download_speed`, `max_advertised_upload_speed`, `low_latency`)
+- Whether the location associated with residential, business or both
+- ways to localize it (`state_abbr`, `block_geoid`, `h3_res8_id`)
+
+
+
+<!-- ::: {.callout-tip}
+A location (see @sec-BSL) can be covered by multiple Internet Services Provides (ISP) with  potentially different services and technologies. Hence, it can represented in the data can by many "rows".
+::: -->
+
+Behind the National Broadband Map they are **two** datasets (see @fig-broadbanddata, below). We are using the "Broadband Availability" dataset  that comes from the "Fabric" locations dataset (developed by CostQuest). 
+The locations are determined within the Fabric locations data.
+
+<!-- :::{.aside}
+Sometimes the process of collecting those two datasets is called **B**roadband **D**ata **C**ollection (BDC)
+::: -->
+
+The exact coordinates of every locations is only part of the Fabric dataset and within the Broadband Availability we can only link a record for a location to a Census Block (2020 vintage) or H3 hexagon.
+
+!["What on the national broadband map" Source: [https://www.fcc.gov/BroadbandData](https://www.fcc.gov/BroadbandData)](img/whats-on-the-national-broadband-map-113023-1.png){#fig-broadbanddata}
+
+The BFM provides information about "*broadband infrastructure deployment projects funded by the Federal government throughout the United States*". The information is structured either at the scale of a specific project inside a program or for the whole program. Hence we have characteristics of each projects with their associated boundaries (territories covered) (see link [https://ruralinnovation.github.io/proj-fcc-report/fcc_funding.html](https://ruralinnovation.github.io/proj-fcc-report/fcc_funding.html)).
+
+
+### What is a Broadband Service Location (BSL)? {#sec-BSL}
+
+> A broadband serviceable location is defined as “a business or residential location in the United States at which fixed broadband Internet access service is, or can be, installed.”  A residential BSL includes all residential structures, including structures that are (or contain) housing units or group quarters (as those terms are defined by the United States Census Bureau).  A business BSL includes “all non-residential (business, government, non-profit, etc.) structures that are on property without residential locations and that would expect to demand Internet access service.” (source FCC[^fcc_bsl])
+
+[^fcc_bsl]: ["The Fabric data"](https://help.bdc.fcc.gov/hc/en-us/articles/7412732399003-Fabric-FAQs)
+
+### When is this data updated?
+
+NBM has two big releases per year (June and December) and have "unofficial" versions every two weeks to take into account challenges[^challenges]. 
+Experience has told us that sometimes their release can be faster (more than one per week) or slower.
+The FCC did not (April 2024) provides a changelog between releases or versions (but the documentation has some of the major changes[^nbm_chnagelog]). 
+
+[^challenges]: [https://www.fcc.gov/sites/default/files/bdc-challenge-overview.pdf](https://www.fcc.gov/sites/default/files/bdc-challenge-overview.pdf)
+
+[^nbm_chnagelog]:See "Change Log" [https://us-fcc.app.box.com/v/bdc-data-downloads-output](https://us-fcc.app.box.com/v/bdc-data-downloads-output)
+
+BFM seems to follow a schedule of update every two weeks but we have not find any specifications. 
+
+### What is the geographic coverage of those datasets?
+
+The Broadband Availability data is covering all US States, Puerto Rico and the US territories.  
+
+The coverage of the funding map depend on each specific program. 
+
+## What is unserved v.s. underseved?
+
+Served, Unserved and Underseved are **overlapping** categories at the **location level**. They can be extended at the "**area level**".
+
+If all available internet services at a location have advertised (reported) maximum speeds that are below 25 Mbps downstream speed or below 3 Mbps upstream (25/3 to simplify), then that location is categorized as **unserved**. If a location has at least one service with maximum speeds that are equal to or above 25/3, but no service with maximum speeds that are equal to or above 100/20, it is categorized as **underserved**. If a location has at least one service with maximum speeds that are equal to or above 100/20, then that location is categorized as **served**.
+
+Those definitions are recommended in the [FCC's Broadband Speed Benchmark](https://www.fcc.gov/document/fcc-increases-broadband-speed-benchmark) and can be adapted by every States[^pew_list].
+
+<!--
+:::{.aside}
+FCC could change those definitions and for example move the bar at 100/20: [https://www.fcc.gov/document/fcc-increases-broadband-speed-benchmark](https://www.fcc.gov/document/fcc-increases-broadband-speed-benchmark)
+:::
+-->
+
+[^pew_list]: Page 4 [https://www.pewtrusts.org/-/media/assets/2023/06/un--and-underserved-definitions-ta-memo-pdf.pdf](https://www.pewtrusts.org/-/media/assets/2023/06/un--and-underserved-definitions-ta-memo-pdf.pdf)
+
+
+
