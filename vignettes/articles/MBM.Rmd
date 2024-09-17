@@ -28,7 +28,7 @@ The license can be found [here](https://broadbandmap.fcc.gov/about):
 > CostQuest Associates, Inc. and its third-party licensors, as applicable, own all right, title, and interest, including all intellectual property rights, in and to the data for locations reflected in the Fabric (including the Location ID, latitude and longitude, address, unit count, and building type code for each location in the Fabric). CostQuest is granted certain rights to Fabric correction submissions for the purpose of correcting or otherwise modifying BDC Fabric data. Broadband service providers, governmental entities, and other third parties are able to license Fabric data, including any changes to Fabric data that have been made as a result of challenges, at no cost for purposes of their participation in the FCC's Broadband Data Collection.
 
 
-## What is the National Broadband Map (NBM) data set
+## What is the National Broadband Map (NBM) data set?
 
 NBM was started by the FCC in November 2022[^fcc_nbm_start] and is following Form 477. 
 
@@ -36,13 +36,14 @@ NBM was started by the FCC in November 2022[^fcc_nbm_start] and is following For
 
 The NBM provides information at the scale of a "service" - a location covered by a provider by a technology with specifics maximum speeds.
 
+This is what is one big change versus Form 477 we are moving from the scale of a Census block to the scale of a location (See @sec-BSL for a definition). 
+
 Every location is characterized by:
 
 - Who is providing those services (`frn`, `provider_id`, and `brand_name`)
 - A description of each services (`technology`, `max_advertised_download_speed`, `max_advertised_upload_speed`, `low_latency`)
 - Whether the location associated with residential, business or both
 - ways to localize it (`state_abbr`, `block_geoid`, `h3_res8_id`)
-
 
 
 <!-- ::: {.callout-tip}
