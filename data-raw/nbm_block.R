@@ -27,7 +27,11 @@ library(duckdb)
 # and maybe cache some intermediary process
 con <- dbConnect(duckdb(), dbdir = "nbm_block.duckdb")
 
-DBI::dbWriteTable(con, "nbm_block", census_blocks)
+init_table <- "create table nbm_block(geoid_bl varchar(15), primary key(geoid_bl));"
+
+DBI::dbExecute(con, init_table)
+
+DBI::dbWriteTable(con, "nbm_block", census_blocks, append = TRUE)
 
 nbm_cori1 <-  "create table staging (
                     frn char(10),
@@ -201,10 +205,53 @@ nbm_count4 <- "
 
 DBI::dbExecute(con, nbm_count4)
 
+
+combo <-
+	"alter table nbm_block
+	add column array_frn varchar[];
+
+	alter table nbm_block
+	add column combo_frn uint64;
+
+
+	with combo as (
+	select 
+		geoid_bl, 
+		array_agg(distinct frn) as array_frn, 
+		hash(array_frn) as combo_frn 
+	from staging 
+	group by geoid_bl
+	)
+
+	update nbm_block as t1
+	set 
+		array_frn = t2.array_frn,
+		combo_frn = t2.combo_frn
+	from
+		combo as t2
+	where t1.geoid_bl = t2.geoid_bl;"
+
+DBI::dbExecute(con, combo_frn)
+
+
+"create table rel_combo_frn (
+  frn varchar(10),
+  combo_frn uint64,
+  primary key (frn, combo_frn)
+);
+
+insert into rel_combo_frn
+select
+	distinct unnest(array_frn) as frn,
+	combo_frn
+from
+ 	nbm_block;"
+
 test <- DBI::dbGetQuery(con, "select * from nbm_block limit 100")
 
 DBI::dbDisconnect(con)
 
-# some could be NA, case census block 100 water?
-"update nbm_block set cnt_total_locations = 0 where cnt_total_locations is null;"
-"update nbm_block set cnt_cori_locations = 0 where cnt_cori_locations is null;"
+frn <-  "0025646373"
+
+"select * from nbm_block
+where combo_frn in (select combo_frn from rel_combo_frn where frn = '0025646373');"
