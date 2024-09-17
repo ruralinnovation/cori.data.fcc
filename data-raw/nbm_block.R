@@ -27,7 +27,7 @@ library(duckdb)
 # and maybe cache some intermediary process
 con <- dbConnect(duckdb(), dbdir = "nbm_block.duckdb")
 
-DBI::dbCreateTable(con, "nbm_block", census_blocks)
+DBI::dbWriteTable(con, "nbm_block", census_blocks)
 
 nbm_cori1 <-  "create table staging (
                     frn char(10),
@@ -118,23 +118,75 @@ group by
 where
    t1.geoid_bl = t2.geoid_bl;"
 
-DBI::dbExecute(con, nbm_cori2)
+DBI::dbExecute(con, nbm_count1)
 
-"
+# test tes default
+nbm_count2 <- "
 alter table nbm_block
-add column cnt_bcat_locations integer;
+add column cnt_cori_locations integer;
 
 update
-	staging as t1
+	nbm_block as t1
 set 
-	cnt_bcat_locations = t2.cnt_bcat_locations
+	cnt_cori_locations = t2.cnt_cori_locations
 from 
 	(select 
-	block_geoid,
-	count(distinct location_id) as cnt_bcat_locations
+	geoid_bl,
+	count(distinct location_id) as cnt_cori_locations
 	from 
-		staging.bcat_raw_lowlat
+		staging
 	group by 
-		block_geoid)  as t2
+		geoid_bl)  as t2
 where    
-	t1.geoid_bl = t2.block_geoid;"
+	t1.geoid_bl = t2.geoid_bl;"
+
+# some could be NA, case census block 100 water? 
+"update nbm_block set cnt_total_locations = 0 where cnt_total_locations is null;"
+"update nbm_block set cnt_cori_locations = 0 where cnt_cori_locations is null;"
+
+
+"alter table nbm_block
+add column cnt_fiber_locations integer,
+add column cnt_25_3 integer,
+add column cnt_100_20 integer,
+add column cnt_100_100 integer;
+
+update
+	nbm_block as t1
+set 
+	cnt_fiber_locations = t2.cnt_fiber_locations,
+	cnt_25_3 = t2.cnt_25_3,
+	cnt_100_20 = t2.cnt_100_20,
+	cnt_100_100 = t2.cnt_100_100
+	
+
+from(
+	select 
+		geoid_bl,
+		count(distinct case when technology = 50 then location_id end) as cnt_fiber_locations,
+		count(distinct case when 
+			(max_advertised_download_speed >= 25 and max_advertised_upload_speed >= 3) 
+			              then location_id end) as cnt_25_3,
+		count(distinct case when 
+			(max_advertised_download_speed >= 100 and max_advertised_upload_speed >= 20) 
+			              then location_id end) as cnt_100_20,
+		count(distinct case when 
+			(max_advertised_download_speed >= 100 and max_advertised_upload_speed >= 100) 
+			              then location_id end) as cnt_100_100
+	from 
+		staging
+	group by 
+		geoid_bl) as t2
+where    
+	t1.geoid_bl = t2.geoid;
+
+
+
+-- update staging.block_bcat set cnt_fiber_locations = 0
+-- where cnt_fiber_locations is null and cnt_total_locations is not null;  
+-- update  staging.block_bcat set cnt_25_3 = 0
+-- where cnt_25_3 is null and cnt_total_locations is not null;
+-- update staging.block_bcat set cnt_100_20 = 0
+-- where cnt_100_20 is null and cnt_total_locations is not null;
+-- update staging.block_bcat set cnt_100_100 = 0
+-- where cnt_100_100 is null and cnt_total_locations is not null;"
