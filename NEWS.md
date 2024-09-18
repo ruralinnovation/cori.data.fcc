@@ -1,8 +1,20 @@
 # cori.data.fcc (development version)
 
-* First functions released.
+## Major Changes
 
-* Improve functions with a user_agent defined in aaa.R #9
+### New datasets
+
+*  Add NBM raws past 4 releases
+
+*  Add NBM Block: CORI opinionted version design at the Census block level
+
+### New functions
+
+* `get_county_nbm_raws()` allows you to get raws NBM data for a specific county and for a release, by default the last one. 
+
+### Updated functions
+
+* update to `get_fcc_dictionary.R` description for new data set and their fields
 
 # cori.data.fcc 0.0.1
 
@@ -17,3 +29,10 @@
 ## Minor improvements 
 
 * Organize reference of function by themes 
+
+
+# cori.data.fcc (first release)
+
+* First functions released.
+
+* Improve functions with a user_agent defined in aaa.R #9

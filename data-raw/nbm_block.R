@@ -27,11 +27,11 @@ library(duckdb)
 # and maybe cache some intermediary process
 con <- dbConnect(duckdb(), dbdir = "nbm_block.duckdb")
 
-init_table <- "create table nbm_block(geoid_bl varchar(15), primary key(geoid_bl));"
+#init_table <- "create table nbm_block(geoid_bl varchar(15), primary key(geoid_bl));"
 
-DBI::dbExecute(con, init_table)
+#DBI::dbExecute(con, init_table)
 
-DBI::dbWriteTable(con, "nbm_block", census_blocks, append = TRUE)
+DBI::dbWriteTable(con, "nbm_block", census_blocks)
 
 nbm_cori1 <-  "create table staging (
                     frn char(10),
@@ -130,16 +130,16 @@ DBI::dbExecute(con, nbm_count1)
 # test tes default
 nbm_count2 <- "
 alter table nbm_block
-add column cnt_cori_locations integer;
+add column cnt_bead_locations integer;
 
 update
 	nbm_block as t1
 set 
-	cnt_cori_locations = t2.cnt_cori_locations
+	cnt_bead_locations = t2.cnt_bead_locations
 from 
 	(select 
 	geoid_bl,
-	count(distinct location_id) as cnt_cori_locations
+	count(distinct location_id) as cnt_bead_locations
 	from 
 		staging
 	group by 
@@ -192,8 +192,8 @@ DBI::dbExecute(con, nbm_count3)
 # if the block has no location we let null/NA
 
 nbm_count4 <- "
-	update nbm_block set cnt_cori_locations = 0
-	where cnt_cori_locations is null and cnt_total_locations is not null;
+	update nbm_block set cnt_bead_locations = 0
+	where cnt_bead_locations is null and cnt_total_locations is not null;
 	update nbm_block set cnt_fiber_locations = 0
 	where cnt_fiber_locations is null and cnt_total_locations is not null;
 	update nbm_block set cnt_25_3 = 0
@@ -206,7 +206,79 @@ nbm_count4 <- "
 DBI::dbExecute(con, nbm_count4)
 
 
-combo <-
+# Cnt terrestrial
+# Cnt distinct frn
+# Combo isp / frn
+# Count by bead metric
+
+nbm_count5 <- "alter table nbm_block add column cnt_copper_locations integer;
+	alter table nbm_block add column cnt_cable_locations integer;
+	alter table nbm_block add column cnt_other_locations integer;
+	alter table nbm_block add column cnt_unlicensed_fixed_wireless_locations integer;
+	alter table nbm_block add column cnt_licensed_fixed_wireless_locations integer;
+	alter table nbm_block add column cnt_LBR_fixed_wireless_locations integer;
+	alter table nbm_block add column cnt_terrestrial_locations integer;
+
+with temp as (select 
+			geoid_bl,
+			count(distinct case when technology = '10' then location_id end) as cnt_copper_locations,
+			count(distinct case when technology = '40' then location_id end) as cnt_cable_locations,
+			count(distinct case when technology = '0' then location_id end) as cnt_other_locations,
+			count(distinct case when technology = '70' then location_id end) as cnt_unlicensed_fixed_wireless_locations,
+			count(distinct case when technology = '71' then location_id end) as cnt_licensed_fixed_wireless_locations,
+			count(distinct case when technology = '72' then location_id end) as cnt_LBR_fixed_wireless_locations,
+			count(distinct case when 
+					technology in ('10', '40', '50', '70', '71', '72') 
+					then location_id end) as cnt_terrestrial_locations
+		from 
+			staging group by geoid_bl)
+
+
+	update
+		nbm_block as t1
+	set 
+		cnt_copper_locations = t2.cnt_copper_locations,
+		cnt_cable_locations = t2.cnt_cable_locations,
+		cnt_other_locations = t2.cnt_other_locations,
+		cnt_unlicensed_fixed_wireless_locations = t2.cnt_unlicensed_fixed_wireless_locations,
+		cnt_licensed_fixed_wireless_locations = t2.cnt_licensed_fixed_wireless_locations,
+		cnt_LBR_fixed_wireless_locations = t2.cnt_LBR_fixed_wireless_locations,
+		cnt_terrestrial_locations = t2.cnt_terrestrial_locations
+	from temp as t2
+	where    
+		t1.geoid_bl = t2.geoid_bl;"
+
+DBI::dbExecute(con, nbm_count5)
+
+
+nbm_count6 <- "
+	update nbm_block set cnt_copper_locations = 0
+	where cnt_copper_locations is null and cnt_total_locations is not null;
+
+	update nbm_block set cnt_cable_locations = 0
+	where cnt_cable_locations is null and cnt_total_locations is not null;
+
+	update nbm_block set cnt_other_locations = 0
+	where cnt_other_locations is null and cnt_total_locations is not null;
+
+	update nbm_block set cnt_unlicensed_fixed_wireless_locations = 0
+	where cnt_unlicensed_fixed_wireless_locations is null and cnt_total_locations is not null;
+
+	update nbm_block set cnt_licensed_fixed_wireless_locations = 0
+	where cnt_licensed_fixed_wireless_locations is null and cnt_total_locations is not null;
+	
+	update nbm_block set cnt_LBR_fixed_wireless_locations = 0
+	where cnt_LBR_fixed_wireless_locations is null and cnt_total_locations is not null;
+
+	update nbm_block set cnt_terrestrial_locations = 0
+	where cnt_terrestrial_locations is null and cnt_total_locations is not null;
+	"
+
+DBI::dbExecute(con, nbm_count4)
+
+
+
+combo_frn <-
 	"alter table nbm_block
 	add column array_frn varchar[];
 
@@ -233,19 +305,41 @@ combo <-
 
 DBI::dbExecute(con, combo_frn)
 
+rel_combo_frn <- "create table rel_combo_frn (
+					frn varchar(10),
+					combo_frn uint64,
+					primary key (frn, combo_frn)
+					);
 
-"create table rel_combo_frn (
-  frn varchar(10),
-  combo_frn uint64,
-  primary key (frn, combo_frn)
-);
+				  insert into rel_combo_frn
+					select
+						distinct unnest(array_frn) as frn,
+						combo_frn
+					from
+						nbm_block;"
 
-insert into rel_combo_frn
-select
-	distinct unnest(array_frn) as frn,
-	combo_frn
-from
- 	nbm_block;"
+DBI::dbExecute(con, rel_combo_frn)
+
+frn_count <- "
+	alter table nbm_block add column cnt_distcint_frn integer;
+
+	update
+		nbm_block as t1
+	set 
+		cnt_distcint_frn = t2.cnt_distcint_frn
+
+	from (select 
+			geoid_bl,
+			count(distinct frn) as cnt_distcint_frn 
+		from 
+			staging
+		group by 
+			geoid_bl) as t2
+	where    
+		t1.geoid_bl = t2.geoid_bl;	
+
+"
+
 
 test <- DBI::dbGetQuery(con, "select * from nbm_block limit 100")
 
