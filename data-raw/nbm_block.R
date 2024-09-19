@@ -471,6 +471,6 @@ DBI::dbExecute(con, write_rel_combo)
 
 DBI::dbDisconnect(con)
 
-system("aws s3 sync nbm_block s3://fcc-data-cori/nbm_block")
+system("aws s3 sync nbm_block s3://cori.data.fcc/nbm_block")
 
-system("aws s3 cp 'rel_combo_frn.parquet' s3://fcc-data-cori/rel_combo_frn.parquet")
+system("aws s3 cp 'rel_combo_frn.parquet' s3://cori.data.fcc/rel_combo_frn.parquet")
