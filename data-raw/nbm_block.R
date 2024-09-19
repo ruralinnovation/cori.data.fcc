@@ -18,20 +18,26 @@ get_census_block <- function() {
 
 census_blocks <- get_census_block()
 
+
 stopifnot(nrow(census_blocks) == 8180866)
 
 library(duckdb)
 
-# I worked with a peersistent db
+# I worked with a persistent db
 # because I also like testing on duckdb cli
 # and maybe cache some intermediary process
 con <- dbConnect(duckdb(), dbdir = "nbm_block.duckdb")
 
-#init_table <- "create table nbm_block(geoid_bl varchar(15), primary key(geoid_bl));"
-
-#DBI::dbExecute(con, init_table)
+release <- "2023-12-01"
 
 DBI::dbWriteTable(con, "nbm_block", census_blocks)
+
+set_release <- sprintf("alter table nbm_block
+					   add column release date;
+					   update nbm_block set release = '%s'"
+					   , release)
+
+DBI::dbExecute(con, set_release)
 
 nbm_cori1 <-  "create table staging (
                     frn char(10),
@@ -49,7 +55,6 @@ nbm_cori1 <-  "create table staging (
 DBI::dbExecute(con, nbm_cori1)
 
 # the last release is '2023-12-01'
-release <- "2023-12-01"
 
 # I used nbm_raw produced previoulsy
 nbm_cori2 <- sprintf("
@@ -205,12 +210,6 @@ nbm_count4 <- "
 
 DBI::dbExecute(con, nbm_count4)
 
-
-# Cnt terrestrial
-# Cnt distinct frn
-# Combo isp / frn
-# Count by bead metric
-
 nbm_count5 <- "alter table nbm_block add column cnt_copper_locations integer;
 	alter table nbm_block add column cnt_cable_locations integer;
 	alter table nbm_block add column cnt_other_locations integer;
@@ -232,7 +231,6 @@ with temp as (select
 					then location_id end) as cnt_terrestrial_locations
 		from 
 			staging group by geoid_bl)
-
 
 	update
 		nbm_block as t1
@@ -274,7 +272,7 @@ nbm_count6 <- "
 	where cnt_terrestrial_locations is null and cnt_total_locations is not null;
 	"
 
-DBI::dbExecute(con, nbm_count4)
+DBI::dbExecute(con, nbm_count6)
 
 
 
@@ -336,16 +334,92 @@ frn_count <- "
 		group by 
 			geoid_bl) as t2
 	where    
-		t1.geoid_bl = t2.geoid_bl;	
+		t1.geoid_bl = t2.geoid_bl;	"
 
-"
+DBI::dbExecute(con, frn_count)
 
+states <-
+"create temp table us_states (
+    state_abbr varchar(2) primary key,
+    geoid_st char(2) not null
+);
 
-test <- DBI::dbGetQuery(con, "select * from nbm_block limit 100")
+insert into us_states (state_abbr, geoid_st) values
+('AL', '01'),  -- Alabama
+('AK', '02'),  -- Alaska
+('AS', '60'),  -- American Samoa
+('AZ', '04'),  -- Arizona
+('AR', '05'),  -- Arkansas
+('CA', '06'),  -- California
+('CO', '08'),  -- Colorado
+('CT', '09'),  -- Connecticut
+('DE', '10'),  -- Delaware
+('DC', '11'),  -- District of Columbia
+('FL', '12'),  -- Florida
+('GA', '13'),  -- Georgia
+('GU', '66'),  -- Guam
+('HI', '15'),  -- Hawaii
+('ID', '16'),  -- Idaho
+('IL', '17'),  -- Illinois
+('IN', '18'),  -- Indiana
+('IA', '19'),  -- Iowa
+('KS', '20'),  -- Kansas
+('KY', '21'),  -- Kentucky
+('LA', '22'),  -- Louisiana
+('ME', '23'),  -- Maine
+('MD', '24'),  -- Maryland
+('MA', '25'),  -- Massachusetts
+('MI', '26'),  -- Michigan
+('MN', '27'),  -- Minnesota
+('MS', '28'),  -- Mississippi
+('MO', '29'),  -- Missouri
+('MT', '30'),  -- Montana
+('NE', '31'),  -- Nebraska
+('NV', '32'),  -- Nevada
+('NH', '33'),  -- New Hampshire
+('NJ', '34'),  -- New Jersey
+('NM', '35'),  -- New Mexico
+('NY', '36'),  -- New York
+('NC', '37'),  -- North Carolina
+('ND', '38'),  -- North Dakota
+('MP', '69'),  -- Northern Mariana Islands
+('OH', '39'),  -- Ohio
+('OK', '40'),  -- Oklahoma
+('OR', '41'),  -- Oregon
+('PA', '42'),  -- Pennsylvania
+('PR', '72'),  -- Puerto Rico
+('RI', '44'),  -- Rhode Island
+('SC', '45'),  -- South Carolina
+('SD', '46'),  -- South Dakota
+('TN', '47'),  -- Tennessee
+('TX', '48'),  -- Texas
+('UT', '49'),  -- Utah
+('VT', '50'),  -- Vermont
+('VI', '78'),  -- Virgin Islands
+('VA', '51'),  -- Virginia
+('WA', '53'),  -- Washington
+('WV', '54'),  -- West Virginia
+('WI', '55'),  -- Wisconsin
+('WY', '56');  -- Wyoming"
+
+"alter table nbm_block
+add column if not exists geoid_st char(2);
+alter table nbm_block
+add column if not exists geoid_co char(5);
+update nbm_block
+set geoid_st = substring(geoid_bl, 1, 2);
+update nbm_block
+set geoid_co = substring(geoid_bl, 1, 5);
+
+alter table nbm_block
+add column if not exists state_abbr char(2);
+update nbm_block
+set state_abbr = us_states.state_abbr
+from us_states
+where nbm_block.geoid_st = us_states.geoid_st;"
+
+DBI::dbExecute(con, states)
+
+DBI::dbGetQuery(con, "describe nbm_block")
 
 DBI::dbDisconnect(con)
-
-frn <-  "0025646373"
-
-"select * from nbm_block
-where combo_frn in (select combo_frn from rel_combo_frn where frn = '0025646373');"
