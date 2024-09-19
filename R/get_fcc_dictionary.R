@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @examples
+#' get_fcc_dictionary("nbm_block")
 
 get_fcc_dictionary <- function(dataset) {
   dict <- cori.data.fcc::fcc_dictionary

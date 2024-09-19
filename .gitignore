@@ -5,3 +5,4 @@ data_swamp/
 .Rproj.user
 cori.data.fcc.Rproj
 *.parquet
+data-raw/fcc_staff.R

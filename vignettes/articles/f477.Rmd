@@ -87,7 +87,7 @@ table_with_options <- function(x){DT::datatable(x, rownames = FALSE,
                           )
             )}
 
-table_with_options(fcc_dictionary)
+table_with_options(get_fcc_dictionary("f477"))
 ```
 
 

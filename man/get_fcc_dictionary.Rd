@@ -15,3 +15,6 @@ a data frame
 \description{
 Display FCC variable and descriptions
 }
+\examples{
+get_fcc_dictionary("nbm_block")
+}
