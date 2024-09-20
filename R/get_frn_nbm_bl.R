@@ -1,13 +1,19 @@
 #' Load part of NBM at Census Block from CORI s3 bucket
 #'
-#' Get all the data related to a FRN.
-#' A row in this data represent a census block (2010 vintage).
+#' Get all the data related to a FRN. 
+#' A row in this data represent a census block (2020 vintage).
+#'
+#'
+#' IMPORTANT: We are not counting blocks:
+#' * when covered only by satellite servives
+#' *  and discarding a location when a service of 0/0 download/uploads speeds.
+#'
 #' Use `get_fcc_dictionary("nbm_block")` to get a description of the date.
 #' A FRN is a 10 number strings, ie "0007435902" can also be used to be more specific.
 #'
-#' FCC Broadband Data Collection
+#' Data Source: FCC Broadband Data Collection
 #'
-#' @param frn a string of 10 numbers matching FCC's FRN, default is "all"
+#' @param frn a string of 10 numbers matching FCC's FRN
 #'
 #' @return a data frame
 #'
@@ -29,9 +35,9 @@ get_frn_nbm_bl <- function(frn) {
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)
 
-	DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
+  DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   statement <- sprintf(
-	  "select * 
+   "select * 
  		  from read_parquet('s3://cori.data.fcc/nbm_block/*/*.parquet')
     where 
       combo_frn in (
@@ -41,5 +47,5 @@ get_frn_nbm_bl <- function(frn) {
     								where frn = '%s'
     );", frn)
 
-		DBI::dbGetQuery(con, statement)
+  DBI::dbGetQuery(con, statement)
 }

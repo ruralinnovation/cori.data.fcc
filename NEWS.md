@@ -4,11 +4,13 @@
 
 ### New datasets
 
-*  Add NBM raws past 4 releases
+*  Add NBM Block: CORI opinionted version designed at the Census block level
 
-*  Add NBM Block: CORI opinionted version design at the Census block level
+*  Add NBM raws, past 4 releases
 
 ### New functions
+
+* `get_frn_nbm_bl()` allows you to get all block where this FRN reported had services (minus satellite BSL and 0/0 speeds services)
 
 * `get_county_nbm_raws()` allows you to get raws NBM data for a specific county and for a release, by default the last one. 
 

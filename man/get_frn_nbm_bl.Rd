@@ -7,19 +7,26 @@
 get_frn_nbm_bl(frn)
 }
 \arguments{
-\item{frn}{a string of 10 numbers matching FCC's FRN, default is "all"}
+\item{frn}{a string of 10 numbers matching FCC's FRN}
 }
 \value{
 a data frame
 }
 \description{
 Get all the data related to a FRN.
-A row in this data represent a census block (2010 vintage).
-Use \code{get_fcc_dictionary("nbm_block")} to get a description of the date.
-A FRN is a 10 number strings, ie "0007435902" can also be used to be more specific.
+A row in this data represent a census block (2020 vintage).
 }
 \details{
-FCC Broadband Data Collection
+IMPORTANT: We are not counting blocks:
+\itemize{
+\item when covered only by satellite servives
+\item and discarding a location when a service of 0/0 download/uploads speeds.
+}
+
+Use \code{get_fcc_dictionary("nbm_block")} to get a description of the date.
+A FRN is a 10 number strings, ie "0007435902" can also be used to be more specific.
+
+Data Source: FCC Broadband Data Collection
 }
 \examples{
 \dontrun{
