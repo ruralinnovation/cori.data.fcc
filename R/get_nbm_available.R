@@ -1,13 +1,13 @@
 #' Get release available in FCC NBM
 #'
-#' NBM's API: 
+#' NBM's API:
 #' ```
 #' paste0("https://broadbandmap.fcc.gov/nbm/",
 #'        "map/api/national_map_process/nbm_get_data_download/")
 #' ```
 #' @param get_data_url a string providing NBM filing API.
 #' @param user_agent a string set up by default
-#' 
+#'
 #' @return A data frame.
 #' @export
 #'
@@ -34,7 +34,8 @@ get_nbm_available <- function(
 
   release <- cori.data.fcc::get_nbm_release()
 
-  big_list <- lapply(seq_len(nrow(release)), get_csv_to_dl, release_file = release)
+  big_list <- lapply(seq_len(nrow(release)),
+                     get_csv_to_dl, release_file = release)
 
   all_data <- do.call(rbind, big_list)
 

@@ -1,6 +1,6 @@
 #' Load part of NBM at Census Block from CORI s3 bucket
 #'
-#' Get all the data related to a FRN. 
+#' Get all the data related to a FRN.
 #' A row in this data represent a census block (2020 vintage).
 #'
 #'
