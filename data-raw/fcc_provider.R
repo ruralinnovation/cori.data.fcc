@@ -1,6 +1,8 @@
 if (!file.exists("data-raw/fcc_provider")) {
   temp <- tempfile(fileext = ".xlsx")
-  url <- "https://us-fcc.app.box.com/index.php?rm=box_download_shared_file&vanity_name=bdcprovideridtable&file_id=f_968170249571"
+  url <- paste0("https://us-fcc.app.box.com/index.php?",
+                "rm=box_download_shared_file&vanity_name=",
+                "bdcprovideridtable&file_id=f_968170249571")
   download.file(url, temp, quiet = TRUE)
   fcc_provider <- readxl::read_xlsx(temp)
   unlink(temp)

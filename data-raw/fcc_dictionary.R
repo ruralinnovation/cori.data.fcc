@@ -180,8 +180,8 @@ nbm_block <- data.frame(
                       "List of FRN excluding ISP only providing satellite services",
                       "Hash, using DuckDB hash function of the list of FRN",
                       release),
-  var_example = c("020130001003033","02", "02013", "AK", "40", "39", "0", "0", "39", 
-                  "0", "0", "0", "0", "39", "39", "39", "0", "1", 
+  var_example = c("020130001003033","02", "02013", "AK", "40", "39", "0", "0", "39",
+                  "0", "0", "0", "0", "39", "39", "39", "0", "1",
                   "[0004991444, 0018506568]",
                   14501455127825750734, "023-12-01")
 )

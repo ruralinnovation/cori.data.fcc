@@ -242,7 +242,7 @@ with temp as (select
 		cnt_copper_locations = t2.cnt_copper_locations,
 		cnt_cable_locations = t2.cnt_cable_locations,
 		cnt_other_locations = t2.cnt_other_locations,
-		cnt_licensed_fixed_wireless_locations = t2.cnt_licensed_fixed_wireless_locations,
+        cnt_licensed_fixed_wireless_locations = t2.cnt_licensed_fixed_wireless_locations,
 		cnt_LBR_fixed_wireless_locations = t2.cnt_LBR_fixed_wireless_locations,
 		cnt_terrestrial_locations = t2.cnt_terrestrial_locations
 	from temp as t2
@@ -252,12 +252,12 @@ with temp as (select
 DBI::dbExecute(con, nbm_count5)
 
 nbm_count5b <- sprintf(
-	"alter table nbm_block add column cnt_unlicensed_fixed_wireless_locations integer;
+  "alter table nbm_block add column cnt_unlicensed_fixed_wireless_locations integer;
 
 	update
 		nbm_block as t1
 	set 
-		cnt_unlicensed_fixed_wireless_locations = t2.cnt_unlicensed_fixed_wireless_locations
+       cnt_unlicensed_fixed_wireless_locations = t2.cnt_unlicensed_fixed_wireless_locations
 	from(
 		select 
 			geoid_bl,
@@ -300,7 +300,7 @@ DBI::dbExecute(con, nbm_count6)
 message(sprintf("Starting create combo frn and relation table: %s", Sys.time()))
 
 combo_frn <-
-	"alter table nbm_block
+  "alter table nbm_block
 	add column array_frn varchar[];
 
 	alter table nbm_block
