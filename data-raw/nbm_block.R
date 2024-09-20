@@ -219,7 +219,6 @@ DBI::dbExecute(con, nbm_count4)
 nbm_count5 <- "alter table nbm_block add column cnt_copper_locations integer;
 	alter table nbm_block add column cnt_cable_locations integer;
 	alter table nbm_block add column cnt_other_locations integer;
-	alter table nbm_block add column cnt_unlicensed_fixed_wireless_locations integer;
 	alter table nbm_block add column cnt_licensed_fixed_wireless_locations integer;
 	alter table nbm_block add column cnt_LBR_fixed_wireless_locations integer;
 	alter table nbm_block add column cnt_terrestrial_locations integer;
@@ -229,7 +228,6 @@ with temp as (select
 			count(distinct case when technology = '10' then location_id end) as cnt_copper_locations,
 			count(distinct case when technology = '40' then location_id end) as cnt_cable_locations,
 			count(distinct case when technology = '0' then location_id end) as cnt_other_locations,
-			count(distinct case when technology = '70' then location_id end) as cnt_unlicensed_fixed_wireless_locations,
 			count(distinct case when technology = '71' then location_id end) as cnt_licensed_fixed_wireless_locations,
 			count(distinct case when technology = '72' then location_id end) as cnt_LBR_fixed_wireless_locations,
 			count(distinct case when 
@@ -244,7 +242,6 @@ with temp as (select
 		cnt_copper_locations = t2.cnt_copper_locations,
 		cnt_cable_locations = t2.cnt_cable_locations,
 		cnt_other_locations = t2.cnt_other_locations,
-		cnt_unlicensed_fixed_wireless_locations = t2.cnt_unlicensed_fixed_wireless_locations,
 		cnt_licensed_fixed_wireless_locations = t2.cnt_licensed_fixed_wireless_locations,
 		cnt_LBR_fixed_wireless_locations = t2.cnt_LBR_fixed_wireless_locations,
 		cnt_terrestrial_locations = t2.cnt_terrestrial_locations
@@ -254,6 +251,26 @@ with temp as (select
 
 DBI::dbExecute(con, nbm_count5)
 
+nbm_count5b <- sprintf(
+	"alter table nbm_block add column cnt_unlicensed_fixed_wireless_locations integer;
+
+	update
+		nbm_block as t1
+	set 
+		cnt_unlicensed_fixed_wireless_locations = t2.cnt_unlicensed_fixed_wireless_locations
+	from(
+		select 
+			geoid_bl,
+			count(distinct case when technology = '70' then location_id end) as cnt_unlicensed_fixed_wireless_locations
+		from 
+			read_parquet('nbm_raw/*/*/*/*.parquet')
+			where release = '%s'
+		group by
+			geoid_bl) as t2
+			
+	where t1.geoid_bl = t2.geoid_bl;", release)
+
+DBI::dbExecute(con, nbm_count5b)
 
 nbm_count6 <- "
 	update nbm_block set cnt_copper_locations = 0
@@ -289,11 +306,10 @@ combo_frn <-
 	alter table nbm_block
 	add column combo_frn uint64;
 
-
 	with combo as (
 	select 
 		geoid_bl, 
-		array_agg(distinct frn) as array_frn, 
+		array_agg(distinct frn order by frn) as array_frn, 
 		hash(array_frn) as combo_frn 
 	from staging 
 	group by geoid_bl
