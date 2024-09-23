@@ -8,11 +8,25 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(DT)
+table_with_options <- function(x){DT::datatable(x, rownames = FALSE,
+              extensions = 'Buttons',
+                options = list(
+                          dom = 'Blfrtip',
+                          buttons = list('copy', 'print', list(
+                            extend = 'collection',
+                            buttons = c('csv', 'excel'),
+                            text = 'Download')
+                                    )
+                          )
+            )}
 ```
 
 ```{r setup}
 library(cori.data.fcc)
 ```
+
+# What is the National Broadband Map (NBM) data set?
 
 ## License and Attribution
 
@@ -28,7 +42,7 @@ The license can be found [here](https://broadbandmap.fcc.gov/about):
 > CostQuest Associates, Inc. and its third-party licensors, as applicable, own all right, title, and interest, including all intellectual property rights, in and to the data for locations reflected in the Fabric (including the Location ID, latitude and longitude, address, unit count, and building type code for each location in the Fabric). CostQuest is granted certain rights to Fabric correction submissions for the purpose of correcting or otherwise modifying BDC Fabric data. Broadband service providers, governmental entities, and other third parties are able to license Fabric data, including any changes to Fabric data that have been made as a result of challenges, at no cost for purposes of their participation in the FCC's Broadband Data Collection.
 
 
-## What is the National Broadband Map (NBM) data set?
+## A Quick Introduction 
 
 NBM was started by the FCC in November 2022[^fcc_nbm_start] and is following [Form 477](https://ruralinnovation.github.io/cori.data.fcc/articles/f477.html). 
 
@@ -85,6 +99,47 @@ The FCC did not (April 2024) provides a changelog between releases or versions (
 ### What is the geographic coverage?
 
 The Broadband Availability data is covering all US States, Puerto Rico and the US territories.  
+
+
+# How does cori.data.fcc help me getting NBM data? 
+
+`cori.data.fcc` help you access this data set in 3 diffferent ways: 
+
+1. The package is providing functions to list available data and download it 
+
+2. We ingested all the Fixed Broadband Availability Data and are providing it in a s3 bucket
+
+3. We ingested all Fixed Broadband Availability data and transformed it to provides information at the Census block level.
+
+
+## Which ways should I go? 
+
+It will depends on your specific needs. 
+We were more interested at the information at the census block level but for that we needed to download the data. 
+So we might as well share how we do it.
+We then first transformed the data in our database. 
+The process was taking some time and frequently we had questions that could not be answered with how the schema was made, hence we reingested it. 
+Ingesting CSV is a coastly operation it was better to have an intermediary data set, close to the raw data but in a better format to either access it and or reingest it. 
+Parquet was perfect for that need and we might as well provide other to access it. 
+
+
+
+### NBM raws's Data dictionary 
+
+This dataset is called "nbm_raw" and  dictionary can be accessed with the function `get_fcc_dictionary`:
+
+```{r nbm-data-dic}
+table_with_options(get_fcc_dictionary("nbm_raw"))
+```
+
+
+### NBM Block's Data Dictionary
+
+This dataset is called "nbm_block"
+
+```{r nbm-data-dic}
+table_with_options(get_fcc_dictionary("nbm_block"))
+```
 
 
 <!--
