@@ -123,7 +123,6 @@ Ingesting CSV is a coastly operation it was better to have an intermediary data 
 Parquet was perfect for that need and we might as well provide other to access it. 
 
 
-
 ### NBM raws's Data dictionary 
 
 This dataset is called "nbm_raw" and  dictionary can be accessed with the function `get_fcc_dictionary`:
@@ -137,7 +136,7 @@ table_with_options(get_fcc_dictionary("nbm_raw"))
 
 This dataset is called "nbm_block"
 
-```{r nbm-data-dic}
+```{r nbm-data-dic2}
 table_with_options(get_fcc_dictionary("nbm_block"))
 ```
 
