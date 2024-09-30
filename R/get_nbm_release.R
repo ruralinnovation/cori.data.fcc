@@ -7,7 +7,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' nbm <- get_nbm_release()
+#' }
 
 get_nbm_release <- function(filing_url = "https://broadbandmap.fcc.gov/nbm/map/api/published/filing",
                             user_agent = the$user_agent) {

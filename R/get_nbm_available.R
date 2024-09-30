@@ -12,7 +12,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' nbm_data <- get_nbm_available()
+#' }
 
 get_nbm_available <- function(
   get_data_url = paste0("https://broadbandmap.fcc.gov/nbm/map/",
