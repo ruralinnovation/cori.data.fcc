@@ -18,5 +18,6 @@ get_nbm_release <- function(filing_url = "https://broadbandmap.fcc.gov/nbm/map/a
                           "User-Agent" = user_agent)
   req <- curl::curl_fetch_memory(filing_url, handle = h)
   release <- jsonlite::fromJSON(rawToChar(req$content))$data
+  release$time_stamp <- as.Date(Sys.time())
   return(release)
 }
