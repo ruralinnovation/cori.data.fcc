@@ -31,8 +31,7 @@ get_nbm_bl <- function(geoid_co) {
   statement <- sprintf(
     "select * 
  		  from read_parquet('s3://cori.data.fcc/nbm_block/*/*.parquet')
-    where geoid_co = '%s'
-    );", geoid_co)
+    where geoid_co = '%s';", geoid_co)
 
   DBI::dbGetQuery(con, statement)
 }
