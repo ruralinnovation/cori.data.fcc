@@ -21,7 +21,5 @@ A data frame.
 Get release available in FCC NBM
 }
 \examples{
-\dontrun{
 nbm <- get_nbm_release()
-}
 }

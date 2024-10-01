@@ -5,7 +5,7 @@
 #'
 #' @param parquet_name a path were the parquet files should be stored
 #' @param src_directory a directory containing only the csv needed
-#' @param part_one a string defining the first column to partition the parquet file
+#' @param part_one a string defining the first column to partition the parquet file 
 #' @param part_two a string defining the second column to partition the parquet file
 #'
 #' @return 0 if the execute went well and write a parquet file
