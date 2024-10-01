@@ -17,6 +17,7 @@
 #' @import duckdb
 #'
 #'@examples
+#' nbm_bl <- get_nbm_bl(geoid_co = "47051")
 
 get_nbm_bl <- function(geoid_co) {
 
