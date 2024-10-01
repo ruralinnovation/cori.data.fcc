@@ -5,10 +5,10 @@
 ### NBM
 # Source: https://us-fcc.app.box.com/v/bdc-data-downloads-output
 
-geoid_bl_desc <- "15-digit U.S. Census Bureau FIPS code for the censusblock in which the Broadband Serviceable Location islocated"
+geoid_bl_desc <- "15-digit U.S. Census Bureau FIPS code for the census block in which the Broadband Serviceable Location is located"
 geoid_co_desc <- "5-digit U.S. Census Bureau for county, 2 first numbers represent a State and last 3 a county within a state"
 geoid_st_desc <- "2-digit U.S. Census Bureau for states"
-state_abbr_desc <- "2-character USPS abbreviation for the state/territory in which the Broadband Serviceable Location islocated"
+state_abbr_desc <- "2-character USPS abbreviation for the state/territory in which the Broadband Serviceable Location is located"
 frn_desc <- "10-digit FCC Registration Number (FRN) of the entitythat submitted the data"
 release <- "Availability data vintage in Month letter (J or D for June or December respectively) and 2digit year (i.e. J23) converted as Date"
 
@@ -116,7 +116,7 @@ nbm_raw <- data.frame(
   var_description = c(
     frn_desc,
     "Unique identifier for the fixed service provider",
-    "Name of the entity or service advertised or offered toconsumers",
+    "Name of the entity or service advertised or offered to consumers",
     "Unique identifier for the location, as used in theBroadband Serviceable Location Fabric",
     "Code for the technology used for the deployed TODO service table link",
     "Maximum advertised download speed offered at the location in Mbps",
