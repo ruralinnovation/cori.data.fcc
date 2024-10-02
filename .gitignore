@@ -1,8 +1,10 @@
-docs 
-.DS_Store
-docs
-data_swamp/ 
-.Rproj.user
+*.DS_Store
+*.bak
+*.idea
+.R*
+*.R*
 cori.data.fcc.Rproj
-*.parquet
+docs
 data-raw/fcc_staff.R
+data_swamp/
+*.parquet

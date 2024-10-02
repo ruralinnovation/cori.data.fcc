@@ -13,6 +13,21 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(DT)
+
+table_with_options <- function(x) {
+  DT::datatable(x, rownames = FALSE,
+                extensions = "Buttons",
+                options = list(
+                          dom = "Blfrtip",
+                          buttons = list("copy", "print", list(
+                            extend = "collection",
+                            buttons = c("csv", "excel"),
+                            text = "Download")
+                                    )
+                          )
+)}
+
 ```
 
 ## FCC's Form 477
@@ -73,21 +88,6 @@ For that we are providing all the code used to generated this data set [here](ht
 
 ```{r}
 library(cori.data.fcc)
-library(DT)
-
-table_with_options <- function(x) {
-  DT::datatable(x, rownames = FALSE,
-                extensions = "Buttons",
-                options = list(
-                          dom = "Blfrtip",
-                          buttons = list("copy", "print", list(
-                            extend = "collection",
-                            buttons = c("csv", "excel"),
-                            text = "Download")
-                                    )
-                          )
-)}
-
 table_with_options(get_fcc_dictionary("f477"))
 ```
 
