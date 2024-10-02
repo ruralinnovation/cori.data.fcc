@@ -2,7 +2,6 @@
 #'
 #' Get all the data related to a states or county.
 #'
-#'
 #' A row in this data represent a census block (2020 vintage).
 #' Use `get_fcc_dictionary("nbm_block")` to get a description of the date.
 #'
