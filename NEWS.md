@@ -22,7 +22,7 @@
 
 ### Removed functions
 
-* `fcc_to_parquet()` not needed and or to opinionated to be useful
+* `fcc_to_parquet()` not needed and/or too opinionated to be useful
 
 # cori.data.fcc 0.0.1
 
