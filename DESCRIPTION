@@ -15,7 +15,9 @@ Suggests:
     testthat (>= 3.0.0),
     pkgdown,
     dplyr,
-    DT
+    DT,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 Imports: 
     curl,
@@ -26,3 +28,4 @@ Imports:
     stringi
 URL: https://ruralinnovation.github.io/cori.data.fcc/
 Config/Needs/website: rmarkdown
+VignetteBuilder: knitr

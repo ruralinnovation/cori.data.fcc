@@ -36,34 +36,54 @@ You can install the development version of cori.data.fcc from [GitHub](https://g
 devtools::install_github("ruralinnovation/cori.data.fcc")
 ```
 
-## Example
+## Examples
 
-This is a basic example which shows some basic workflow:
-
-```{r example-release}
+```{r load}
 library(cori.data.fcc)
-
-release <- get_nbm_release() # get the available releases
-release
 ```
 
-You can also inspect what is available:
+### National Broadband Map
 
-```{r example-available}
-nbm <- get_nbm_available() # get what data is available
-# if we are intrested in  "Fixed Broadband" / "Nationwide" / released "June 30, 2023"
-nbm_filter <- nbm[which(nbm$release == "June 30, 2023" &
-                        nbm$data_type == "Fixed Broadband" &
-                        nbm$data_category == "Nationwide"), ]
-rownames(nbm_filter) <- NULL
+- The package is providing you a way to download zipped `csv`  see the vignette "Check and download NBM data"
 
+- Access a parquet files stored in CORI s3 bucket per county:
 
-# or
-nbm_dplyr_filter <- nbm |> dplyr::filter(release == "June 30, 2023" &
-                                         data_type == "Fixed Broadband" &
-                                         data_category == "Nationwide")
-all.equal(nbm_filter, nbm_dplyr_filter)
-head(nbm_filter)
+```{r nbm_raw}
+guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
+head(guilford_cty)
+```
+
+- Use the CORI opinionated version at the Census block level for the **last NBM's release**:
+
+```{r nbm_block}
+# get a county
+nbm_bl <- get_nbm_bl(geoid_co = "47051")
+dim(nbm_bl)
+
+# get census block covered by an ISP identified by their FRN
+skymesh <- get_frn_nbm_bl("0027136753")
+dim(skymesh)
+
+```
+
+### Form 477
+
+Sadly automating the download of some of the source data is harder for Form 477. 
+We are not providing that functionality.  
+
+You can get all data (multiple years) covering a State from Form 477:
+
+```{r get_f477_example}
+f477_vt <- get_f477("VT")
+head(f477_vt)
+```
+
+### Utilities
+
+Getting the dictionnary for each dataset:
+
+```{r get_fcc_dictionary_ex}
+head(get_fcc_dictionary())
 ```
 
 

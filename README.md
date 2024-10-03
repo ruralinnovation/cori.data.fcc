@@ -31,64 +31,127 @@ You can install the development version of cori.data.fcc from
 devtools::install_github("ruralinnovation/cori.data.fcc")
 ```
 
-## Example
-
-This is a basic example which shows some basic workflow:
+## Examples
 
 ``` r
 library(cori.data.fcc)
-
-release <- get_nbm_release() # get the available releases
-release
-#>   filing_type_id filing_type    filing_subtype
-#> 1         100006    Biannual December 31, 2022
-#> 2         100000    Biannual     June 30, 2022
-#> 3         100007    Biannual     June 30, 2023
-#> 4         100011    Biannual December 31, 2023
-#>                           process_uuid enable_bfm_link
-#> 1 bbfba324-616d-4247-ab49-933fdd97ff12            TRUE
-#> 2 7b81911a-c0cb-4be6-8e6c-63a32e8bf917            TRUE
-#> 3 59f1d8d7-e532-468a-b68f-826c7945f918            TRUE
-#> 4 dc5111bf-7169-40bf-bb23-f0827250cc04            TRUE
-#>   enable_challenge_download
-#> 1                      TRUE
-#> 2                      TRUE
-#> 3                      TRUE
-#> 4                      TRUE
 ```
 
-You can also inspect what is available:
+### National Broadband Map
+
+- The package is providing you a way to download zipped `csv` see the
+  vignette “Check and download NBM data”
+
+- Access a parquet files stored in CORI s3 bucket per county:
 
 ``` r
-nbm <- get_nbm_available() # get what data is available
-# if we are intrested in  "Fixed Broadband" / "Nationwide" / released "June 30, 2023"
-nbm_filter <- nbm[which(nbm$release == "June 30, 2023" &
-                        nbm$data_type == "Fixed Broadband" &
-                        nbm$data_category == "Nationwide"), ]
-rownames(nbm_filter) <- NULL
+guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
+head(guilford_cty)
+#>          frn provider_id brand_name location_id technology
+#> 1 0001857952      130077       AT&T  1344960789         10
+#> 2 0001857952      130077       AT&T  1344965855         10
+#> 3 0001857952      130077       AT&T  1344971572         10
+#> 4 0001857952      130077       AT&T  1344982708         10
+#> 5 0001857952      130077       AT&T  1344991329         10
+#> 6 0001857952      130077       AT&T  1344996969         10
+#>   max_advertised_download_speed max_advertised_upload_speed low_latency
+#> 1                            10                           1        TRUE
+#> 2                             0                           0        TRUE
+#> 3                            10                           1        TRUE
+#> 4                            50                          10        TRUE
+#> 5                            50                          10        TRUE
+#> 6                            75                          20        TRUE
+#>   business_residential_code state_usps        geoid_bl geoid_co file_time_stamp
+#> 1                         X         NC 370810161022008    37081      2024-09-03
+#> 2                         X         NC 370810168003003    37081      2024-09-03
+#> 3                         X         NC 370810125051020    37081      2024-09-03
+#> 4                         X         NC 370810171011021    37081      2024-09-03
+#> 5                         X         NC 370810157042006    37081      2024-09-03
+#> 6                         X         NC 370810127052022    37081      2024-09-03
+#>      release
+#> 1 2023-12-01
+#> 2 2023-12-01
+#> 3 2023-12-01
+#> 4 2023-12-01
+#> 5 2023-12-01
+#> 6 2023-12-01
+```
 
+- Use the CORI opinionated version at the Census block level for the
+  **last NBM’s release**:
 
-# or
-nbm_dplyr_filter <- nbm |> dplyr::filter(release == "June 30, 2023" &
-                                         data_type == "Fixed Broadband" &
-                                         data_category == "Nationwide")
-all.equal(nbm_filter, nbm_dplyr_filter)
-#> [1] TRUE
-head(nbm_filter)
-#>       id       release       data_type technology_code state_fips provider_id
-#> 1 689598 June 30, 2023 Fixed Broadband               0         01        <NA>
-#> 2 689599 June 30, 2023 Fixed Broadband               0         04        <NA>
-#> 3 689600 June 30, 2023 Fixed Broadband               0         06        <NA>
-#> 4 689601 June 30, 2023 Fixed Broadband               0         12        <NA>
-#> 5 689602 June 30, 2023 Fixed Broadband               0         17        <NA>
-#> 6 689603 June 30, 2023 Fixed Broadband               0         18        <NA>
-#>                                    file_name file_type data_category
-#> 1 bdc_01_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
-#> 2 bdc_04_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
-#> 3 bdc_06_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
-#> 4 bdc_12_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
-#> 5 bdc_17_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
-#> 6 bdc_18_Other_fixed_broadband_J23_01sep2024       csv    Nationwide
+``` r
+# get a county
+nbm_bl <- get_nbm_bl(geoid_co = "47051")
+dim(nbm_bl)
+#> [1] 2146   21
+
+# get census block covered by an ISP identified by their FRN
+skymesh <- get_frn_nbm_bl("0027136753")
+dim(skymesh)
+#> [1]  3 21
+```
+
+### Form 477
+
+Sadly automating the download of some of the source data is harder for
+Form 477. We are not providing that functionality.
+
+You can get all data (multiple years) covering a State from Form 477:
+
+``` r
+f477_vt <- get_f477("VT")
+head(f477_vt)
+#>   Provider_Id        FRN            ProviderName           DBAName
+#> 1        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
+#> 2        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
+#> 3        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
+#> 4        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
+#> 5        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
+#> 6        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
+#>        HoldingCompanyName HocoNum               HocoFinal StateAbbr
+#> 1 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
+#> 2 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
+#> 3 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
+#> 4 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
+#> 5 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
+#> 6 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
+#>         BlockCode TechCode Consumer MaxAdDown MaxAdUp Business       Date
+#> 1 500159531001026       42     TRUE        25       5     TRUE 2014-12-01
+#> 2 500159531001026       41     TRUE        25       5     TRUE 2014-12-01
+#> 3 500159531001026       50    FALSE         0       0     TRUE 2014-12-01
+#> 4 500159531001027       42     TRUE        25       5     TRUE 2014-12-01
+#> 5 500159531001027       41     TRUE        25       5     TRUE 2014-12-01
+#> 6 500159531001027       50    FALSE         0       0     TRUE 2014-12-01
+```
+
+### Utilities
+
+Getting the dictionnary for each dataset:
+
+``` r
+head(get_fcc_dictionary())
+#>   dataset           var_name var_type
+#> 1    f477        Provider_Id     TEXT
+#> 2    f477                FRN     TEXT
+#> 3    f477       ProviderName  VARCHAR
+#> 4    f477            DBAName  VARCHAR
+#> 5    f477 HoldingCompanyName  VARCHAR
+#> 6    f477            HocoNum     TEXT
+#>                               var_description
+#> 1             filing number (assigned by FCC)
+#> 2                     FCC registration number
+#> 3                               Provider name
+#> 4                    'Doing business as' name
+#> 5 Holding company name (as filed on Form 477)
+#> 6    Holding company number (assigned by FCC)
+#>                                            var_example
+#> 1                                                 8026
+#> 2                                           0001570936
+#> 3 Arctic Slope Telephone Association Cooperative, Inc.
+#> 4                                                ASTAC
+#> 5 Arctic Slope Telephone Association Cooperative, Inc.
+#> 6                                               130067
 ```
 
 The package also provide the list of Provider ID and FRN
