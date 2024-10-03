@@ -1,6 +1,8 @@
 #' Display FCC variable and descriptions
 #'
-#' @param dataset a string matching a dataset
+#' Return dictionary for a specific dataset. Available dataset are "f477", "nbm_raw" and "nbm_block".
+#'
+#' @param dataset a string matching a dataset, default is "all"
 #'
 #' @return a data frame
 #'
@@ -9,7 +11,12 @@
 #' @examples
 #' get_fcc_dictionary("nbm_block")
 
-get_fcc_dictionary <- function(dataset) {
+get_fcc_dictionary <- function(dataset = "all") {
   dict <- cori.data.fcc::fcc_dictionary
-  dict[dict[["dataset"]] == dataset, ]
+  if (dataset == "all") {
+    return(dict)
+  } else {
+    filter <- dict[dict[["dataset"]] == dataset, ]
+    return(filter)
+  }
 }
