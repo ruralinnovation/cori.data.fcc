@@ -11,7 +11,7 @@ navbar:
       text: Use cases
       menu:
         - text: "Check and download NBM data"
-          href: articles/Download_nbm.html
+          href: articles/Check_and_download_NBM_data.html
     data:
       text: "Data stories"
       menu:

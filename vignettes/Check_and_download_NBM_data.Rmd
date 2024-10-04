@@ -1,0 +1,42 @@
+---
+title: "Check and download NBM data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{"Check and download NBM data"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup}
+library(cori.data.fcc)
+```
+
+
+This example shows some basic workflow:
+
+1. First, you inspect what release are available: 
+
+```{r get_nbm_release}
+release <- get_nbm_release() # get the available releases
+release
+```
+
+2. Second, you check what files are available:
+
+```{r get_nbm_available}
+nbm <- get_nbm_available() # get what data is available
+# if we are intrested in  "Fixed Broadband" / "Nationwide" / released "June 30, 2023"
+nbm_filter <- nbm[which(nbm$release == "June 30, 2023" &
+                        nbm$data_type == "Fixed Broadband" &
+                        nbm$data_category == "Nationwide"), ]
+rownames(nbm_filter) <- NULL
+
+
+# or
+nbm_dplyr_filter <- nbm |> dplyr::filter(release == "June 30, 2023" &
+                                         data_type == "Fixed Broadband" &
+                                         data_category == "Nationwide")
+all.equal(nbm_filter, nbm_dplyr_filter)
+#> [1] TRUE
+head(nbm_filter)
+```
