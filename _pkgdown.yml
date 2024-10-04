@@ -16,7 +16,7 @@ navbar:
       text: "Data stories"
       menu:
       - text: "National Broadband Map (NBM)"
-        href: articles/MBM.html
+        href: articles/NBM.html
       - text: "FCC's Form 477"
         href: articles/f477.html
 
