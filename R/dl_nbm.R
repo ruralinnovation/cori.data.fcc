@@ -1,7 +1,7 @@
 #' Download NBM data
 #'
-#' Just a draft of a function that download all NBM data related to CORI works
-#' It motsly works in my setup (download in ~/data_swamp)
+#' Function that download all NBM data related to CORI works. 
+#' It takes a path to download the zipped csv.
 #'
 #' @param path_to_dl a string by default "~/data_swamp"
 #' @param release_date a string can be "December 31, 2023" or "June 30, 2023"
@@ -10,7 +10,7 @@
 #' @param user_agent a string set up by default
 #' @param ... additional parameters for download.file()
 #'
-#' @return A lot of zipped file
+#' @return Zipped csv
 #' @export
 #'
 #' @examples

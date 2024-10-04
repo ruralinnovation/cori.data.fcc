@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nbm_release.R
 \name{get_nbm_release}
 \alias{get_nbm_release}
-\title{Get release available in FCC NBM}
+\title{Get a list of release available in FCC NBM}
 \usage{
 get_nbm_release(
   filing_url = "https://broadbandmap.fcc.gov/nbm/map/api/published/filing",
@@ -18,7 +18,7 @@ get_nbm_release(
 A data frame.
 }
 \description{
-Get release available in FCC NBM
+Get a list of release available in FCC NBM
 }
 \examples{
 nbm <- get_nbm_release()

@@ -1,6 +1,6 @@
-#' Get release available in FCC NBM
+#' Get a list of files availables in FCC servers
 #'
-#' NBM's API: 
+#' NBM's API:
 #' ```
 #' paste0("https://broadbandmap.fcc.gov/nbm/",
 #'        "map/api/national_map_process/nbm_get_data_download/")

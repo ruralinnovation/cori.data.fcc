@@ -1,12 +1,11 @@
 #' Load part of NBM at Census Block from CORI s3 bucket
 #'
-#' Get all the data related to a FRN. 
+#' Get all the data related to a FRN.
 #' A row in this data represent a census block (2020 vintage).
-#'
 #'
 #' IMPORTANT: We are not counting blocks:
 #' * when covered only by satellite servives
-#' *  and discarding a location when a service of 0/0 download/uploads speeds.
+#' * and discarding a location when a service of 0/0 download/uploads speeds.
 #'
 #' Use `get_fcc_dictionary("nbm_block")` to get a description of the date.
 #' A FRN is a 10 number strings, ie "0007435902" can also be used to be more specific.

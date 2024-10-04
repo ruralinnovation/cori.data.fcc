@@ -23,13 +23,12 @@ navbar:
 reference:
   - title: NBM 
     contents:
+    - get_nbm_bl
+    - get_county_nbm_raw
+    - get_frn_nbm_bl
     - get_nbm_release
     - get_nbm_available
     - dl_nbm 
-    - fcc_to_parquet
-    - get_county_nbm_raw
-    - get_frn_nbm_bl
-    - get_nbm_bl
 
   - title: Form 477
     contents:
@@ -39,8 +38,8 @@ reference:
     contents:
     - get_fcc_dictionary
     - fcc_dictionary
-    - fcc_provider
     - check_frn
+    - fcc_provider
     - user_agent
     - set_user_agent
 

@@ -1,4 +1,4 @@
-# cori.data.fcc (development version)
+# cori.data.fcc 0.1.0
 
 ## Major Changes
 

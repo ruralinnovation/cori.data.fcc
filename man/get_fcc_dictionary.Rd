@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_fcc_dictionary.R
 \name{get_fcc_dictionary}
 \alias{get_fcc_dictionary}
-\title{Display FCC variable and descriptions}
+\title{Display FCC variables and associated descriptions}
 \usage{
 get_fcc_dictionary(dataset = "all")
 }
@@ -13,7 +13,7 @@ get_fcc_dictionary(dataset = "all")
 a data frame
 }
 \description{
-Return dictionary for a specific dataset. Available dataset are "f477", "nbm_raw" and "nbm_block".
+Return dictionary for a all datasets. Available dataset are "f477", "nbm_raw" and "nbm_block".
 }
 \examples{
 get_fcc_dictionary("nbm_block")

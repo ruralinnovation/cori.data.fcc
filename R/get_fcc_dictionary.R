@@ -1,6 +1,6 @@
-#' Display FCC variable and descriptions
+#' Display FCC variables and associated descriptions
 #'
-#' Return dictionary for a specific dataset. Available dataset are "f477", "nbm_raw" and "nbm_block".
+#' Return dictionary for a all datasets. Available dataset are "f477", "nbm_raw" and "nbm_block".
 #'
 #' @param dataset a string matching a dataset, default is "all"
 #'

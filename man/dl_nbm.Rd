@@ -27,11 +27,11 @@ dl_nbm(
 \item{...}{additional parameters for download.file()}
 }
 \value{
-A lot of zipped file
+Zipped csv
 }
 \description{
-Just a draft of a function that download all NBM data related to CORI works
-It motsly works in my setup (download in ~/data_swamp)
+Function that download all NBM data related to CORI works.
+It takes a path to download the zipped csv.
 }
 \examples{
 \dontrun{
