@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/f477.html">FCC's Form 477</a></li>
+    <li><a class="dropdown-item" href="../articles/NBM.html">National Broadband Map (NBM)</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -141,21 +142,7 @@ data set <a href="https://github.com/ruralinnovation/cori.data.fcc/blob/main/dat
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ruralinnovation.github.io/cori.data.fcc/">cori.data.fcc</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/DT" class="external-link">DT</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">table_with_options</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span><span class="va">x</span>, rownames <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>              extensions <span class="op">=</span> <span class="st">'Buttons'</span>,</span>
-<span>                options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>                          dom <span class="op">=</span> <span class="st">'Blfrtip'</span>,</span>
-<span>                          buttons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'copy'</span>, <span class="st">'print'</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>                            extend <span class="op">=</span> <span class="st">'collection'</span>,</span>
-<span>                            buttons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'csv'</span>, <span class="st">'excel'</span><span class="op">)</span>,</span>
-<span>                            text <span class="op">=</span> <span class="st">'Download'</span><span class="op">)</span></span>
-<span>                                    <span class="op">)</span></span>
-<span>                          <span class="op">)</span></span>
-<span>            <span class="op">)</span><span class="op">}</span></span>
-<span></span>
-<span><span class="fu">table_with_options</span><span class="op">(</span><span class="va">dictionary</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">table_with_options</span><span class="op">(</span><span class="fu"><a href="../reference/get_fcc_dictionary.html">get_fcc_dictionary</a></span><span class="op">(</span><span class="st">"f477"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477"],["Provider_Id","FRN","ProviderName","DBAName","HoldingCompanyName","HocoNum","HocoFinal","StateAbbr","BlockCode","TechCode","Consumer","MaxAdDown","MaxAdUp","Business","Date"],["TEXT","TEXT","VARCHAR","VARCHAR","VARCHAR","TEXT","TEXT","CHAR(2)","CHAR(15)","VARCHAR(2)","BOOLEAN","SMALLINT","SMALLINT","BOOLEAN","Date"],["filing number (assigned by FCC)","FCC registration number","Provider name","'Doing business as' name","Holding company name (as filed on Form 477)","Holding company number (assigned by FCC)","Holding company name (attribution by FCC)","2-letter state abbreviation used by the US Postal Service","15-digit census block code used in the 2010 US Census","2-digit code indicating the Technology of Transmission used to offer broadband service","(0/1) where 1 = Provider can or does offer consumer/mass market/residential service in the block","Maximum advertised downstream speed/bandwidth (in Mbps) offered by the provider in the block for Consumer service","Maximum advertised upstream speed/bandwidth (in Mbps) offered by the provider in the block for Consumer service","(0/1) where 1 = Provider can or does offer business/government service in the block","Date of the release, provided in file name"],["8026","0001570936","Arctic Slope Telephone Association Cooperative, Inc.","ASTAC","Arctic Slope Telephone Association Cooperative, Inc.","130067","Arctic Slope Telephone Association Cooperative, Inc.","AK","021850001001047","11","true","1","0","true","2014-12-01 00:00:00"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>dataset<\/th>\n      <th>var_name<\/th>\n      <th>var_type<\/th>\n      <th>var_description<\/th>\n      <th>var_example<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","print",{"extend":"collection","buttons":["csv","excel"],"text":"Download"}],"columnDefs":[{"name":"dataset","targets":0},{"name":"var_name","targets":1},{"name":"var_type","targets":2},{"name":"var_description","targets":3},{"name":"var_example","targets":4}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p>You may have notice that we could have been more strict on our data
 types. For example an FRN should be 10 numbers (with padded 0), ie
@@ -177,7 +164,7 @@ revisit this decisions and enforce more constraints on data.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>

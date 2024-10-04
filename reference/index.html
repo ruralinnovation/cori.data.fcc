@@ -19,6 +19,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/f477.html">FCC's Form 477</a></li>
+    <li><a class="dropdown-item" href="../articles/NBM.html">National Broadband Map (NBM)</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -65,10 +66,22 @@
         <dd>Download NBM data</dd>
       </dl><dl><dt>
 
-          <code><a href="fcc_to_parquet.html">fcc_to_parquet()</a></code>
+          <code><a href="get_county_nbm_raw.html">get_county_nbm_raw()</a></code>
 
         </dt>
-        <dd>Convert CSVs to parquet for NBM data</dd>
+        <dd>Load all BSL from NBM dataset for a specific county</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_frn_nbm_bl.html">get_frn_nbm_bl()</a></code>
+
+        </dt>
+        <dd>Load part of NBM at Census Block from CORI s3 bucket</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_nbm_bl.html">get_nbm_bl()</a></code>
+
+        </dt>
+        <dd>Load part of NBM at Census Block from CORI s3 bucket</dd>
       </dl></div><div class="section level2">
       <h2 id="form-">Form 477<a class="anchor" aria-label="anchor" href="#form-"></a></h2>
 
@@ -99,13 +112,13 @@
 
       <dl><dt>
 
-          <code><a href="fcc_dictionary.html">fcc_dictionary()</a></code>
+          <code><a href="get_fcc_dictionary.html">get_fcc_dictionary()</a></code>
 
         </dt>
         <dd>Display FCC variable and descriptions</dd>
       </dl><dl><dt>
 
-          <code><a href="dictionary.html">dictionary</a></code>
+          <code><a href="fcc_dictionary.html">fcc_dictionary</a></code>
 
         </dt>
         <dd>Dictionary for our datasets</dd>
@@ -143,7 +156,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

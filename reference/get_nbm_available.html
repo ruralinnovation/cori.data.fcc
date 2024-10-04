@@ -25,6 +25,7 @@ paste0(&quot;https://broadbandmap.fcc.gov/nbm/&quot;,
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/f477.html">FCC's Form 477</a></li>
+    <li><a class="dropdown-item" href="../articles/NBM.html">National Broadband Map (NBM)</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -77,7 +78,28 @@ paste0(&quot;https://broadbandmap.fcc.gov/nbm/&quot;,
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nbm_data</span> <span class="op">&lt;-</span> <span class="fu">get_nbm_available</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in curl::curl_fetch_memory(get_data_url):</span> HTTP/2 stream 0 was not closed cleanly: INTERNAL_ERROR (err 2)</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nbm_data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id           release                           data_type technology_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 548534 December 31, 2022 Broadband Summary by Geography Type            &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 548537 December 31, 2022                     Fixed Broadband               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 548538 December 31, 2022                     Fixed Broadband               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 548539 December 31, 2022                     Fixed Broadband               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 548540 December 31, 2022                     Fixed Broadband               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 548541 December 31, 2022                     Fixed Broadband               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   state_fips provider_id                                           file_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       &lt;NA&gt;        &lt;NA&gt; bdc_us_broadband_summary_by_geography_D22_08may2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         01        &lt;NA&gt;          bdc_01_Other_fixed_broadband_D22_08may2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         04        &lt;NA&gt;          bdc_04_Other_fixed_broadband_D22_08may2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         06        &lt;NA&gt;          bdc_06_Other_fixed_broadband_D22_08may2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         12        &lt;NA&gt;          bdc_12_Other_fixed_broadband_D22_08may2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         13        &lt;NA&gt;          bdc_13_Other_fixed_broadband_D22_08may2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   file_type data_category</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       csv    Nationwide</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -89,7 +111,7 @@ paste0(&quot;https://broadbandmap.fcc.gov/nbm/&quot;,
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
