@@ -1,6 +1,11 @@
 ---
 title: "National Broadband Map (NBM)"
 output: rmarkdown::html_vignette
+code_folding: hide
+vignette: >
+  %\VignetteIndexEntry{National Broadband Map (NBM)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}

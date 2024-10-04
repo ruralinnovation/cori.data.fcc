@@ -28,7 +28,7 @@ reference:
     - get_frn_nbm_bl
     - get_nbm_release
     - get_nbm_available
-    - dl_nbm 
+    - dl_nbm
 
   - title: Form 477
     contents:
