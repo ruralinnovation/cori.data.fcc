@@ -1,4 +1,4 @@
-#' Get release available in FCC NBM
+#' Get a list of release available in FCC NBM
 #'
 #' @param filing_url a string providing NBM filing API. Default is "https://broadbandmap.fcc.gov/nbm/map/api/published/filing"
 #' @param user_agent set a default user agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0"

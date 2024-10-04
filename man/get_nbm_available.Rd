@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nbm_available.R
 \name{get_nbm_available}
 \alias{get_nbm_available}
-\title{Get release available in FCC NBM}
+\title{Get a list of files availables in FCC servers}
 \usage{
 get_nbm_available(
   get_data_url = paste0("https://broadbandmap.fcc.gov/nbm/map/",

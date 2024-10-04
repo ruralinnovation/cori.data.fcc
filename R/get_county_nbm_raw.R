@@ -22,7 +22,7 @@
 #'
 #'@examples
 #'\dontrun{
-#'guilford_cty <- get_nbm_raw(geoid_co = "37081")
+#'guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
 #'}
 
 get_county_nbm_raw <- function(geoid_co, frn = "all", release = "2023-12-01") {

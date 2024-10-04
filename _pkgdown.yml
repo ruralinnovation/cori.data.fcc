@@ -2,15 +2,33 @@ url: https://ruralinnovation.github.io/cori.data.fcc/
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    left:  [reference, articles, data, Changelog]
+    right: [search, github]
+  components:
+    articles:
+      text: Use cases
+      menu:
+        - text: "Check and download NBM data"
+          href: articles/Download_nbm.html
+    data:
+      text: "Data stories"
+      menu:
+      - text: "National Broadband Map (NBM)"
+        href: articles/MBM.html
+      - text: "FCC's Form 477"
+        href: articles/f477.html
+
 reference:
   - title: NBM 
     contents:
+    - get_nbm_bl
+    - get_county_nbm_raw
+    - get_frn_nbm_bl
     - get_nbm_release
     - get_nbm_available
     - dl_nbm
-    - get_county_nbm_raw
-    - get_frn_nbm_bl
-    - get_nbm_bl
 
   - title: Form 477
     contents:
@@ -20,8 +38,10 @@ reference:
     contents:
     - get_fcc_dictionary
     - fcc_dictionary
-    - fcc_provider
     - check_frn
+    - fcc_provider
     - user_agent
     - set_user_agent
 
+
+    

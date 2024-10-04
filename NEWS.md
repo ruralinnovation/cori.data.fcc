@@ -1,4 +1,4 @@
-# cori.data.fcc (development version)
+# cori.data.fcc 0.1.0
 
 ## Major Changes
 
@@ -12,11 +12,17 @@
 
 * `get_frn_nbm_bl()` allows you to get all block where this FRN reported had services (minus satellite BSL and 0/0 speeds services)
 
+* `get_nbm_bl()`allows you to get all block from one county
+
 * `get_county_nbm_raws()` allows you to get raws NBM data for a specific county and for a release, by default the last one. 
 
 ### Updated functions
 
-* update to `get_fcc_dictionary.R` description for new data set and their fields
+* update to `get_fcc_dictionary.R` description for new data set ("nbm_block", "nbm_raw") and their fields
+
+### Removed functions
+
+* `fcc_to_parquet()` not needed and/or too opinionated to be useful
 
 # cori.data.fcc 0.0.1
 
