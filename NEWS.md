@@ -1,8 +1,22 @@
 # cori.data.fcc (development version)
 
-* First functions released.
+## Major Changes
 
-* Improve functions with a user_agent defined in aaa.R #9
+### New datasets
+
+*  Add NBM Block: CORI opinionted version designed at the Census block level
+
+*  Add NBM raws, past 4 releases
+
+### New functions
+
+* `get_frn_nbm_bl()` allows you to get all block where this FRN reported had services (minus satellite BSL and 0/0 speeds services)
+
+* `get_county_nbm_raws()` allows you to get raws NBM data for a specific county and for a release, by default the last one. 
+
+### Updated functions
+
+* update to `get_fcc_dictionary.R` description for new data set and their fields
 
 # cori.data.fcc 0.0.1
 
@@ -17,3 +31,10 @@
 ## Minor improvements 
 
 * Organize reference of function by themes 
+
+
+# cori.data.fcc (first release)
+
+* First functions released.
+
+* Improve functions with a user_agent defined in aaa.R #9

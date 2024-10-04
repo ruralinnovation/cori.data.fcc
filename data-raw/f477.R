@@ -89,7 +89,7 @@ system("mkdir -p data_swamp/clean/")
 convert_to_utf8 <- function(x) {
   l_f <- unlist(strsplit(x, ":"))
   s <- sprintf("iconv -f %s -t UTF8 %s > data_swamp/clean/%s",
-          l_f[2], l_f[1], basename(l_f[1]))
+               l_f[2], l_f[1], basename(l_f[1]))
   print(s)
   system(s)
 }
@@ -101,7 +101,7 @@ for (i in encoding) {
 # Magic of duckDB
 # FCC is not always very strict in following their data type
 # lot of time spend testing and adjusting to it
-# more can be found here: 
+# more can be found here:
 # https://www.fcc.gov/general/explanation-broadband-deployment-data
 # https://www.fcc.gov/general/technology-codes-used-fixed-broadband-deployment-dat# require uchardet
 

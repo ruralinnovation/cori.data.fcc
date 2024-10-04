@@ -22,9 +22,13 @@ check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz
 
-#doc		: build doc 
+#3 doc		: build doc 
 doc:
 	R -e 'devtools::document()'
+
+## site		: buil pkgdown
+site:
+	R -e 'pkgdown::build_site()'
 
 ## article	: test article 
 article:

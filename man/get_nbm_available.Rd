@@ -27,4 +27,5 @@ NBM's API:
 }
 \examples{
 nbm_data <- get_nbm_available()
+head(nbm_data)
 }
