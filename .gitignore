@@ -9,3 +9,4 @@ data-raw/fcc_staff.R
 data_swamp/
 *.parquet
 inst/doc
+.Rproj.user
