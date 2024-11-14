@@ -72,34 +72,35 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ruralinnovation.github.io/cori.data.fcc/">cori.data.fcc</a></span><span class="op">)</span></span></code></pre></div>
-<p>This example shows some basic workflow:</p>
+<p>This example shows a basic workflow:</p>
 <ol style="list-style-type: decimal">
-<li>First, you inspect what release are available:</li>
+<li>First, you can inspect what releases are available:</li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">release</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_nbm_release.html">get_nbm_release</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># get the available releases</span></span>
 <span><span class="va">release</span></span></code></pre></div>
 <pre><code><span><span class="co">##   filing_type_id filing_type    filing_subtype</span></span>
-<span><span class="co">## 1         100006    Biannual December 31, 2022</span></span>
-<span><span class="co">## 2         100000    Biannual     June 30, 2022</span></span>
-<span><span class="co">## 3         100007    Biannual     June 30, 2023</span></span>
-<span><span class="co">## 4         100011    Biannual December 31, 2023</span></span>
+<span><span class="co">## 1         100007    Biannual     June 30, 2023</span></span>
+<span><span class="co">## 2         100011    Biannual December 31, 2023</span></span>
+<span><span class="co">## 3         100000    Biannual     June 30, 2022</span></span>
+<span><span class="co">## 4         100006    Biannual December 31, 2022</span></span>
 <span><span class="co">##                           process_uuid enable_bfm_link</span></span>
-<span><span class="co">## 1 bbfba324-616d-4247-ab49-933fdd97ff12            TRUE</span></span>
-<span><span class="co">## 2 7b81911a-c0cb-4be6-8e6c-63a32e8bf917            TRUE</span></span>
-<span><span class="co">## 3 59f1d8d7-e532-468a-b68f-826c7945f918            TRUE</span></span>
-<span><span class="co">## 4 45c3dbd3-ca1b-4800-9c95-e948a5d12a25            TRUE</span></span>
+<span><span class="co">## 1 c9257b94-8221-4c96-afa6-103fcd95770d            TRUE</span></span>
+<span><span class="co">## 2 c73bff56-2d5a-4721-b895-d71d7db2cf7f            TRUE</span></span>
+<span><span class="co">## 3 7b81911a-c0cb-4be6-8e6c-63a32e8bf917            TRUE</span></span>
+<span><span class="co">## 4 b842d204-ba21-4cbd-9b22-11f62a5f490d            TRUE</span></span>
 <span><span class="co">##   enable_challenge_download</span></span>
 <span><span class="co">## 1                      TRUE</span></span>
 <span><span class="co">## 2                      TRUE</span></span>
 <span><span class="co">## 3                      TRUE</span></span>
 <span><span class="co">## 4                      TRUE</span></span></code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>Second, you check what files are available:</li>
+<li>Second, you can check what files are available:</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nbm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_nbm_available.html">get_nbm_available</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># get what data is available</span></span>
-<span><span class="co"># if we are intrested in  "Fixed Broadband" / "Nationwide" / released "June 30, 2023"</span></span>
+<span></span>
+<span><span class="co"># if we are interested in  "Fixed Broadband" / "Nationwide" / released "June 30, 2023"</span></span>
 <span><span class="va">nbm_filter</span> <span class="op">&lt;-</span> <span class="va">nbm</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">nbm</span><span class="op">$</span><span class="va">release</span> <span class="op">==</span> <span class="st">"June 30, 2023"</span> <span class="op">&amp;</span></span>
 <span>                        <span class="va">nbm</span><span class="op">$</span><span class="va">data_type</span> <span class="op">==</span> <span class="st">"Fixed Broadband"</span> <span class="op">&amp;</span></span>
 <span>                        <span class="va">nbm</span><span class="op">$</span><span class="va">data_category</span> <span class="op">==</span> <span class="st">"Nationwide"</span><span class="op">)</span>, <span class="op">]</span></span>
@@ -110,25 +111,26 @@
 <span><span class="va">nbm_dplyr_filter</span> <span class="op">&lt;-</span> <span class="va">nbm</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">release</span> <span class="op">==</span> <span class="st">"June 30, 2023"</span> <span class="op">&amp;</span></span>
 <span>                                         <span class="va">data_type</span> <span class="op">==</span> <span class="st">"Fixed Broadband"</span> <span class="op">&amp;</span></span>
 <span>                                         <span class="va">data_category</span> <span class="op">==</span> <span class="st">"Nationwide"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">nbm_filter</span>, <span class="va">nbm_dplyr_filter</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nbm_filter</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       id       release       data_type technology_code state_fips provider_id</span></span>
-<span><span class="co">## 1 689598 June 30, 2023 Fixed Broadband               0         01        &lt;NA&gt;</span></span>
-<span><span class="co">## 2 689599 June 30, 2023 Fixed Broadband               0         04        &lt;NA&gt;</span></span>
-<span><span class="co">## 3 689600 June 30, 2023 Fixed Broadband               0         06        &lt;NA&gt;</span></span>
-<span><span class="co">## 4 689601 June 30, 2023 Fixed Broadband               0         12        &lt;NA&gt;</span></span>
-<span><span class="co">## 5 689602 June 30, 2023 Fixed Broadband               0         17        &lt;NA&gt;</span></span>
-<span><span class="co">## 6 689603 June 30, 2023 Fixed Broadband               0         18        &lt;NA&gt;</span></span>
+<span><span class="co">## 1 785375 June 30, 2023 Fixed Broadband               0         01        &lt;NA&gt;</span></span>
+<span><span class="co">## 2 785376 June 30, 2023 Fixed Broadband               0         04        &lt;NA&gt;</span></span>
+<span><span class="co">## 3 785377 June 30, 2023 Fixed Broadband               0         06        &lt;NA&gt;</span></span>
+<span><span class="co">## 4 785378 June 30, 2023 Fixed Broadband               0         12        &lt;NA&gt;</span></span>
+<span><span class="co">## 5 785379 June 30, 2023 Fixed Broadband               0         17        &lt;NA&gt;</span></span>
+<span><span class="co">## 6 785380 June 30, 2023 Fixed Broadband               0         18        &lt;NA&gt;</span></span>
 <span><span class="co">##                                    file_name file_type data_category</span></span>
-<span><span class="co">## 1 bdc_01_Other_fixed_broadband_J23_01sep2024       csv    Nationwide</span></span>
-<span><span class="co">## 2 bdc_04_Other_fixed_broadband_J23_01sep2024       csv    Nationwide</span></span>
-<span><span class="co">## 3 bdc_06_Other_fixed_broadband_J23_01sep2024       csv    Nationwide</span></span>
-<span><span class="co">## 4 bdc_12_Other_fixed_broadband_J23_01sep2024       csv    Nationwide</span></span>
-<span><span class="co">## 5 bdc_17_Other_fixed_broadband_J23_01sep2024       csv    Nationwide</span></span>
-<span><span class="co">## 6 bdc_18_Other_fixed_broadband_J23_01sep2024       csv    Nationwide</span></span></code></pre>
+<span><span class="co">## 1 bdc_01_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span></span>
+<span><span class="co">## 2 bdc_04_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span></span>
+<span><span class="co">## 3 bdc_06_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span></span>
+<span><span class="co">## 4 bdc_12_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span></span>
+<span><span class="co">## 5 bdc_17_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span></span>
+<span><span class="co">## 6 bdc_18_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span></span></code></pre>
   </main>
 </div>
 

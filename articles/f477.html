@@ -78,15 +78,15 @@
 <div class="section level2">
 <h2 id="fccs-form-477">FCC’s Form 477<a class="anchor" aria-label="anchor" href="#fccs-form-477"></a>
 </h2>
-<p>Simplifying access to data is usually a matters of opinion: what data
-should we kept, what should be discarded?</p>
-<p>For effectif data analysis it is important to communicate those
-decisions and provide the data’s story.</p>
+<p>Simplifying access to data is usually a matter of opinion. What data
+should we keep? What data should be discarded?</p>
+<p>For effective data analysis, it is important to communicate these
+decisions and provide the full story of the data.</p>
 <div class="section level3">
 <h3 id="short-introduction">Short introduction<a class="anchor" aria-label="anchor" href="#short-introduction"></a>
 </h3>
-<p>FCC was reporting on Form 477 about Fixed Broadband deployement.
-Broadband providers were required to fill it:</p>
+<p>FCC reports on Form 477 about Fixed Broadband deployment. Broadband
+providers were required to file information:</p>
 <blockquote>
 <p><strong>All</strong> facilities-based broadband providers are
 required to file data with the FCC twice a year (Form 477) on where they
@@ -99,16 +99,16 @@ information about the service.</p>
 <p>The census block mentioned are from <strong>US census blocks</strong>
 and from the <strong>2010 vintage</strong>. Water only census blocks are
 also removed.</p>
-<p>Every row in this dataset is matching a specific services provided by
-an ISP in a census block. Hence an ISP can provides multiple services,
-for example different technologies or different speeds in a census
-block.</p>
-<p>The time period covered goes from December 2014 and then have an
-update in June and December for every next year until december 2021.</p>
+<p>Every row in this dataset matches a specific service provided by an
+ISP in a census block. An ISP can provides multiple services, such as
+different technologies or different speeds in a census block.</p>
+<p>The time period covered goes back to December 2014. There is an
+update in June and December for every other year until December
+2021.</p>
 <hr>
-<strong>NOTE</strong> A provider is just required to tell if he provides
-a specific services in a block and is not required to provide how much
-in that block he is covering within it.<br><hr>
+<strong>NOTE</strong> A provider is just required to tell if they
+provide a specific service in a block. A provider is not required to
+provide how much of that block is covered by their services.<br><hr>
 </div>
 <div class="section level3">
 <h3 id="license-and-attribution">License and attribution<a class="anchor" aria-label="anchor" href="#license-and-attribution"></a>
@@ -118,11 +118,11 @@ in that block he is covering within it.<br><hr>
 Bureau that are presented on this site are offered free and not subject
 to copyright restriction.</p>
 </blockquote>
-<p>FCC is asking for proper credit to be given:</p>
+<p>FCC asks for proper credit to be given:</p>
 <ul>
 <li>Source data: FCC Form 477</li>
 </ul>
-<p>If you are using these data please follow those simple
+<p>If you are using these data please follow these simple
 guidelines.</p>
 <p>Source: <a href="https://broadband477map.fcc.gov/#/about" class="external-link uri">https://broadband477map.fcc.gov/#/about</a></p>
 </div>
@@ -133,15 +133,15 @@ guidelines.</p>
 <p>From 477 data was released in multiple versions for some but not all
 releases. We took the decision to only use and ingest the last release
 of each version. We are assuming here that those versions are more
-consistant and only selecting the last one will help homogeneize this
-dataset.</p>
-<p>We also decided that satellite data were less important hence we
-focused in <em>Fixed without satellite</em> data.</p>
-<p>As you will see in our data dictionary we did not kept</p>
-<p>Our opinionated version is maybe supbotimal for you and perhaps you
-need to look at our implementation making sure that our process is
-reliable. For that we are providing all the code used to generated this
-data set <a href="https://github.com/ruralinnovation/cori.data.fcc/blob/main/data-raw/f477.R" class="external-link">here</a>.</p>
+consistent, and so only selecting the last version will help homogenize
+this dataset.</p>
+<p>We also decided that satellite data is less important for most
+workflows, hence we focused on <em>Fixed without satellite</em>
+data.</p>
+<p>Our opinionated version is perhaps suboptimal for your specific uses.
+Feel free to look at our implementation making sure that our process is
+reliable.</p>
+<p>We provide all the code used to generated this data set <a href="https://github.com/ruralinnovation/cori.data.fcc/blob/main/data-raw/f477.R" class="external-link">here</a>.</p>
 <div class="section level3">
 <h3 id="data-dictionary">Data dictionary<a class="anchor" aria-label="anchor" href="#data-dictionary"></a>
 </h3>
@@ -149,13 +149,14 @@ data set <a href="https://github.com/ruralinnovation/cori.data.fcc/blob/main/dat
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ruralinnovation.github.io/cori.data.fcc/">cori.data.fcc</a></span><span class="op">)</span></span>
 <span><span class="fu">table_with_options</span><span class="op">(</span><span class="fu"><a href="../reference/get_fcc_dictionary.html">get_fcc_dictionary</a></span><span class="op">(</span><span class="st">"f477"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477"],["Provider_Id","FRN","ProviderName","DBAName","HoldingCompanyName","HocoNum","HocoFinal","StateAbbr","BlockCode","TechCode","Consumer","MaxAdDown","MaxAdUp","Business","Date"],["TEXT","TEXT","VARCHAR","VARCHAR","VARCHAR","TEXT","TEXT","CHAR(2)","CHAR(15)","VARCHAR(2)","BOOLEAN","SMALLINT","SMALLINT","BOOLEAN","Date"],["filing number (assigned by FCC)","FCC registration number","Provider name","'Doing business as' name","Holding company name (as filed on Form 477)","Holding company number (assigned by FCC)","Holding company name (attribution by FCC)","2-letter state abbreviation used by the US Postal Service","15-digit census block code used in the 2010 US Census","2-digit code indicating the Technology of Transmission used to offer broadband service","(0/1) where 1 = Provider can or does offer consumer/mass market/residential service in the block","Maximum advertised downstream speed/bandwidth (in Mbps) offered by the provider in the block for Consumer service","Maximum advertised upstream speed/bandwidth (in Mbps) offered by the provider in the block for Consumer service","(0/1) where 1 = Provider can or does offer business/government service in the block","Date of the release, provided in file name"],["8026","0001570936","Arctic Slope Telephone Association Cooperative, Inc.","ASTAC","Arctic Slope Telephone Association Cooperative, Inc.","130067","Arctic Slope Telephone Association Cooperative, Inc.","AK","021850001001047","11","true","1","0","true","2014-12-01 00:00:00"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>dataset<\/th>\n      <th>var_name<\/th>\n      <th>var_type<\/th>\n      <th>var_description<\/th>\n      <th>var_example<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","print",{"extend":"collection","buttons":["csv","excel"],"text":"Download"}],"columnDefs":[{"name":"dataset","targets":0},{"name":"var_name","targets":1},{"name":"var_type","targets":2},{"name":"var_description","targets":3},{"name":"var_example","targets":4}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p>You may have notice that we could have been more strict on our data
-types. For example an FRN should be 10 numbers (with padded 0), ie
-<code>CHAR(10)</code> sadly our experience on previous ingestions have
-shown that is was not a rules enforced. We decided to provide the data
-as it is instead of removing rows with dubious value. This decisions
-should be done by the analyst and domain expert but we could, in future
-revisit this decisions and enforce more constraints on data.</p>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477","f477"],["Provider_Id","FRN","ProviderName","DBAName","HoldingCompanyName","HocoNum","HocoFinal","StateAbbr","BlockCode","TechCode","Consumer","MaxAdDown","MaxAdUp","Business","Date"],["TEXT","TEXT","VARCHAR","VARCHAR","VARCHAR","TEXT","TEXT","CHAR(2)","CHAR(15)","VARCHAR(2)","BOOLEAN","SMALLINT","SMALLINT","BOOLEAN","Date"],["filing number (assigned by FCC)","FCC registration number","Provider name","'Doing business as' name","Holding company name (as filed on Form 477)","Holding company number (assigned by FCC)","Holding company name (attribution by FCC)","2-letter state abbreviation used by the US Postal Service","15-digit census block code used in the 2010 US Census","2-digit code indicating the Technology of Transmission used to offer broadband service","(0/1) where 1 = Provider can or does offer consumer/mass market/residential service in the block","Maximum advertised downstream speed/bandwidth (in Mbps) offered by the provider in the block for Consumer service","Maximum advertised upstream speed/bandwidth (in Mbps) offered by the provider in the block for Consumer service","(0/1) where 1 = Provider can or does offer business/government service in the block","Date of the release, provided in file name"],["8026","0001570936","Arctic Slope Telephone Association Cooperative, Inc.","ASTAC","Arctic Slope Telephone Association Cooperative, Inc.","130067","Arctic Slope Telephone Association Cooperative, Inc.","AK","021850001001047","11","true","1","0","true","2014-12-01 00:00:00"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>dataset<\/th>\n      <th>var_name<\/th>\n      <th>var_type<\/th>\n      <th>var_description<\/th>\n      <th>var_example<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","print",{"extend":"collection","buttons":["csv","excel"],"text":"Download"}],"columnDefs":[{"name":"dataset","targets":0},{"name":"var_name","targets":1},{"name":"var_type","targets":2},{"name":"var_description","targets":3},{"name":"var_example","targets":4}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p>You may have notice that we could have been more strict with regard
+to our data types. For example, an FRN should be 10 numbers (with padded
+0), ie <code>CHAR(10)</code>, but our experience working with previous
+ingestions have shown that this was not a consistently enforced
+rule.</p>
+<p>We also decided to provide the data “as is” instead of removing rows
+with dubious values. Those decisions should be done by the analyst for
+now.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

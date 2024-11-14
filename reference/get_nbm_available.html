@@ -82,27 +82,20 @@ paste0(&quot;https://broadbandmap.fcc.gov/nbm/&quot;,
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nbm_data</span> <span class="op">&lt;-</span> <span class="fu">get_nbm_available</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nbm_data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       id           release                           data_type technology_code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 548534 December 31, 2022 Broadband Summary by Geography Type            &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 548537 December 31, 2022                     Fixed Broadband               0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 548538 December 31, 2022                     Fixed Broadband               0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 548539 December 31, 2022                     Fixed Broadband               0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 548540 December 31, 2022                     Fixed Broadband               0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 548541 December 31, 2022                     Fixed Broadband               0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   state_fips provider_id                                           file_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       &lt;NA&gt;        &lt;NA&gt; bdc_us_broadband_summary_by_geography_D22_08may2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         01        &lt;NA&gt;          bdc_01_Other_fixed_broadband_D22_08may2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         04        &lt;NA&gt;          bdc_04_Other_fixed_broadband_D22_08may2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         06        &lt;NA&gt;          bdc_06_Other_fixed_broadband_D22_08may2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         12        &lt;NA&gt;          bdc_12_Other_fixed_broadband_D22_08may2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         13        &lt;NA&gt;          bdc_13_Other_fixed_broadband_D22_08may2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   file_type data_category</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id       release       data_type technology_code state_fips provider_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 785375 June 30, 2023 Fixed Broadband               0         01        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 785376 June 30, 2023 Fixed Broadband               0         04        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 785377 June 30, 2023 Fixed Broadband               0         06        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 785378 June 30, 2023 Fixed Broadband               0         12        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 785379 June 30, 2023 Fixed Broadband               0         17        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 785380 June 30, 2023 Fixed Broadband               0         18        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                    file_name file_type data_category</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 bdc_01_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 bdc_04_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 bdc_06_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 bdc_12_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 bdc_17_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 bdc_18_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

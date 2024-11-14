@@ -62,10 +62,10 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of cori.data.fcc is to facilate the discovery, the download and uses of FCC’s data.</p>
-<p>It covers:</p>
+<p>The goal of <code>cori.data.fcc</code> is to facilitate the discovery, analysis, and use of FCC public data releases.</p>
+<p>The package provides access to data from the following sources:</p>
 <ul>
-<li>National Broadband Map <a href="https://broadbandmap.fcc.gov/home" class="external-link">(NBM)</a> data<br>
+<li>National Broadband Map <a href="https://broadbandmap.fcc.gov/home" class="external-link">(NBM)</a> data<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;This data describes what internet services are available to individual locations across the country, along with new maps of mobile coverage, as reported by Internet Service Providers (ISPs). It is part of the FCC’s ongoing &lt;a href="https://broadbandmap.fcc.gov/data-download/nationwide-data" class="external-link"&gt;Broadband Data Collection&lt;/a&gt;).&lt;/p&gt;'><sup>1</sup></a>
 </li>
 <li>
 <a href="https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477" class="external-link">Form 477</a> data</li>
@@ -73,7 +73,7 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of cori.data.fcc from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the development version of <code>cori.data.fcc</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ruralinnovation/cori.data.fcc"</span><span class="op">)</span></span></code></pre></div>
@@ -86,113 +86,126 @@
 <div class="section level3">
 <h3 id="national-broadband-map">National Broadband Map<a class="anchor" aria-label="anchor" href="#national-broadband-map"></a>
 </h3>
+<p>Key uses:</p>
 <ul>
-<li><p>The package is providing you a way to download zipped <code>csv</code> see the vignette “Check and download NBM data”</p></li>
-<li><p>Access a parquet files stored in CORI s3 bucket per county:</p></li>
+<li>Access parquet files stored in a CORI s3 bucket, by county:</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">guilford_cty</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_county_nbm_raw.html">get_county_nbm_raw</a></span><span class="op">(</span>geoid_co <span class="op">=</span> <span class="st">"37081"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">guilford_cty</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          frn provider_id brand_name location_id technology</span></span>
-<span><span class="co">#&gt; 1 0001857952      130077       AT&amp;T  1344960789         10</span></span>
-<span><span class="co">#&gt; 2 0001857952      130077       AT&amp;T  1344965855         10</span></span>
-<span><span class="co">#&gt; 3 0001857952      130077       AT&amp;T  1344971572         10</span></span>
-<span><span class="co">#&gt; 4 0001857952      130077       AT&amp;T  1344982708         10</span></span>
-<span><span class="co">#&gt; 5 0001857952      130077       AT&amp;T  1344991329         10</span></span>
-<span><span class="co">#&gt; 6 0001857952      130077       AT&amp;T  1344996969         10</span></span>
-<span><span class="co">#&gt;   max_advertised_download_speed max_advertised_upload_speed low_latency</span></span>
-<span><span class="co">#&gt; 1                            10                           1        TRUE</span></span>
-<span><span class="co">#&gt; 2                             0                           0        TRUE</span></span>
-<span><span class="co">#&gt; 3                            10                           1        TRUE</span></span>
-<span><span class="co">#&gt; 4                            50                          10        TRUE</span></span>
-<span><span class="co">#&gt; 5                            50                          10        TRUE</span></span>
-<span><span class="co">#&gt; 6                            75                          20        TRUE</span></span>
-<span><span class="co">#&gt;   business_residential_code state_usps        geoid_bl geoid_co file_time_stamp</span></span>
-<span><span class="co">#&gt; 1                         X         NC 370810161022008    37081      2024-09-03</span></span>
-<span><span class="co">#&gt; 2                         X         NC 370810168003003    37081      2024-09-03</span></span>
-<span><span class="co">#&gt; 3                         X         NC 370810125051020    37081      2024-09-03</span></span>
-<span><span class="co">#&gt; 4                         X         NC 370810171011021    37081      2024-09-03</span></span>
-<span><span class="co">#&gt; 5                         X         NC 370810157042006    37081      2024-09-03</span></span>
-<span><span class="co">#&gt; 6                         X         NC 370810127052022    37081      2024-09-03</span></span>
-<span><span class="co">#&gt;      release</span></span>
-<span><span class="co">#&gt; 1 2023-12-01</span></span>
-<span><span class="co">#&gt; 2 2023-12-01</span></span>
-<span><span class="co">#&gt; 3 2023-12-01</span></span>
-<span><span class="co">#&gt; 4 2023-12-01</span></span>
-<span><span class="co">#&gt; 5 2023-12-01</span></span>
-<span><span class="co">#&gt; 6 2023-12-01</span></span></code></pre></div>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">guilford_cty</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 1,337,541</span></span>
+<span><span class="co">#&gt; Columns: 14</span></span>
+<span><span class="co">#&gt; $ frn                           &lt;chr&gt; "0001857952", "0001857952", "0001857952"…</span></span>
+<span><span class="co">#&gt; $ provider_id                   &lt;chr&gt; "130077", "130077", "130077", "130077", …</span></span>
+<span><span class="co">#&gt; $ brand_name                    &lt;chr&gt; "AT&amp;T", "AT&amp;T", "AT&amp;T", "AT&amp;T", "AT&amp;T", …</span></span>
+<span><span class="co">#&gt; $ location_id                   &lt;chr&gt; "1344960789", "1344965855", "1344971572"…</span></span>
+<span><span class="co">#&gt; $ technology                    &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, …</span></span>
+<span><span class="co">#&gt; $ max_advertised_download_speed &lt;int&gt; 10, 0, 10, 50, 50, 75, 50, 10, 50, 0, 10…</span></span>
+<span><span class="co">#&gt; $ max_advertised_upload_speed   &lt;int&gt; 1, 0, 1, 10, 10, 20, 10, 1, 10, 0, 1, 5,…</span></span>
+<span><span class="co">#&gt; $ low_latency                   &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE…</span></span>
+<span><span class="co">#&gt; $ business_residential_code     &lt;chr&gt; "X", "X", "X", "X", "X", "X", "X", "X", …</span></span>
+<span><span class="co">#&gt; $ state_usps                    &lt;chr&gt; "NC", "NC", "NC", "NC", "NC", "NC", "NC"…</span></span>
+<span><span class="co">#&gt; $ geoid_bl                      &lt;chr&gt; "370810161022008", "370810168003003", "3…</span></span>
+<span><span class="co">#&gt; $ geoid_co                      &lt;chr&gt; "37081", "37081", "37081", "37081", "370…</span></span>
+<span><span class="co">#&gt; $ file_time_stamp               &lt;date&gt; 2024-09-03, 2024-09-03, 2024-09-03, 202…</span></span>
+<span><span class="co">#&gt; $ release                       &lt;date&gt; 2023-12-01, 2023-12-01, 2023-12-01, 202…</span></span></code></pre></div>
 <ul>
-<li>Use the CORI opinionated version at the Census block level for the <strong>last NBM’s release</strong>:</li>
+<li>Access a CORI-opinionated, Census-block level version of the <strong>latest NBM release</strong>:</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get a county</span></span>
 <span><span class="va">nbm_bl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_nbm_bl.html">get_nbm_bl</a></span><span class="op">(</span>geoid_co <span class="op">=</span> <span class="st">"47051"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">nbm_bl</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 2146   21</span></span>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">nbm_bl</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 2,146</span></span>
+<span><span class="co">#&gt; Columns: 21</span></span>
+<span><span class="co">#&gt; $ geoid_bl                                &lt;chr&gt; "470519601001000", "4705196010…</span></span>
+<span><span class="co">#&gt; $ geoid_st                                &lt;chr&gt; "47", "47", "47", "47", "47", …</span></span>
+<span><span class="co">#&gt; $ geoid_co                                &lt;chr&gt; "47051", "47051", "47051", "47…</span></span>
+<span><span class="co">#&gt; $ state_abbr                              &lt;chr&gt; "TN", "TN", "TN", "TN", "TN", …</span></span>
+<span><span class="co">#&gt; $ cnt_total_locations                     &lt;int&gt; NA, NA, NA, NA, 8, NA, 8, 3, 1…</span></span>
+<span><span class="co">#&gt; $ cnt_bead_locations                      &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_copper_locations                    &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_cable_locations                     &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_fiber_locations                     &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_other_locations                     &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_unlicensed_fixed_wireless_locations &lt;int&gt; NA, NA, NA, NA, 7, NA, 8, 3, 1…</span></span>
+<span><span class="co">#&gt; $ cnt_licensed_fixed_wireless_locations   &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_LBR_fixed_wireless_locations        &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_terrestrial_locations               &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_25_3                                &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_100_20                              &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_100_100                             &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
+<span><span class="co">#&gt; $ cnt_distcint_frn                        &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA…</span></span>
+<span><span class="co">#&gt; $ array_frn                               &lt;list&gt; &lt;NULL&gt;, &lt;NULL&gt;, &lt;NULL&gt;, &lt;NULL…</span></span>
+<span><span class="co">#&gt; $ combo_frn                               &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA…</span></span>
+<span><span class="co">#&gt; $ release                                 &lt;date&gt; 2023-12-01, 2023-12-01, 2023-…</span></span>
 <span></span>
 <span><span class="co"># get census block covered by an ISP identified by their FRN</span></span>
 <span><span class="va">skymesh</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_frn_nbm_bl.html">get_frn_nbm_bl</a></span><span class="op">(</span><span class="st">"0027136753"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">skymesh</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1]  3 21</span></span></code></pre></div>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">skymesh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 3</span></span>
+<span><span class="co">#&gt; Columns: 21</span></span>
+<span><span class="co">#&gt; $ geoid_bl                                &lt;chr&gt; "390375301004009", "3903755510…</span></span>
+<span><span class="co">#&gt; $ geoid_st                                &lt;chr&gt; "39", "39", "39"</span></span>
+<span><span class="co">#&gt; $ geoid_co                                &lt;chr&gt; "39037", "39037", "39109"</span></span>
+<span><span class="co">#&gt; $ state_abbr                              &lt;chr&gt; "OH", "OH", "OH"</span></span>
+<span><span class="co">#&gt; $ cnt_total_locations                     &lt;int&gt; 13, 7, 15</span></span>
+<span><span class="co">#&gt; $ cnt_bead_locations                      &lt;int&gt; 13, 6, 15</span></span>
+<span><span class="co">#&gt; $ cnt_copper_locations                    &lt;int&gt; 9, 2, 10</span></span>
+<span><span class="co">#&gt; $ cnt_cable_locations                     &lt;int&gt; 10, 0, 0</span></span>
+<span><span class="co">#&gt; $ cnt_fiber_locations                     &lt;int&gt; 13, 5, 2</span></span>
+<span><span class="co">#&gt; $ cnt_other_locations                     &lt;int&gt; 0, 0, 0</span></span>
+<span><span class="co">#&gt; $ cnt_unlicensed_fixed_wireless_locations &lt;int&gt; 13, 7, 15</span></span>
+<span><span class="co">#&gt; $ cnt_licensed_fixed_wireless_locations   &lt;int&gt; 13, 6, 14</span></span>
+<span><span class="co">#&gt; $ cnt_LBR_fixed_wireless_locations        &lt;int&gt; 11, 0, 0</span></span>
+<span><span class="co">#&gt; $ cnt_terrestrial_locations               &lt;int&gt; 13, 6, 15</span></span>
+<span><span class="co">#&gt; $ cnt_25_3                                &lt;int&gt; 13, 6, 14</span></span>
+<span><span class="co">#&gt; $ cnt_100_20                              &lt;int&gt; 13, 5, 14</span></span>
+<span><span class="co">#&gt; $ cnt_100_100                             &lt;int&gt; 13, 5, 5</span></span>
+<span><span class="co">#&gt; $ cnt_distcint_frn                        &lt;int&gt; 9, 6, 8</span></span>
+<span><span class="co">#&gt; $ array_frn                               &lt;list&gt; &lt;"0002930980", "0004328688", "…</span></span>
+<span><span class="co">#&gt; $ combo_frn                               &lt;dbl&gt; 1.241130e+19, 7.392885e+18, 6.…</span></span>
+<span><span class="co">#&gt; $ release                                 &lt;date&gt; 2023-12-01, 2023-12-01, 2023-1…</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="form-477">Form 477<a class="anchor" aria-label="anchor" href="#form-477"></a>
 </h3>
-<p>Sadly automating the download of some of the source data is harder for Form 477. We are not providing that functionality.</p>
-<p>You can get all data (multiple years) covering a State from Form 477:</p>
+<p>Access state data for multiple years:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f477_vt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_f477.html">get_f477</a></span><span class="op">(</span><span class="st">"VT"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">f477_vt</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Provider_Id        FRN            ProviderName           DBAName</span></span>
-<span><span class="co">#&gt; 1        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC</span></span>
-<span><span class="co">#&gt; 2        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC</span></span>
-<span><span class="co">#&gt; 3        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC</span></span>
-<span><span class="co">#&gt; 4        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC</span></span>
-<span><span class="co">#&gt; 5        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC</span></span>
-<span><span class="co">#&gt; 6        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC</span></span>
-<span><span class="co">#&gt;        HoldingCompanyName HocoNum               HocoFinal StateAbbr</span></span>
-<span><span class="co">#&gt; 1 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT</span></span>
-<span><span class="co">#&gt; 2 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT</span></span>
-<span><span class="co">#&gt; 3 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT</span></span>
-<span><span class="co">#&gt; 4 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT</span></span>
-<span><span class="co">#&gt; 5 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT</span></span>
-<span><span class="co">#&gt; 6 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT</span></span>
-<span><span class="co">#&gt;         BlockCode TechCode Consumer MaxAdDown MaxAdUp Business       Date</span></span>
-<span><span class="co">#&gt; 1 500159531001026       42     TRUE        25       5     TRUE 2014-12-01</span></span>
-<span><span class="co">#&gt; 2 500159531001026       41     TRUE        25       5     TRUE 2014-12-01</span></span>
-<span><span class="co">#&gt; 3 500159531001026       50    FALSE         0       0     TRUE 2014-12-01</span></span>
-<span><span class="co">#&gt; 4 500159531001027       42     TRUE        25       5     TRUE 2014-12-01</span></span>
-<span><span class="co">#&gt; 5 500159531001027       41     TRUE        25       5     TRUE 2014-12-01</span></span>
-<span><span class="co">#&gt; 6 500159531001027       50    FALSE         0       0     TRUE 2014-12-01</span></span></code></pre></div>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">f477_vt</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 1,147,267</span></span>
+<span><span class="co">#&gt; Columns: 15</span></span>
+<span><span class="co">#&gt; $ Provider_Id        &lt;chr&gt; "9395", "9395", "9395", "9395", "9395", "9395", "93…</span></span>
+<span><span class="co">#&gt; $ FRN                &lt;chr&gt; "0021002092", "0021002092", "0021002092", "00210020…</span></span>
+<span><span class="co">#&gt; $ ProviderName       &lt;chr&gt; "Stowe Cablevision, Inc.", "Stowe Cablevision, Inc.…</span></span>
+<span><span class="co">#&gt; $ DBAName            &lt;chr&gt; "Stowe Access, LLC", "Stowe Access, LLC", "Stowe Ac…</span></span>
+<span><span class="co">#&gt; $ HoldingCompanyName &lt;chr&gt; "Stowe Cablevision, Inc.", "Stowe Cablevision, Inc.…</span></span>
+<span><span class="co">#&gt; $ HocoNum            &lt;chr&gt; "240090", "240090", "240090", "240090", "240090", "…</span></span>
+<span><span class="co">#&gt; $ HocoFinal          &lt;chr&gt; "Stowe Cablevision, Inc.", "Stowe Cablevision, Inc.…</span></span>
+<span><span class="co">#&gt; $ StateAbbr          &lt;chr&gt; "VT", "VT", "VT", "VT", "VT", "VT", "VT", "VT", "VT…</span></span>
+<span><span class="co">#&gt; $ BlockCode          &lt;chr&gt; "500159531001026", "500159531001026", "500159531001…</span></span>
+<span><span class="co">#&gt; $ TechCode           &lt;chr&gt; "42", "41", "50", "42", "41", "50", "42", "41", "50…</span></span>
+<span><span class="co">#&gt; $ Consumer           &lt;lgl&gt; TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, F…</span></span>
+<span><span class="co">#&gt; $ MaxAdDown          &lt;int&gt; 25, 25, 0, 25, 25, 0, 25, 25, 0, 25, 25, 0, 25, 25,…</span></span>
+<span><span class="co">#&gt; $ MaxAdUp            &lt;int&gt; 5, 5, 0, 5, 5, 0, 5, 5, 0, 5, 5, 0, 5, 5, 0, 5, 5, …</span></span>
+<span><span class="co">#&gt; $ Business           &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…</span></span>
+<span><span class="co">#&gt; $ Date               &lt;dttm&gt; 2014-12-01, 2014-12-01, 2014-12-01, 2014-12-01, 20…</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a>
 </h3>
-<p>Getting the dictionnary for each dataset:</p>
+<p>Access the dictionary for each dataset:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/get_fcc_dictionary.html">get_fcc_dictionary</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   dataset           var_name var_type</span></span>
-<span><span class="co">#&gt; 1    f477        Provider_Id     TEXT</span></span>
-<span><span class="co">#&gt; 2    f477                FRN     TEXT</span></span>
-<span><span class="co">#&gt; 3    f477       ProviderName  VARCHAR</span></span>
-<span><span class="co">#&gt; 4    f477            DBAName  VARCHAR</span></span>
-<span><span class="co">#&gt; 5    f477 HoldingCompanyName  VARCHAR</span></span>
-<span><span class="co">#&gt; 6    f477            HocoNum     TEXT</span></span>
-<span><span class="co">#&gt;                               var_description</span></span>
-<span><span class="co">#&gt; 1             filing number (assigned by FCC)</span></span>
-<span><span class="co">#&gt; 2                     FCC registration number</span></span>
-<span><span class="co">#&gt; 3                               Provider name</span></span>
-<span><span class="co">#&gt; 4                    'Doing business as' name</span></span>
-<span><span class="co">#&gt; 5 Holding company name (as filed on Form 477)</span></span>
-<span><span class="co">#&gt; 6    Holding company number (assigned by FCC)</span></span>
-<span><span class="co">#&gt;                                            var_example</span></span>
-<span><span class="co">#&gt; 1                                                 8026</span></span>
-<span><span class="co">#&gt; 2                                           0001570936</span></span>
-<span><span class="co">#&gt; 3 Arctic Slope Telephone Association Cooperative, Inc.</span></span>
-<span><span class="co">#&gt; 4                                                ASTAC</span></span>
-<span><span class="co">#&gt; 5 Arctic Slope Telephone Association Cooperative, Inc.</span></span>
-<span><span class="co">#&gt; 6                                               130067</span></span></code></pre></div>
-<p>The package also provide the list of Provider ID and FRN</p>
+<code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="fu"><a href="reference/get_fcc_dictionary.html">get_fcc_dictionary</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 50</span></span>
+<span><span class="co">#&gt; Columns: 5</span></span>
+<span><span class="co">#&gt; $ dataset         &lt;chr&gt; "f477", "f477", "f477", "f477", "f477", "f477", "f477"…</span></span>
+<span><span class="co">#&gt; $ var_name        &lt;chr&gt; "Provider_Id", "FRN", "ProviderName", "DBAName", "Hold…</span></span>
+<span><span class="co">#&gt; $ var_type        &lt;chr&gt; "TEXT", "TEXT", "VARCHAR", "VARCHAR", "VARCHAR", "TEXT…</span></span>
+<span><span class="co">#&gt; $ var_description &lt;chr&gt; "filing number (assigned by FCC)", "FCC registration n…</span></span>
+<span><span class="co">#&gt; $ var_example     &lt;chr&gt; "8026", "0001570936", "Arctic Slope Telephone Associat…</span></span></code></pre></div>
+<p>The package also provides a list of Provider IDs and FRNs.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">fcc_provider</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    4456 obs. of  5 variables:</span></span>
@@ -206,9 +219,11 @@
 <div class="section level2">
 <h2 id="inspiration">Inspiration<a class="anchor" aria-label="anchor" href="#inspiration"></a>
 </h2>
-<p>This package was imspired by <a href="https://github.com/bbcommons/bfm-explorer" class="external-link uri">https://github.com/bbcommons/bfm-explorer</a></p>
+<p>This package was inspired by <a href="https://github.com/bbcommons/bfm-explorer" class="external-link uri">https://github.com/bbcommons/bfm-explorer</a></p>
 </div>
 </div>
+
+
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
