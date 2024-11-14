@@ -20,18 +20,18 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of cori.data.fcc is to facilitate the discovery, download and use of FCC public data releases.
+The goal of `cori.data.fcc` is to facilitate the discovery, analysis, and use of FCC public data releases.
 
-It covers:
+The package provides access to data from the following sources:
 
   -  National Broadband Map [(NBM)](https://broadbandmap.fcc.gov/home) data[^bdc]
   -  [Form 477](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) data
 
-[^bdc]: This is data about internet services available to individual locations across the country, along with new maps of mobile coverage, as reported by Internet Service Providers (ISPs) as part of the FCC’s ongoing [Broadband Data Collection](https://broadbandmap.fcc.gov/data-download/nationwide-data)).
+[^bdc]: This data describes what internet services are available to individual locations across the country, along with new maps of mobile coverage, as reported by Internet Service Providers (ISPs). It is part of the FCC’s ongoing [Broadband Data Collection](https://broadbandmap.fcc.gov/data-download/nationwide-data)).
 
 ## Installation
 
-You can install the development version of cori.data.fcc from [GitHub](https://github.com/) with:
+You can install the development version of `cori.data.fcc` from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -46,50 +46,47 @@ library(cori.data.fcc)
 
 ### National Broadband Map
 
-- The package is providing you a way to download zipped `csv`  see the vignette "Check and download NBM data"
+Key uses:
 
-- Access a parquet files stored in CORI s3 bucket per county:
+- Access parquet files stored in a CORI s3 bucket, by county:
 
 ```{r nbm_raw}
 guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
-head(guilford_cty)
+dplyr::glimpse(guilford_cty)
 ```
 
-- Use the CORI opinionated version at the Census block level for the **last NBM's release**:
+- Access a CORI-opinionated, Census-block level version of the **latest NBM release**:
 
 ```{r nbm_block}
 # get a county
 nbm_bl <- get_nbm_bl(geoid_co = "47051")
-dim(nbm_bl)
+dplyr::glimpse(nbm_bl)
 
 # get census block covered by an ISP identified by their FRN
 skymesh <- get_frn_nbm_bl("0027136753")
-dim(skymesh)
+dplyr::glimpse(skymesh)
 
 ```
 
 ### Form 477
 
-Sadly automating the download of some of the source data is harder for Form 477. 
-We are not providing that functionality.  
-
-You can get all data (multiple years) covering a State from Form 477:
+Access state data for multiple years:
 
 ```{r get_f477_example}
 f477_vt <- get_f477("VT")
-head(f477_vt)
+dplyr::glimpse(f477_vt)
 ```
 
 ### Utilities
 
-Getting the dictionnary for each dataset:
+Access the dictionary for each dataset:
 
 ```{r get_fcc_dictionary_ex}
-head(get_fcc_dictionary())
+dplyr::glimpse(get_fcc_dictionary())
 ```
 
 
-The package also provide the list of Provider ID and FRN 
+The package also provides a list of Provider IDs and FRNs.
 
 ```{r fcc_provider}
 str(fcc_provider)
@@ -97,4 +94,4 @@ str(fcc_provider)
 
 ## Inspiration
 
-This package was imspired by https://github.com/bbcommons/bfm-explorer 
+This package was inspired by https://github.com/bbcommons/bfm-explorer 

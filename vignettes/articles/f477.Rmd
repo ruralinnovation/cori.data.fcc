@@ -32,14 +32,16 @@ table_with_options <- function(x) {
 
 ## FCC's Form 477
 
-Simplifying access to data is usually a matters of opinion: what data should we kept, what should be discarded?
+Simplifying access to data is usually a matter of opinion. What data should 
+we keep? What data should be discarded?
 
-For effectif data analysis it is important to communicate those decisions and provide the data's story. 
+For effective data analysis, it is important to communicate these 
+decisions and provide the full story of the data. 
 
 ### Short introduction
 
-FCC was reporting on Form 477 about Fixed Broadband deployement. 
-Broadband providers were required to fill it: 
+FCC reports on Form 477 about Fixed Broadband deployment. 
+Broadband providers were required to file information: 
 
 > **All** facilities-based broadband providers are required to file data with the FCC twice a year (Form 477) on where they offer Internet access service at speeds exceeding 200 kbps in at least one direction.  
 > **Fixed** providers file lists of census blocks in which they can or do offer service to at least one location, with additional information about the service.
@@ -49,25 +51,26 @@ Source: https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477
 The census block mentioned are from **US census blocks** and from the **2010 vintage**.
 Water only census blocks are also removed. 
 
-Every row in this dataset is matching a specific services provided by an ISP in a census block. 
-Hence an ISP can provides multiple services, for example different technologies or different speeds in a census block. 
+Every row in this dataset matches a specific service provided by an ISP in a census block. 
+An ISP can provides multiple services, such as different technologies or different speeds in a census block. 
 
-The time period covered goes from December 2014 and then have an update in June and December for every next year until december 2021.  
+The time period covered goes back to December 2014. There is an update in June and December for every other year until December 2021.  
 
 <hr>
 **NOTE**
-A provider is just required to tell if he provides a specific services in a block and is not required to provide how much in that block he is covering within it.   
+A provider is just required to tell if they provide a specific service in a block. 
+A provider is not required to provide how much of that block is covered by their services.   
 <hr>
 
 ### License and attribution 
 
 > Broadband data from FCC Form 477, and data from the U.S. Census Bureau that are presented on this site are offered free and not subject to copyright restriction. 
 
-FCC is asking for proper credit to be given: 
+FCC asks for proper credit to be given: 
 
 * Source data: FCC Form 477
 
-If you are using these data please follow those simple guidelines.
+If you are using these data please follow these simple guidelines.
 
 Source: https://broadband477map.fcc.gov/#/about
 
@@ -75,14 +78,16 @@ Source: https://broadband477map.fcc.gov/#/about
 
 From 477 data was released in multiple versions for some but not all releases.
 We took the decision to only use and ingest the last release of each version. 
-We are assuming here that those versions are more consistant and only selecting the last one will help homogeneize this dataset.
+We are assuming here that those versions are more consistent, and so only selecting the 
+last version will help homogenize this dataset.
 
-We also decided that satellite data were less important hence we focused in *Fixed without satellite* data.
+We also decided that satellite data is less important for most workflows, 
+hence we focused on *Fixed without satellite* data.
 
-As you will see in our data dictionary we did not kept  
+Our opinionated version is perhaps suboptimal for your specific uses. Feel free 
+to look at our implementation making sure that our process is reliable.
 
-Our opinionated version is maybe supbotimal for you and perhaps you need to look at our implementation making sure that our process is reliable.
-For that we are providing all the code used to generated this data set [here](https://github.com/ruralinnovation/cori.data.fcc/blob/main/data-raw/f477.R).   
+We provide all the code used to generated this data set [here](https://github.com/ruralinnovation/cori.data.fcc/blob/main/data-raw/f477.R).   
 
 ### Data dictionary 
 
@@ -92,11 +97,12 @@ table_with_options(get_fcc_dictionary("f477"))
 ```
 
 
-You may have notice that we could have been more strict on our data types.
-For example an FRN should be 10 numbers (with padded 0), ie `CHAR(10)` sadly our experience on previous 
-ingestions have shown that is was not a rules enforced. 
-We decided to provide the data as it is instead of removing rows with dubious value. 
-This decisions should be done by the analyst and domain expert but we could, 
-in future revisit this decisions and enforce more constraints on data. 
+You may have notice that we could have been more strict with regard to our data types.
+For example, an FRN should be 10 numbers (with padded 0), ie `CHAR(10)`, but our 
+experience working with previous ingestions have shown that this was not a 
+consistently enforced rule.
+
+We also decided to provide the data "as is" instead of removing rows with 
+dubious values. Those decisions should be done by the analyst for now.
 
 

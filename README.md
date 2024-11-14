@@ -10,20 +10,20 @@ coverage](https://codecov.io/gh/ruralinnovation/cori.data.fcc/branch/main/graph/
 [![R-CMD-check](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of cori.data.fcc is to facilate the discovery, the download and
-uses of FCC’s data.
+The goal of `cori.data.fcc` is to facilitate the discovery, analysis,
+and use of FCC public data releases.
 
-It covers:
+The package provides access to data from the following sources:
 
 - National Broadband Map [(NBM)](https://broadbandmap.fcc.gov/home)
-  data  
+  data[^1]
 - [Form
   477](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477)
   data
 
 ## Installation
 
-You can install the development version of cori.data.fcc from
+You can install the development version of `cori.data.fcc` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -39,122 +39,132 @@ library(cori.data.fcc)
 
 ### National Broadband Map
 
-- The package is providing you a way to download zipped `csv` see the
-  vignette “Check and download NBM data”
+Key uses:
 
-- Access a parquet files stored in CORI s3 bucket per county:
+- Access parquet files stored in a CORI s3 bucket, by county:
 
 ``` r
 guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
-head(guilford_cty)
-#>          frn provider_id brand_name location_id technology
-#> 1 0001857952      130077       AT&T  1344960789         10
-#> 2 0001857952      130077       AT&T  1344965855         10
-#> 3 0001857952      130077       AT&T  1344971572         10
-#> 4 0001857952      130077       AT&T  1344982708         10
-#> 5 0001857952      130077       AT&T  1344991329         10
-#> 6 0001857952      130077       AT&T  1344996969         10
-#>   max_advertised_download_speed max_advertised_upload_speed low_latency
-#> 1                            10                           1        TRUE
-#> 2                             0                           0        TRUE
-#> 3                            10                           1        TRUE
-#> 4                            50                          10        TRUE
-#> 5                            50                          10        TRUE
-#> 6                            75                          20        TRUE
-#>   business_residential_code state_usps        geoid_bl geoid_co file_time_stamp
-#> 1                         X         NC 370810161022008    37081      2024-09-03
-#> 2                         X         NC 370810168003003    37081      2024-09-03
-#> 3                         X         NC 370810125051020    37081      2024-09-03
-#> 4                         X         NC 370810171011021    37081      2024-09-03
-#> 5                         X         NC 370810157042006    37081      2024-09-03
-#> 6                         X         NC 370810127052022    37081      2024-09-03
-#>      release
-#> 1 2023-12-01
-#> 2 2023-12-01
-#> 3 2023-12-01
-#> 4 2023-12-01
-#> 5 2023-12-01
-#> 6 2023-12-01
+dplyr::glimpse(guilford_cty)
+#> Rows: 1,337,541
+#> Columns: 14
+#> $ frn                           <chr> "0001857952", "0001857952", "0001857952"…
+#> $ provider_id                   <chr> "130077", "130077", "130077", "130077", …
+#> $ brand_name                    <chr> "AT&T", "AT&T", "AT&T", "AT&T", "AT&T", …
+#> $ location_id                   <chr> "1344960789", "1344965855", "1344971572"…
+#> $ technology                    <dbl> 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, …
+#> $ max_advertised_download_speed <int> 10, 0, 10, 50, 50, 75, 50, 10, 50, 0, 10…
+#> $ max_advertised_upload_speed   <int> 1, 0, 1, 10, 10, 20, 10, 1, 10, 0, 1, 5,…
+#> $ low_latency                   <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE…
+#> $ business_residential_code     <chr> "X", "X", "X", "X", "X", "X", "X", "X", …
+#> $ state_usps                    <chr> "NC", "NC", "NC", "NC", "NC", "NC", "NC"…
+#> $ geoid_bl                      <chr> "370810161022008", "370810168003003", "3…
+#> $ geoid_co                      <chr> "37081", "37081", "37081", "37081", "370…
+#> $ file_time_stamp               <date> 2024-09-03, 2024-09-03, 2024-09-03, 202…
+#> $ release                       <date> 2023-12-01, 2023-12-01, 2023-12-01, 202…
 ```
 
-- Use the CORI opinionated version at the Census block level for the
-  **last NBM’s release**:
+- Access a CORI-opinionated, Census-block level version of the **latest
+  NBM release**:
 
 ``` r
 # get a county
 nbm_bl <- get_nbm_bl(geoid_co = "47051")
-dim(nbm_bl)
-#> [1] 2146   21
+dplyr::glimpse(nbm_bl)
+#> Rows: 2,146
+#> Columns: 21
+#> $ geoid_bl                                <chr> "470519601001000", "4705196010…
+#> $ geoid_st                                <chr> "47", "47", "47", "47", "47", …
+#> $ geoid_co                                <chr> "47051", "47051", "47051", "47…
+#> $ state_abbr                              <chr> "TN", "TN", "TN", "TN", "TN", …
+#> $ cnt_total_locations                     <int> NA, NA, NA, NA, 8, NA, 8, 3, 1…
+#> $ cnt_bead_locations                      <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_copper_locations                    <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_cable_locations                     <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_fiber_locations                     <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_other_locations                     <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_unlicensed_fixed_wireless_locations <int> NA, NA, NA, NA, 7, NA, 8, 3, 1…
+#> $ cnt_licensed_fixed_wireless_locations   <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_LBR_fixed_wireless_locations        <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_terrestrial_locations               <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_25_3                                <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_100_20                              <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_100_100                             <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
+#> $ cnt_distcint_frn                        <int> NA, NA, NA, NA, NA, NA, NA, NA…
+#> $ array_frn                               <list> <NULL>, <NULL>, <NULL>, <NULL…
+#> $ combo_frn                               <dbl> NA, NA, NA, NA, NA, NA, NA, NA…
+#> $ release                                 <date> 2023-12-01, 2023-12-01, 2023-…
 
 # get census block covered by an ISP identified by their FRN
 skymesh <- get_frn_nbm_bl("0027136753")
-dim(skymesh)
-#> [1]  3 21
+dplyr::glimpse(skymesh)
+#> Rows: 3
+#> Columns: 21
+#> $ geoid_bl                                <chr> "390375301004009", "3903755510…
+#> $ geoid_st                                <chr> "39", "39", "39"
+#> $ geoid_co                                <chr> "39037", "39037", "39109"
+#> $ state_abbr                              <chr> "OH", "OH", "OH"
+#> $ cnt_total_locations                     <int> 13, 7, 15
+#> $ cnt_bead_locations                      <int> 13, 6, 15
+#> $ cnt_copper_locations                    <int> 9, 2, 10
+#> $ cnt_cable_locations                     <int> 10, 0, 0
+#> $ cnt_fiber_locations                     <int> 13, 5, 2
+#> $ cnt_other_locations                     <int> 0, 0, 0
+#> $ cnt_unlicensed_fixed_wireless_locations <int> 13, 7, 15
+#> $ cnt_licensed_fixed_wireless_locations   <int> 13, 6, 14
+#> $ cnt_LBR_fixed_wireless_locations        <int> 11, 0, 0
+#> $ cnt_terrestrial_locations               <int> 13, 6, 15
+#> $ cnt_25_3                                <int> 13, 6, 14
+#> $ cnt_100_20                              <int> 13, 5, 14
+#> $ cnt_100_100                             <int> 13, 5, 5
+#> $ cnt_distcint_frn                        <int> 9, 6, 8
+#> $ array_frn                               <list> <"0002930980", "0004328688", "…
+#> $ combo_frn                               <dbl> 1.241130e+19, 7.392885e+18, 6.…
+#> $ release                                 <date> 2023-12-01, 2023-12-01, 2023-1…
 ```
 
 ### Form 477
 
-Sadly automating the download of some of the source data is harder for
-Form 477. We are not providing that functionality.
-
-You can get all data (multiple years) covering a State from Form 477:
+Access state data for multiple years:
 
 ``` r
 f477_vt <- get_f477("VT")
-head(f477_vt)
-#>   Provider_Id        FRN            ProviderName           DBAName
-#> 1        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
-#> 2        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
-#> 3        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
-#> 4        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
-#> 5        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
-#> 6        9395 0021002092 Stowe Cablevision, Inc. Stowe Access, LLC
-#>        HoldingCompanyName HocoNum               HocoFinal StateAbbr
-#> 1 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
-#> 2 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
-#> 3 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
-#> 4 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
-#> 5 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
-#> 6 Stowe Cablevision, Inc.  240090 Stowe Cablevision, Inc.        VT
-#>         BlockCode TechCode Consumer MaxAdDown MaxAdUp Business       Date
-#> 1 500159531001026       42     TRUE        25       5     TRUE 2014-12-01
-#> 2 500159531001026       41     TRUE        25       5     TRUE 2014-12-01
-#> 3 500159531001026       50    FALSE         0       0     TRUE 2014-12-01
-#> 4 500159531001027       42     TRUE        25       5     TRUE 2014-12-01
-#> 5 500159531001027       41     TRUE        25       5     TRUE 2014-12-01
-#> 6 500159531001027       50    FALSE         0       0     TRUE 2014-12-01
+dplyr::glimpse(f477_vt)
+#> Rows: 1,147,267
+#> Columns: 15
+#> $ Provider_Id        <chr> "9395", "9395", "9395", "9395", "9395", "9395", "93…
+#> $ FRN                <chr> "0021002092", "0021002092", "0021002092", "00210020…
+#> $ ProviderName       <chr> "Stowe Cablevision, Inc.", "Stowe Cablevision, Inc.…
+#> $ DBAName            <chr> "Stowe Access, LLC", "Stowe Access, LLC", "Stowe Ac…
+#> $ HoldingCompanyName <chr> "Stowe Cablevision, Inc.", "Stowe Cablevision, Inc.…
+#> $ HocoNum            <chr> "240090", "240090", "240090", "240090", "240090", "…
+#> $ HocoFinal          <chr> "Stowe Cablevision, Inc.", "Stowe Cablevision, Inc.…
+#> $ StateAbbr          <chr> "VT", "VT", "VT", "VT", "VT", "VT", "VT", "VT", "VT…
+#> $ BlockCode          <chr> "500159531001026", "500159531001026", "500159531001…
+#> $ TechCode           <chr> "42", "41", "50", "42", "41", "50", "42", "41", "50…
+#> $ Consumer           <lgl> TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, F…
+#> $ MaxAdDown          <int> 25, 25, 0, 25, 25, 0, 25, 25, 0, 25, 25, 0, 25, 25,…
+#> $ MaxAdUp            <int> 5, 5, 0, 5, 5, 0, 5, 5, 0, 5, 5, 0, 5, 5, 0, 5, 5, …
+#> $ Business           <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…
+#> $ Date               <dttm> 2014-12-01, 2014-12-01, 2014-12-01, 2014-12-01, 20…
 ```
 
 ### Utilities
 
-Getting the dictionnary for each dataset:
+Access the dictionary for each dataset:
 
 ``` r
-head(get_fcc_dictionary())
-#>   dataset           var_name var_type
-#> 1    f477        Provider_Id     TEXT
-#> 2    f477                FRN     TEXT
-#> 3    f477       ProviderName  VARCHAR
-#> 4    f477            DBAName  VARCHAR
-#> 5    f477 HoldingCompanyName  VARCHAR
-#> 6    f477            HocoNum     TEXT
-#>                               var_description
-#> 1             filing number (assigned by FCC)
-#> 2                     FCC registration number
-#> 3                               Provider name
-#> 4                    'Doing business as' name
-#> 5 Holding company name (as filed on Form 477)
-#> 6    Holding company number (assigned by FCC)
-#>                                            var_example
-#> 1                                                 8026
-#> 2                                           0001570936
-#> 3 Arctic Slope Telephone Association Cooperative, Inc.
-#> 4                                                ASTAC
-#> 5 Arctic Slope Telephone Association Cooperative, Inc.
-#> 6                                               130067
+dplyr::glimpse(get_fcc_dictionary())
+#> Rows: 50
+#> Columns: 5
+#> $ dataset         <chr> "f477", "f477", "f477", "f477", "f477", "f477", "f477"…
+#> $ var_name        <chr> "Provider_Id", "FRN", "ProviderName", "DBAName", "Hold…
+#> $ var_type        <chr> "TEXT", "TEXT", "VARCHAR", "VARCHAR", "VARCHAR", "TEXT…
+#> $ var_description <chr> "filing number (assigned by FCC)", "FCC registration n…
+#> $ var_example     <chr> "8026", "0001570936", "Arctic Slope Telephone Associat…
 ```
 
-The package also provide the list of Provider ID and FRN
+The package also provides a list of Provider IDs and FRNs.
 
 ``` r
 str(fcc_provider)
@@ -168,4 +178,10 @@ str(fcc_provider)
 
 ## Inspiration
 
-This package was imspired by <https://github.com/bbcommons/bfm-explorer>
+This package was inspired by <https://github.com/bbcommons/bfm-explorer>
+
+[^1]: This data describes what internet services are available to
+    individual locations across the country, along with new maps of
+    mobile coverage, as reported by Internet Service Providers (ISPs).
+    It is part of the FCC’s ongoing [Broadband Data
+    Collection](https://broadbandmap.fcc.gov/data-download/nationwide-data)).
