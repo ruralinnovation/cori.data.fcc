@@ -19,6 +19,9 @@ navbar:
         href: articles/NBM.html
       - text: "FCC's Form 477"
         href: articles/f477.html
+    Changelog:
+      text: News
+      href: news/index.html
 
 reference:
   - title: NBM 
