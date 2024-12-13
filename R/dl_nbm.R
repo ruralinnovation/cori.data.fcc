@@ -51,9 +51,24 @@ dl_nbm <- function(path_to_dl = "~/data_swamp",
       print(paste(dest_file, "already downloaded, skipping it"))
       next
     }
-
-    try(utils::download.file(url = paste0(base_url, one_release_to_dl$id[i], "/1"),
-                      destfile =  dest_file,
-                      headers = c("User-Agent" = user_agent), ...))
+    get_data_url <- paste0(base_url, one_release_to_dl$id[i], "/1")
+    res <- system(
+      sprintf(
+        paste0("curl '%s' --compressed ",
+               "-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0' ",
+               "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/png,image/svg+xml,*/*;q=0.8' ",
+               "-H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br, zstd' ",
+               "-H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1' ",
+               "-H 'Referer: https://broadbandmap.fcc.gov/data-download' ",
+               "-H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate' -H 'Sec-Fetch-Site: none' -H 'Sec-Fetch-User: ?1' ",
+               "-H 'Sec-GPC: 1' -H 'Priority: u=0, i' -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' -H 'TE: trailers' ",
+               "-o %s"),
+        get_data_url, dest_file
+        )
+      )
+    # unsure if an error in a system call return 0 consistantly but oh well
+    if (res != 0) {
+      stop(sprintf("Downloading %s failed", get_data_url))
+    }
   }
 }
