@@ -1,6 +1,6 @@
 Package: cori.data.fcc
 Title: Process FCC data 
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person(given="Olivier", family="Leroy", email="olivier.leroy@ruralinnovation.us", role = c("aut", "cre"))
 Description: Functions to get and process FCC data.
