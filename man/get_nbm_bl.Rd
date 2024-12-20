@@ -22,5 +22,7 @@ Use \code{get_fcc_dictionary("nbm_block")} to get a description of the date.
 Data Source: FCC Broadband Data Collection
 }
 \examples{
-nbm_bl <- get_nbm_bl(geoid_co = "47051")
+\dontrun{
+  nbm_bl <- get_nbm_bl(geoid_co = "47051")
+}
 }

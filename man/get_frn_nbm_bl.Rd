@@ -30,6 +30,6 @@ Data Source: FCC Broadband Data Collection
 }
 \examples{
 \dontrun{
-skymesh <- get_frn_nbm_bl("0027136753")
+ skymesh <- get_frn_nbm_bl("0027136753")
 }
 }

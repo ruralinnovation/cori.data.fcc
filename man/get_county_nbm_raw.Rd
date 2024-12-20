@@ -29,6 +29,6 @@ Source data: FCC Broadband Funding Map
 }
 \examples{
 \dontrun{
-guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
+ guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
 }
 }

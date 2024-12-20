@@ -25,6 +25,6 @@ Source data: FCC Form 477
 }
 \examples{
 \dontrun{
-NC <- get_f477(state_abbr = "NC")
+ NC <- get_f477(state_abbr = "NC")
 }
 }

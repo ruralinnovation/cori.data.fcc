@@ -1,4 +1,11 @@
-# cori.data.fcc 0.1.1
+# cori.data.fcc 0.1.2
+
+## Minor improvements 
+
+* Use CORI-brewed `download_file` function; global user_agent no longer needed
+
+
+## cori.data.fcc 0.1.1
 
 ## Minor improvements 
 
@@ -50,8 +57,9 @@
 * Organize reference of function by themes 
 
 
-# cori.data.fcc (first release)
+# cori.data.fcc 0.0.0
 
-* First functions released.
+* First release! 
+  - FCC BDC download functions
 
 * Improve functions with a user_agent defined in aaa.R #9
