@@ -32,9 +32,9 @@ devtools::install_github("ruralinnovation/cori.data.fcc")
 ```
 
 ::: {.callout-note}
-We were encountering problems with `devtools::check()` related to specific dependencies. Make sure to have the lates version of these packages:
+We were encountering problems with `devtools::check()` related to specific dependencies. Make sure to have the latest version of these packages:
 - `waldo`
-- 
+- `duckdb`
 :::
 
 
