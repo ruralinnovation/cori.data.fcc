@@ -13,16 +13,17 @@
 #'
 #' @export
 #' @import DBI
-#' @import duckdb
 #'
-#'@examples
-#' nbm_bl <- get_nbm_bl(geoid_co = "47051")
+#' @examples
+#' \dontrun{
+#'   nbm_bl <- get_nbm_bl(geoid_co = "47051")
+#' }
 
 get_nbm_bl <- function(geoid_co) {
 
   if (nchar(geoid_co) != 5L) stop("geoid_co should be a 5-digit string")
 
-  con <- DBI::dbConnect(duckdb())
+  con <- DBI::dbConnect(duckdb::duckdb())
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)

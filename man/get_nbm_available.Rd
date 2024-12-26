@@ -5,15 +5,12 @@
 \title{Get a list of files availables in FCC servers}
 \usage{
 get_nbm_available(
-  get_data_url = paste0("https://broadbandmap.fcc.gov/nbm/map/",
-    "api/national_map_process/nbm_get_data_download/"),
-  user_agent = the$user_agent
+  get_root_url = paste0("https://broadbandmap.fcc.gov/nbm/map/",
+    "api/national_map_process/nbm_get_data_download/")
 )
 }
 \arguments{
-\item{get_data_url}{a string providing NBM filing API.}
-
-\item{user_agent}{a string set up by default}
+\item{get_root_url}{a string providing NBM filing API.}
 }
 \value{
 A data frame.

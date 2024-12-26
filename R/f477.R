@@ -14,18 +14,17 @@
 #'
 #' @export
 #' @import DBI
-#' @import duckdb
 #'
 #'@examples
 #'\dontrun{
-#'NC <- get_f477(state_abbr = "NC")
+#'  NC <- get_f477(state_abbr = "NC")
 #'}
 
 get_f477 <- function(state_abbr, frn = "all") {
 
   state_abbr <- state_abbr_lookup(state_abbr)
 
-  con <- DBI::dbConnect(duckdb())
+  con <- DBI::dbConnect(duckdb::duckdb())
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)

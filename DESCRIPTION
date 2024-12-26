@@ -1,6 +1,6 @@
 Package: cori.data.fcc
 Title: Process FCC data 
-Version: 0.1.0
+Version: 0.1.2
 Authors@R: 
     person(given="Olivier", family="Leroy", email="olivier.leroy@ruralinnovation.us", role = c("aut", "cre"))
 Description: Functions to get and process FCC data.
@@ -11,20 +11,18 @@ RoxygenNote: 7.3.2
 Depends: 
     R (>= 2.10)
 LazyData: true
-Suggests: 
-    testthat (>= 3.0.0),
-    pkgdown,
+Suggests:
     dplyr,
     DT,
     knitr,
-    rmarkdown
+    pkgdown,
+    rmarkdown,
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Imports: 
-    curl,
-    jsonlite,
-    utils,
-    DBI,
+Imports:
     duckdb,
+    jsonlite,
+    DBI,
     stringi
 URL: https://ruralinnovation.github.io/cori.data.fcc/
 Config/Needs/website: rmarkdown

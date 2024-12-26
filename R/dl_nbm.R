@@ -7,7 +7,6 @@
 #' @param release_date a string can be "December 31, 2023" or "June 30, 2023"
 #' @param data_type a string "Fixed Broadband"
 #' @param data_category a string "Nationwide"
-#' @param user_agent a string set up by default
 #' @param ... additional parameters for download.file()
 #'
 #' @return Zipped csv
@@ -23,8 +22,7 @@
 dl_nbm <- function(path_to_dl = "~/data_swamp",
                    release_date = "June 30, 2023",
                    data_type = "Fixed Broadband",
-                   data_category = "Nationwide",
-                   user_agent = the$user_agent, ...) {
+                   data_category = "Nationwide", ...) {
   # clean my mess
   prev_timeout <- getOption("timeout")
   on.exit(options(timeout = prev_timeout), add = TRUE)
@@ -52,8 +50,15 @@ dl_nbm <- function(path_to_dl = "~/data_swamp",
       next
     }
 
-    try(utils::download.file(url = paste0(base_url, one_release_to_dl$id[i], "/1"),
-                      destfile =  dest_file,
-                      headers = c("User-Agent" = user_agent), ...))
+    get_data_url <- paste0(base_url, one_release_to_dl$id[i], "/1")
+
+    res <- download_file(get_data_url, dest_file)
+
+    # Check res
+    if (!(dest_file %in% res)) {
+      message(paste0("Error in download result: ", res))
+      stop(sprintf("Downloading %s failed", get_data_url))
+    }
+
   }
 }

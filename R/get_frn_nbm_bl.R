@@ -18,18 +18,17 @@
 #'
 #' @export
 #' @import DBI
-#' @import duckdb
 #'
 #'@examples
 #'\dontrun{
-#' skymesh <- get_frn_nbm_bl("0027136753")
+#'  skymesh <- get_frn_nbm_bl("0027136753")
 #'}
 
 get_frn_nbm_bl <- function(frn) {
 
   if (nchar(frn) != 10L) stop("frn should be a 10-digit string")
 
-  con <- DBI::dbConnect(duckdb())
+  con <- DBI::dbConnect(duckdb::duckdb())
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)

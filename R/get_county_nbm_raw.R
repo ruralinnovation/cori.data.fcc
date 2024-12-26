@@ -18,18 +18,17 @@
 #'
 #' @export
 #' @import DBI
-#' @import duckdb
 #'
 #'@examples
 #'\dontrun{
-#'guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
+#'  guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
 #'}
 
 get_county_nbm_raw <- function(geoid_co, frn = "all", release = "2023-12-01") {
 
   # do I need a look up for county?
 
-  con <- DBI::dbConnect(duckdb())
+  con <- DBI::dbConnect(duckdb::duckdb())
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)
