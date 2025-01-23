@@ -4,7 +4,7 @@
 \alias{get_county_nbm_raw}
 \title{Load all BSL from NBM dataset for a specific county}
 \usage{
-get_county_nbm_raw(geoid_co, frn = "all", release = "2023-12-01")
+get_county_nbm_raw(geoid_co, frn = "all", release = "2024-06-01")
 }
 \arguments{
 \item{geoid_co}{a string matching a GEOID for a county}
