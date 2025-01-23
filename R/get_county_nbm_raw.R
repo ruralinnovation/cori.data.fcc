@@ -24,7 +24,7 @@
 #'  guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
 #'}
 
-get_county_nbm_raw <- function(geoid_co, frn = "all", release = "2023-12-01") {
+get_county_nbm_raw <- function(geoid_co, frn = "all", release = "2024-06-01") {
 
   # do I need a look up for county?
 

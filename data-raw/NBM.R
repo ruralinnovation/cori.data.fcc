@@ -116,4 +116,73 @@ DBI::dbExecute(con, copy_stat)
 
 DBI::dbDisconnect(con)
 
-system("aws s3 nbm_raw s3://cori.data.fcc/nbm_raw")
+system("aws s3 sync nbm_raw s3://cori.data.fcc/nbm_raw")
+
+## update January 2025, adding June2024
+# assuming list of csv in data_swamp
+
+library(duckdb)
+
+con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
+
+# I needed to run because FCC naming J24 can be june, january ... 
+dir <- "data_swamp/10dec2024/"
+
+raw_csv <- list.files(dir, pattern = "*.csv", recursive = TRUE)
+raw_csv <- paste0(dir, raw_csv)
+
+# better names is defined above
+better_name <- vapply(raw_csv, better_fcc_name, FUN.VALUE = character(1))
+
+file.rename(raw_csv, better_name)
+
+
+## I went overkill with that one, it is probably not needed
+DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
+
+copy_stat <- "
+COPY
+    (SELECT 
+      frn, 
+      provider_id, 
+      brand_name,
+      location_id,
+      technology,
+      max_advertised_download_speed,
+      max_advertised_upload_speed,
+      low_latency,
+      business_residential_code,
+      state_usps,
+      block_geoid as geoid_bl, 
+      substring(block_geoid, 1, 5) as geoid_co,
+      strptime(split_part(split_part(filename, '_', 8), '.', 1), '%d%b%Y')::DATE
+       as file_time_stamp,
+      strptime(split_part(filename, '_', 7), '%B%Y')::DATE as release 
+    FROM 
+    read_csv(
+             'data_swamp/10dec2024/*.csv',
+              types = { 
+                        'frn'        : 'VARCHAR(10)',
+                        'provider_id': 'TEXT',
+                        'brand_name' : 'TEXT',
+                        'location_id': 'TEXT', 
+                        'technology' : 'VARCHAR(2)', 
+                        'max_advertised_download_speed' : INTEGER,
+                        'max_advertised_upload_speed' : INTEGER,
+                        'low_latency' : 'BOOLEAN',
+                        'business_residential_code': 'VARCHAR(1)',
+                        'state_usps' : 'VARCHAR(2)',
+                        'block_geoid': 'VARCHAR(15)'  
+    },   
+              ignore_errors = true,         
+              delim=',', quote='\"',
+              new_line='\\n', skip=0, 
+              header=true, filename=true))
+    TO 'nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology)
+    );"
+
+DBI::dbExecute(con, copy_stat)
+
+DBI::dbDisconnect(con)
+
+system("aws s3 sync nbm_raw/release=2024-06-01 s3://cori.data.fcc/nbm_raw/release=2024-06-01")
