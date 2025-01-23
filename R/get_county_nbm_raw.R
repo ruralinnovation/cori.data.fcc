@@ -12,7 +12,7 @@
 #'
 #' @param geoid_co a string matching a GEOID for a county
 #' @param frn a string of 10 numbers matching FCC's FRN, default is "all"
-#' @param release a date, set by default to be '2023-12-01'
+#' @param release a date, set by default to be '2024-06-01'
 #'
 #' @return a data frame
 #'

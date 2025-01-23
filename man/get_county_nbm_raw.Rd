@@ -11,7 +11,7 @@ get_county_nbm_raw(geoid_co, frn = "all", release = "2024-06-01")
 
 \item{frn}{a string of 10 numbers matching FCC's FRN, default is "all"}
 
-\item{release}{a date, set by default to be '2023-12-01'}
+\item{release}{a date, set by default to be '2024-06-01'}
 }
 \value{
 a data frame
