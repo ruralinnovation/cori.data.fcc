@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cori.data.fcc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,9 +87,9 @@
 <span><span class="co">## 4         100015    Biannual     June 30, 2024</span></span>
 <span><span class="co">##                           process_uuid enable_bfm_link</span></span>
 <span><span class="co">## 1 c9257b94-8221-4c96-afa6-103fcd95770d            TRUE</span></span>
-<span><span class="co">## 2 699df50d-47cc-4d0d-96e5-2b60cbe2de7b            TRUE</span></span>
+<span><span class="co">## 2 d51b71be-2d79-43b1-afab-1a951b11a82d            TRUE</span></span>
 <span><span class="co">## 3 b842d204-ba21-4cbd-9b22-11f62a5f490d            TRUE</span></span>
-<span><span class="co">## 4 edfc24cc-2d8a-436a-a5f7-3333a74b88b1            TRUE</span></span>
+<span><span class="co">## 4 c7b5d386-3703-4678-b4b8-3abdae137fbc            TRUE</span></span>
 <span><span class="co">##   enable_challenge_download</span></span>
 <span><span class="co">## 1                      TRUE</span></span>
 <span><span class="co">## 2                      TRUE</span></span>
@@ -111,13 +111,11 @@
 <span><span class="co"># or</span></span>
 <span><span class="va">nbm_dplyr_filter</span> <span class="op">&lt;-</span> <span class="va">nbm</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">release</span> <span class="op">==</span> <span class="st">"June 30, 2023"</span> <span class="op">&amp;</span></span>
 <span>                                         <span class="va">data_type</span> <span class="op">==</span> <span class="st">"Fixed Broadband"</span> <span class="op">&amp;</span></span>
-<span>                                         <span class="va">data_category</span> <span class="op">==</span> <span class="st">"Nationwide"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">nbm_filter</span>, <span class="va">nbm_dplyr_filter</span><span class="op">)</span></span></code></pre></div>
+<span>                                         <span class="va">data_category</span> <span class="op">==</span> <span class="st">"Nationwide"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">nbm_filter</span>, <span class="va">nbm_dplyr_filter</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nbm_filter</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       id       release       data_type technology_code state_fips provider_id</span></span>
