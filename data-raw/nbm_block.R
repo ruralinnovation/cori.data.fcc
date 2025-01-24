@@ -1,7 +1,7 @@
 ## code to prepare `nbm_block` dataset goes here
 
 # this workflow depend on nbm_raw processed in NBM.R and the 2020 US Census Block
-# I used an in house dataset here but this can be replaced by tigris
+# I used an in house dataset here but this can be replaced by tigris [TODO?]
 # or just going in the FTP of US census
 # our internal package
 library(cori.db)

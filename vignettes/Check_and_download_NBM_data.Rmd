@@ -2,7 +2,7 @@
 title: "Check and download NBM data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"Check and download NBM data"}
+  %\VignetteIndexEntry{Check and download NBM data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
