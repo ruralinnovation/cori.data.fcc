@@ -36,12 +36,12 @@ get_frn_nbm_bl <- function(frn) {
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   statement <- sprintf(
    "select * 
- 		  from read_parquet('s3://cori.data.fcc/nbm_block/*/*.parquet')
+ 		  from read_parquet('s3://cori.data.fcc/nbm_block-J24/*/*.parquet')
     where 
       combo_frn in (
     							  select combo_frn 
     							  from 
-										read_parquet('s3://cori.data.fcc/rel_combo_frn.parquet')
+										read_parquet('s3://cori.data.fcc/rel_combo_frn-J24.parquet')
     								where frn = '%s'
     );", frn)
 

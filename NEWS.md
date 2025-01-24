@@ -1,3 +1,11 @@
+# cori.data.fcc 0.2.1
+
+## Major changes
+
+* We updated raw data with the June 2024 FCC release
+
+* CORI opinionated version at Census Block level is also now using that version. 
+
 # cori.data.fcc 0.1.2
 
 ## Minor improvements 

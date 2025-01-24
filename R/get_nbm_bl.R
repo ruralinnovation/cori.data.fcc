@@ -31,7 +31,7 @@ get_nbm_bl <- function(geoid_co) {
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   statement <- sprintf(
     "select * 
- 		  from read_parquet('s3://cori.data.fcc/nbm_block/*/*.parquet')
+ 		  from read_parquet('s3://cori.data.fcc/nbm_block-J24/*/*.parquet')
     where geoid_co = '%s';", geoid_co)
 
   DBI::dbGetQuery(con, statement)
