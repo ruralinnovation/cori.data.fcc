@@ -64,17 +64,17 @@ dir.create(paste0(data_dir, "/", source_prefix), recursive = TRUE)
 source_files_s3 <- (
   cori.db::list_s3_objects(bucket_name = s3_bucket_name) |> 
       dplyr::filter(grepl(source_prefix, `key`)) |> 
+      dplyr::filter(grepl('Jun2021', `key`)) |> 
       dplyr::filter(grepl(".zip", `key`))
 )$key
 
-tic()
 source_files_s3 |> lapply(function(x) {
 
   cori.db::get_s3_object(s3_bucket_name, x, paste0(data_dir, "/", x))
 
   print(paste0("Fininshed downloading ", data_dir, "/", x))
 })
-toc()
+
 
 unzip_command <- sprintf("unzip -u %s/\\*.zip -d %s", paste0(data_dir, "/", source_prefix), data_dir)
 print(unzip_command)
@@ -82,7 +82,7 @@ print(unzip_command)
 system(unzip_command)
 
 # should be 15 files
-list.files(data_dir, pattern = "*.csv")
+# list.files(data_dir, pattern = "*.csv")
 
 ### TODO: Originally downloaded these files...
 #  [1] "fbd_us_without_satellite_dec2014_v3.csv"
@@ -121,7 +121,7 @@ list.files(data_dir, pattern = "*.csv")
 clean_dir <- paste0(data_dir, "/clean")
 dir.create(clean_dir, recursive = TRUE)
 
-csv_files <- list.files(data_dir, pattern = ".csv", recursive = FALSE)
+csv_files <- list.files(data_dir, pattern = ".zip", recursive = FALSE)
 
 convert_to_utf8_and_clean <- function(file_path) {
 
@@ -157,6 +157,28 @@ convert_to_utf8_and_clean <- function(file_path) {
 
   tic()
 
+  ### read in entire release dataset
+  dt <- data.table::fread(paste0(data_dir, '/clean/', file_name))
+  
+  states <- unique(dt$StateAbbr)
+  ### partition on state
+  lapply(states, function(st_abbr){
+    
+    ##subset and clean
+    dt_st <- dt[StateAbbr == st_abbr,,]
+    dt_st[, `HoldingCompanyName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `HoldingCompanyName`)]
+    
+    ### create state directory (if it doesn't exist)
+    
+    
+    ### write out state file
+    
+    
+  })
+  
+  
+  ### write csv state tables by release to a "clean" subdirectory (states) 
+  
   state_abbr <- c("VT")
 
   # dt <- fread(file = paste0(data_dir, "/clean/", file_name), 
@@ -172,32 +194,6 @@ convert_to_utf8_and_clean <- function(file_path) {
 
   dt[, `HoldingCompanyName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `HoldingCompanyName`)]
 
-  # # Read the file
-  # old_lines <- readLines(paste0(data_dir, "/clean/", file_name))
-
-  # # Process each line to handle multiple adjacent double-quoted strings
-  # process_line <- function(line) {
-  #   # First, identify patterns matching a double quote followed by text and then double-double quotes
-  #   # Keep applying the transformation until there are no more matches
-  #   while(grepl('"[^"]*""[^"]*"', line)) {
-  #     # cat(paste0("Found: ", line))
-  #     # print("")
-  #     # # Replace patterns of the form "text1""text2" with "text1, text2,"
-  #     line <- gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', line)
-  #     # cat(paste0("Changed: ", line))
-  #     # print("")
-  #   }
-  #   return(line)
-  # }
-
-  # # Apply the function to each line
-  # new_lines <- lapply(old_lines, process_line)
-
-  # # Delete original file
-  # unlink(paste0(data_dir, "/clean/", file_name))
-
-  # # Write results to same file name
-  # writeLines(unlist(new_lines), paste0(data_dir, "/clean/", file_name))
   
   print(paste0("Fininshed cleaning ", file_name))
   toc()
