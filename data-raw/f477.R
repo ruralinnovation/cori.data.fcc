@@ -1,6 +1,7 @@
 ## code to prepare `f477` dataset goes here
 library(DBI)
 library(cori.db)
+library(data.table)
 library(dplyr)
 library(duckdb)
 library(tictoc)
@@ -15,6 +16,12 @@ dir.create(data_dir, recursive = TRUE)
 # library(curl)
 # options(timeout = 600)
 
+
+list_url <- c(
+  "https://us-fcc.box.com/v/AK-Jun2021-v1",
+  "https://us-fcc.box.com/v/AL-Jun2021-v1",
+  "https://us-fcc.box.com/v/AR-Jun2021-v1"
+)
 
 # # first year are easy to access
 # list_url <- c(
@@ -138,7 +145,7 @@ convert_to_utf8_and_clean <- function(file_path) {
 
   stopifnot(length(result) > 0 && result[[1]] == 0)
 
-  unlink(paste0(data_dir, "/", file_name))
+  # unlink(paste0(data_dir, "/", file_name))
   
   print(paste0("Fininshed writing UTF8 version of ", file_name))
   toc()
@@ -150,32 +157,47 @@ convert_to_utf8_and_clean <- function(file_path) {
 
   tic()
 
-  # Read the file
-  old_lines <- readLines(paste0(data_dir, "/clean/", file_name))
+  state_abbr <- "VT"
 
-  # Process each line to handle multiple adjacent double-quoted strings
-  process_line <- function(line) {
-    # First, identify patterns matching a double quote followed by text and then double-double quotes
-    # Keep applying the transformation until there are no more matches
-    while(grepl('"[^"]*""[^"]*"', line)) {
-      # cat(paste0("Found: ", line))
-      # print("")
-      # # Replace patterns of the form "text1""text2" with "text1, text2,"
-      line <- gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', line)
-      # cat(paste0("Changed: ", line))
-      # print("")
-    }
-    return(line)
-  }
+  # dt <- fread(file = paste0(data_dir, "/clean/", file_name), 
+  dt <- fread(cmd = paste0("grep -E '", state_abbr, "' ", data_dir, "/clean/", file_name),
+    header = TRUE,       # Assuming no header
+    sep = "\n"          # Read line by line
+    # quote = "",           # Disable quoting to preserve all characters
+    # stringsAsFactors = FALSE)  # Keep as character strings
+  ) |>
+    dplyr::filter(
+      StateAbbr == state_abbr
+    )
 
-  # Apply the function to each line
-  new_lines <- lapply(old_lines, process_line)
+  dt[, `HoldingCompanyName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `HoldingCompanyName`)]
 
-  # Delete original file
-  unlink(paste0(data_dir, "/clean/", file_name))
+  # # Read the file
+  # old_lines <- readLines(paste0(data_dir, "/clean/", file_name))
 
-  # Write results to same file name
-  writeLines(unlist(new_lines), paste0(data_dir, "/clean/", file_name))
+  # # Process each line to handle multiple adjacent double-quoted strings
+  # process_line <- function(line) {
+  #   # First, identify patterns matching a double quote followed by text and then double-double quotes
+  #   # Keep applying the transformation until there are no more matches
+  #   while(grepl('"[^"]*""[^"]*"', line)) {
+  #     # cat(paste0("Found: ", line))
+  #     # print("")
+  #     # # Replace patterns of the form "text1""text2" with "text1, text2,"
+  #     line <- gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', line)
+  #     # cat(paste0("Changed: ", line))
+  #     # print("")
+  #   }
+  #   return(line)
+  # }
+
+  # # Apply the function to each line
+  # new_lines <- lapply(old_lines, process_line)
+
+  # # Delete original file
+  # unlink(paste0(data_dir, "/clean/", file_name))
+
+  # # Write results to same file name
+  # writeLines(unlist(new_lines), paste0(data_dir, "/clean/", file_name))
   
   print(paste0("Fininshed cleaning ", file_name))
   toc()
