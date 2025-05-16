@@ -17,11 +17,11 @@ dir.create(data_dir, recursive = TRUE)
 # options(timeout = 600)
 
 
-list_url <- c(
-  "https://us-fcc.box.com/v/AK-Jun2021-v1",
-  "https://us-fcc.box.com/v/AL-Jun2021-v1",
-  "https://us-fcc.box.com/v/AR-Jun2021-v1"
-)
+# list_url <- c(
+#   "https://us-fcc.box.com/v/AK-Jun2021-v1",
+#   "https://us-fcc.box.com/v/AL-Jun2021-v1",
+#   "https://us-fcc.box.com/v/AR-Jun2021-v1"
+# )
 
 # # first year are easy to access
 # list_url <- c(
@@ -157,7 +157,7 @@ convert_to_utf8_and_clean <- function(file_path) {
 
   tic()
 
-  state_abbr <- "VT"
+  state_abbr <- c("VT")
 
   # dt <- fread(file = paste0(data_dir, "/clean/", file_name), 
   dt <- fread(cmd = paste0("grep -E '", state_abbr, "' ", data_dir, "/clean/", file_name),
