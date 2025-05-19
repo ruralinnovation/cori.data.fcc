@@ -8,129 +8,64 @@ library(tictoc)
 
 
 data_dir <- "inst/ext_data" # <= must have underscore to work with duckdb query used later
-dir.create(data_dir, recursive = TRUE)
-
-## TODO: REDO all of this WITH Satellite data
-
-# # the process to get f477 is a bit long
-# library(curl)
-# options(timeout = 600)
-
-
-# list_url <- c(
-#   "https://us-fcc.box.com/v/AK-Jun2021-v1",
-#   "https://us-fcc.box.com/v/AL-Jun2021-v1",
-#   "https://us-fcc.box.com/v/AR-Jun2021-v1"
-# )
-
-# # first year are easy to access
-# list_url <- c(
-#       "https://www.fcc.gov/form477/BroadbandData/Fixed/Dec14/Version%203/US-Fixed-with-Satellite-Dec2014.zip",
-#       "https://www.fcc.gov/form477/BroadbandData/Fixed/Jun15/Version%205/US-Fixed-with-Satellite-Jun2015.zip",
-#       "https://www.fcc.gov/form477/BroadbandData/Fixed/Dec15/Version%204/US-Fixed-with-Satellite-Dec2015.zip",
-#       "https://transition.fcc.gov/form477/BroadbandData/Fixed/Jun16/Version%204/US-Fixed-with-Satellite-Jun2016.zip",
-#       "https://www.fcc.gov/form477/BroadbandData/Fixed/Dec16/Version%202/US-Fixed-with-satellite-Dec2016.zip",
-#       "https://www.fcc.gov/form477/BroadbandData/Fixed/Jun17/Version%203/US-Fixed-with-Satellite-Jun2017.zip",
-#       "http://www.fcc.gov/form477/BroadbandData/Fixed/Dec17/Version%203/US-Fixed-with-satellite-Dec2017.zip",
-#       "https://www.fcc.gov/form477/BroadbandData/Fixed/Jun18/Version%201/US-Fixed-with-Satellite-Jun2018.zip",
-#       "http://www.fcc.gov/form477/BroadbandData/Fixed/Dec18/Version%203/US-Fixed-with-Satellite-Dec2018.zip"
-
-# )
-
-# list_url[1]
-
-# for (i in list_url) {
-#   curl::curl_download(i, paste0(data_dir, "/",
-#                                 basename(i)))
-# }
-
-# # then FCC started to use box and I do not want an account here:
-# # and need to be downloaded manually
-
-
-# list_box <- c(
-#   "https://www.fcc.gov/form-477-broadband-deployment-data-june-2019-version-2",
-#   "https://www.fcc.gov/form-477-broadband-deployment-data-december-2019-version-1",
-#   "https://www.fcc.gov/form-477-broadband-deployment-data-june-2020-version-2",
-#   "https://www.fcc.gov/form-477-broadband-deployment-data-december-2020",
-#   "https://www.fcc.gov/form-477-broadband-deployment-data-june-2021",
-#   "https://us-fcc.box.com/v/US-with-Sat-Dec2021-v1"
-# )
+dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
 
 s3_bucket_name <- "cori.data.fcc"
 source_prefix <- "source"
-dir.create(paste0(data_dir, "/", source_prefix), recursive = TRUE)
+dir.create(paste0(data_dir, "/", source_prefix), recursive = TRUE, showWarnings = FALSE)
 
 source_files_s3 <- (
-  cori.db::list_s3_objects(bucket_name = s3_bucket_name) |> 
-      dplyr::filter(grepl(source_prefix, `key`)) |> 
-      dplyr::filter(grepl('Jun2021', `key`)) |> 
+  cori.db::list_s3_objects(bucket_name = s3_bucket_name) |>
+      dplyr::filter(grepl(source_prefix, `key`)) |>
+      # dplyr::filter(grepl('Jun2021', `key`)) |> # <= TODO: REMOVE this filter when ready for ALL releases
       dplyr::filter(grepl(".zip", `key`))
 )$key
 
+### create clean and states directories (if they don't exist)
+clean_dir <- paste0(data_dir, "/clean")
+dir.create(clean_dir, recursive = TRUE, showWarnings = FALSE)
+clean_states_dir <- paste0(clean_dir, "/states")
+dir.create(clean_states_dir, recursive = TRUE, showWarnings = FALSE)
+
+
 source_files_s3 |> lapply(function(x) {
 
-  cori.db::get_s3_object(s3_bucket_name, x, paste0(data_dir, "/", x))
+  # MAIN LOOP
 
-  print(paste0("Fininshed downloading ", data_dir, "/", x))
-})
+  file_name <- basename(x)
+  file_path <- paste0(data_dir, "/", source_prefix, "/", file_name)
 
+  cori.db::get_s3_object(s3_bucket_name, x, file_path) # <= `x` includes source_prefix (i.e. "source")
 
-unzip_command <- sprintf("unzip -u %s/\\*.zip -d %s", paste0(data_dir, "/", source_prefix), data_dir)
-print(unzip_command)
+  print(paste0("Finished downloading ", file_path))
 
-system(unzip_command)
+  release_name <- gsub(".zip", "", basename(file_path))
+  release_dir <- paste0(data_dir, "/", release_name)
 
-# should be 15 files
-# list.files(data_dir, pattern = "*.csv")
+  print(paste0("Unzip release contents to ", release_dir))
+  dir.create(release_dir, recursive = TRUE, showWarnings = FALSE)
 
-### TODO: Originally downloaded these files...
-#  [1] "fbd_us_without_satellite_dec2014_v3.csv"
-#  [2] "fbd_us_without_satellite_dec2015_v4.csv"
-#  [3] "fbd_us_without_satellite_dec2016_v2.csv"
-#  [4] "fbd_us_without_satellite_dec2017_v3.csv"
-#  [5] "fbd_us_without_satellite_dec2018_v3.csv"
-#  [6] "fbd_us_without_satellite_dec2019_v1.csv"
-#  [7] "fbd_us_without_satellite_dec2020_v1.csv"
-#  [8] "fbd_us_without_satellite_dec2021_v1.csv"
-#  [9] "fbd_us_without_satellite_jun2015_v5.csv"
-# [10] "fbd_us_without_satellite_jun2016_v4.csv"
-# [11] "fbd_us_without_satellite_jun2017_v3.csv"
-# [12] "fbd_us_without_satellite_jun2018_v1.csv"
-# [13] "fbd_us_without_satellite_jun2019_v2.csv"
-# [14] "fbd_us_without_satellite_jun2020_v2.csv"
-# [15] "fbd_us_without_satellite_jun2021_v1.csv"
+  unzip_command <- sprintf("unzip -u %s -d %s", file_path, release_dir)
+  print(unzip_command)
 
-### ... but we're switching to *with_satellite (full data set)
-# [1] "fbd_us_with_satellite_dec2014_v3.csv"
-# [2] "fbd_us_with_satellite_dec2015_v4.csv"
-# [3] "fbd_us_with_satellite_dec2016_v2.csv"
-# [4] "fbd_us_with_satellite_dec2017_v3.csv"
-# [5] "fbd_us_with_satellite_dec2018_v3.csv"
-# [6] "fbd_us_with_satellite_dec2019_v1.csv"
-# [7] "fbd_us_with_satellite_dec2020_v1.csv"
-# [8] "fbd_us_with_satellite_dec2021_v1.csv"
-# [9] "fbd_us_with_satellite_jun2015_v5.csv"
-# [10] "fbd_us_with_satellite_jun2016_v4.csv"
-# [11] "fbd_us_with_satellite_jun2017_v3.csv"
-# [12] "fbd_us_with_satellite_jun2018_v1.csv"
-# [13] "fbd_us_with_satellite_jun2019_v2.csv"
-# [14] "fbd_us_with_satellite_jun2020_v2.csv"
+  system(unzip_command)
 
-# system("mkdir -p data_swamp/clean/")
-clean_dir <- paste0(data_dir, "/clean")
-dir.create(clean_dir, recursive = TRUE)
+  file_name <- list.files(release_dir, pattern = ".csv", recursive = FALSE)[1]
+  file_path <- paste0(release_dir, "/", file_name)
 
-csv_files <- list.files(data_dir, pattern = ".zip", recursive = FALSE)
+  print(file_path)
 
-convert_to_utf8_and_clean <- function(file_path) {
+  stopifnot(file.exists(file_path))
+
+  # csv_files <- list.files(data_dir, pattern = ".csv", recursive = FALSE)
+
+  # convert_to_utf8_and_clean <- function(file_path) {
 
   tic()
 
   # weird encoding to fix
   # If missing uchardet command, install on Mac with: brew install uchardet
-  file_name <- basename(file_path)
-  uchardet_command <- paste0("uchardet ", data_dir, "/", file_name)
+  uchardet_command <- paste0("uchardet ", file_path)
   encoding <- system(uchardet_command, intern = TRUE)
 
   print(list(file_name, encoding))
@@ -138,16 +73,19 @@ convert_to_utf8_and_clean <- function(file_path) {
   # fbd_us_with_satellite_jun2021_v1.csv WINDOWS-1250
 
   # Requires iconv: https://linux.die.net/man/1/iconv
-  s <- sprintf('iconv -f %s -t UTF8 %s/%s > %s/clean/%s',
-               encoding, data_dir, file_name, data_dir, file_name)
+  s <- sprintf('iconv -f %s -t UTF8 %s > %s/%s',
+              encoding, file_path, clean_dir, file_name)
   print(s)
   result <- system(s)
 
   stopifnot(length(result) > 0 && result[[1]] == 0)
 
-  # unlink(paste0(data_dir, "/", file_name))
-  
-  print(paste0("Fininshed writing UTF8 version of ", file_name))
+  # Delete release dir (pre-cleaned US data set)
+  unlink(release_dir, recursive = TRUE)
+
+  file_path <- paste0(clean_dir, "/", file_name)
+
+  print(paste0("Finished writing UTF8 version of ", file_path))
   toc()
 
   # Before importing to duckdb, we need to fix quote errors
@@ -158,52 +96,112 @@ convert_to_utf8_and_clean <- function(file_path) {
   tic()
 
   ### read in entire release dataset
-  dt <- data.table::fread(paste0(data_dir, '/clean/', file_name))
-  
+  dt <- data.table::fread(file_path)
+
+  # states <- c("AL")
   states <- unique(dt$StateAbbr)
+
   ### partition on state
-  lapply(states, function(st_abbr){
-    
-    ##subset and clean
+  states |> lapply(function(st_abbr){
+
+    ### Subset and clean dt
     dt_st <- dt[StateAbbr == st_abbr,,]
-    dt_st[, `HoldingCompanyName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `HoldingCompanyName`)]
-    
-    ### create state directory (if it doesn't exist)
-    
-    
-    ### write out state file
-    
-    
+
+    ## TODO: None of these data.table find-and-replace methods worked...
+
+    # ## Claude says:
+    # # state_abbr <- c("VT")
+    #
+    # # # dt <- fread(file = paste0(data_dir, "/clean/", file_name),
+    # # dt <- fread(cmd = paste0("grep -E '", state_abbr, "' ", data_dir, "/clean/", file_name),
+    # #   header = TRUE,
+    # #   sep = "\n" #,
+    # #   # quote = "",
+    # #   # stringsAsFactors = FALSE)
+    # # ) |>
+    # #   dplyr::filter(
+    # #     StateAbbr == state_abbr
+    # #   )
+    #
+    # # dt[, `HoldingCompanyName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `HoldingCompanyName`)]
+    #
+    # ## Claude also says:
+    #
+    # # Process all columns in the data.table
+    # process_column <- function(col) {
+    #   if(is.character(col)) {
+    #     while(any(grepl('"[^"]*""[^"]*"', col, perl=TRUE))) {
+    #       col <- gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', col, perl=TRUE)
+    #     }
+    #   }
+    #   return(col)
+    # }
+    #
+    # # Apply to all columns
+    # dt_st <- dt_st[, lapply(.SD, process_column)]
+    #
+    # ## ... for good measure... if this does not work then write out state csv and gsub line-by-line
+    # dt_st <- dt_st[, `ProviderName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `ProviderName`)]
+
+    ## ... soooo, lets write the state level csv file...
+
+    ## write csv state tables by release to a "clean" subdirectory (states)
+    file_name <- gsub("_us_", paste0("_", tolower(st_abbr), "_"), file_name)
+    file_path <- paste0(clean_states_dir, "/", file_name)
+    result <- fwrite(dt_st, file_path)
+
+    stopifnot(file.exists(file_path))
+
+    rm(dt_st) # Remove subset data.table from the environment
+
+    ## Then read it back in with readLines (works)
+    old_lines <- readLines(file_path)
+
+    # Process each line to handle multiple adjacent double-quoted strings
+    process_line <- function(line) {
+      # First, identify patterns matching a double quote followed by text and then double-double quotes
+      # Keep applying the transformation until there are no more matches
+      while(grepl('"[^"]*""[^"]*"', line)) {
+        cat(paste0("Found: ", line))
+        print("")
+        # Replace patterns of the form "text1""text2" with "text1, text2,"
+        line <- gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', line)
+        cat(paste0("Changed: ", line))
+        print("")
+      }
+      return(line)
+    }
+
+    # Apply the function to each line
+    new_lines <- lapply(old_lines, process_line)
+
+    # Delete original file
+    unlink(file_path)
+
+    # Write results to same file name
+    writeLines(unlist(new_lines), file_path)
+
+    print(paste0("Finished cleaning ", file_path))
+
+    return(invisible(result))
   })
-  
-  
-  ### write csv state tables by release to a "clean" subdirectory (states) 
-  
-  state_abbr <- c("VT")
 
-  # dt <- fread(file = paste0(data_dir, "/clean/", file_name), 
-  dt <- fread(cmd = paste0("grep -E '", state_abbr, "' ", data_dir, "/clean/", file_name),
-    header = TRUE,       # Assuming no header
-    sep = "\n"          # Read line by line
-    # quote = "",           # Disable quoting to preserve all characters
-    # stringsAsFactors = FALSE)  # Keep as character strings
-  ) |>
-    dplyr::filter(
-      StateAbbr == state_abbr
-    )
+  # Delete clean US dataset
+  unlink(file_path)
 
-  dt[, `HoldingCompanyName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `HoldingCompanyName`)]
-
-  
-  print(paste0("Fininshed cleaning ", file_name))
+  print(paste0("Finished cleaning and writing all states for ", file_name))
   toc()
-  
+
   return(invisible(result))
-}
 
-csv_files |> lapply(convert_to_utf8_and_clean)
+  # }
 
-load_into_duckdb <- function (pq_prefix) {
+  # csv_files |> lapply(convert_to_utf8_and_clean)
+
+})
+
+
+load_into_duckdb <- function (csv_dir, pq_dir) {
   # Magic of duckDB
   # FCC is not always very strict in following their data type
   # lot of time spend testing and adjusting to it
@@ -212,7 +210,7 @@ load_into_duckdb <- function (pq_prefix) {
   # https://www.fcc.gov/general/technology-codes-used-fixed-broadband-deployment-dat# require uchardet
 
   duck_dir <- paste0(data_dir, "/duckdb")
-  dir.create(duck_dir, recursive = TRUE)
+  dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
 
   con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/f477.duckdb"), op)
   on.exit(DBI::dbDisconnect(con))
@@ -241,7 +239,7 @@ load_into_duckdb <- function (pq_prefix) {
       strptime(split_part(filename, '_', 6), '%b%Y') as Date
     FROM 
     read_csv(
-            '", clean_dir, "/*.csv',
+            '", csv_dir, "/*.csv',
               types = { 'LogRecNo': 'BIGINT',
                         'Provider_Id' : 'TEXT',
                         'FRN' : 'TEXT',
@@ -260,7 +258,7 @@ load_into_duckdb <- function (pq_prefix) {
               delim=',', quote='\"',
               new_line='\\n', skip=0, 
               header=true, filename=true))
-    TO '", data_dir, "/", pq_prefix, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);
+    TO '", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);
   "
   )
 
@@ -272,7 +270,8 @@ load_into_duckdb <- function (pq_prefix) {
 }
 
 parquet_prefix <- "f477_with_satellite"
+parquet_dir <- paste0(data_dir, "/", parquet_prefix)
 
-load_into_duckdb(parquet_prefix)
+load_into_duckdb(clean_states_dir, parquet_dir)
 
-cori.db::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, paste0(data_dir, "/", parquet_prefix))
+cori.db::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, parquet_dir)
