@@ -7,7 +7,7 @@ library(duckdb)
 library(tictoc)
 
 
-data_dir <- "inst/ext_data" # <= must have underscore to work with duckdb query used later
+data_dir <- "inst/ext_data" # <= Must have underscore to work with duckdb query used later
 dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
 
 s3_bucket_name <- "cori.data.fcc"
@@ -17,11 +17,11 @@ dir.create(paste0(data_dir, "/", source_prefix), recursive = TRUE, showWarnings 
 source_files_s3 <- (
   cori.db::list_s3_objects(bucket_name = s3_bucket_name) |>
       dplyr::filter(grepl(source_prefix, `key`)) |>
-      # dplyr::filter(grepl('Jun2021', `key`)) |> # <= TODO: REMOVE this filter when ready for ALL releases
+      # dplyr::filter(grepl('Jun2021', `key`)) |> # <= test filter
       dplyr::filter(grepl(".zip", `key`))
 )$key
 
-### create clean and states directories (if they don't exist)
+### Create clean and states directories (if they don't exist)
 clean_dir <- paste0(data_dir, "/clean")
 dir.create(clean_dir, recursive = TRUE, showWarnings = FALSE)
 clean_states_dir <- paste0(clean_dir, "/states")
@@ -57,13 +57,9 @@ source_files_s3 |> lapply(function(x) {
 
   stopifnot(file.exists(file_path))
 
-  # csv_files <- list.files(data_dir, pattern = ".csv", recursive = FALSE)
-
-  # convert_to_utf8_and_clean <- function(file_path) {
-
   tic()
 
-  # weird encoding to fix
+  # Olivier says: weird encoding to fix
   # If missing uchardet command, install on Mac with: brew install uchardet
   uchardet_command <- paste0("uchardet ", file_path)
   encoding <- system(uchardet_command, intern = TRUE)
@@ -95,9 +91,17 @@ source_files_s3 |> lapply(function(x) {
 
   tic()
 
-  # TODO: DO NOT DROP LEADING ZEROS on FRN, Provider_ID, etc. AND...
-  ### read in entire release dataset
-  dt <- data.table::fread(file_path)
+  ### Read in entire release dataset
+  # dt <- data.table::fread(file_path)
+  dt <- data.table::fread(cmd = file_path,
+              header = TRUE,
+              sep = "\n",
+              colClasses = c(FRN = "character",
+                             MaxAdDown = "numeric",
+                             MaxAdUp = "numeric"),
+              stringsAsFactors = FALSE)
+
+  print(head(dt))
 
   # states <- c("AL")
   states <- unique(dt$StateAbbr)
@@ -108,54 +112,16 @@ source_files_s3 |> lapply(function(x) {
     ### Subset and clean dt
     dt_st <- dt[StateAbbr == st_abbr,,]
 
-    ## TODO: None of these data.table find-and-replace methods worked...
-
-    # ## Claude says:
-    # # state_abbr <- c("VT")
-    #
-    # # # dt <- fread(file = paste0(data_dir, "/clean/", file_name),
-    # # dt <- fread(cmd = paste0("grep -E '", state_abbr, "' ", data_dir, "/clean/", file_name),
-    # #   header = TRUE,
-    # #   sep = "\n" #,
-    # #   # quote = "",
-    # #   # stringsAsFactors = FALSE)
-    # # ) |>
-    # #   dplyr::filter(
-    # #     StateAbbr == state_abbr
-    # #   )
-    #
-    # # dt[, `HoldingCompanyName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `HoldingCompanyName`)]
-    #
-    # ## Claude also says:
-    #
-    # # Process all columns in the data.table
-    # process_column <- function(col) {
-    #   if(is.character(col)) {
-    #     while(any(grepl('"[^"]*""[^"]*"', col, perl=TRUE))) {
-    #       col <- gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', col, perl=TRUE)
-    #     }
-    #   }
-    #   return(col)
-    # }
-    #
-    # # Apply to all columns
-    # dt_st <- dt_st[, lapply(.SD, process_column)]
-    #
-    # ## ... for good measure... if this does not work then write out state csv and gsub line-by-line
-    # dt_st <- dt_st[, `ProviderName` := gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', `ProviderName`)]
-
-    ## ... soooo, lets write the state level csv file...
-
-    ## write csv state tables by release to a "clean" subdirectory (states)
+    ## Write csv state tables by release to a "clean" subdirectory (states)
     file_name <- gsub("_us_", paste0("_", tolower(st_abbr), "_"), file_name)
     file_path <- paste0(clean_states_dir, "/", file_name)
     result <- fwrite(dt_st, file_path)
 
     stopifnot(file.exists(file_path))
 
-    rm(dt_st) # Remove subset data.table from the environment
+    rm(dt_st) # Remove subset data.table from the environment...
 
-    ## Then read it back in with readLines (works)
+    ## ... then read it back in with readLines (works)
     old_lines <- readLines(file_path)
 
     # Process each line to handle multiple adjacent double-quoted strings
@@ -195,10 +161,6 @@ source_files_s3 |> lapply(function(x) {
 
   return(invisible(result))
 
-  # }
-
-  # csv_files |> lapply(convert_to_utf8_and_clean)
-
 })
 
 
@@ -206,7 +168,7 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
 
   pq_dir <- paste0(data_dir, "/", pq_prefix)
 
-  # Magic of duckDB
+  # Olivier says: Magic of duckDB
   # FCC is not always very strict in following their data type
   # lot of time spend testing and adjusting to it
   # more can be found here:
@@ -215,6 +177,9 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
 
   duck_dir <- paste0(data_dir, "/duckdb")
   dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
+
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/f477.duckdb"), op)
+  on.exit(DBI::dbDisconnect(con))
 
   duckdb::dbSendQuery(con, "INSTALL httpfs;")
   duckdb::dbSendQuery(con, "LOAD httpfs;")
@@ -226,13 +191,9 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
     CHAIN 'env;config'
 );")
 
-  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/f477.duckdb"), op)
-  on.exit(DBI::dbDisconnect(con))
-
   ## I went overkill with that one, it is probably not needed
   DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
 
-  ## TODO: ... FIX THIS DATE STAMP (Linux v.s. OS X issue?)
   # DuckDb will round (up) SMALLINT values, so use decimal instead
   copy_stat <- paste0("
   COPY
@@ -275,14 +236,15 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
       )
     ) ",
 # "    TO '", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);"
-"    TO 's3://", s3_bucket_name, "/", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);" # <= Direct to S3
+# "    TO 's3://", s3_bucket_name, "/", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);" # Error: Not implemented Error: OVERWRITE is not supported for remote file systems
+"    TO 's3://", s3_bucket_name, "/", pq_prefix, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr));" # <= Write parquet directly to S3, but FIRST you must manually delete prior data on S3
   )
 
   cat(copy_stat)
 
-  DBI::dbExecute(con, copy_stat)
+  result <- DBI::dbExecute(con, copy_stat)
 
-  result <- cori.db::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, pq_dir)
+  # result <- cori.db::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, pq_dir) # <= This would overwrite S3 without first deleting... could be an issue for parquet
 
   return(invisible(result))
 }
