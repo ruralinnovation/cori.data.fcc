@@ -46,7 +46,7 @@ get_f477 <- function(state_abbr, frn = "all") {
                          from
                          read_parquet(
                          's3://cori.data.fcc/f477_with_satellite/*/*/*.parquet')
-                         where StateAbbr = '%s' and frn = '%s';",
+                         where StateAbbr = '%s' and FRN = '%s';",
                          state_abbr, frn)
   }
 
