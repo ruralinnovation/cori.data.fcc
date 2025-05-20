@@ -32,8 +32,12 @@ source_files_s3 |> lapply(function(x) {
 
   # MAIN LOOP
 
+  print(paste0("Downloading ", x, " from s3://", s3_bucket_name))
+
   file_name <- basename(x)
   file_path <- paste0(data_dir, "/", source_prefix, "/", file_name)
+
+  system(paste0("touch ", file_path))
 
   cori.db::get_s3_object(s3_bucket_name, x, file_path) # <= `x` includes source_prefix (i.e. "source")
 
@@ -42,8 +46,8 @@ source_files_s3 |> lapply(function(x) {
   release_name <- gsub(".zip", "", basename(file_path))
   release_dir <- paste0(data_dir, "/", release_name)
 
-  print(paste0("Unzip release contents to ", release_dir))
   dir.create(release_dir, recursive = TRUE, showWarnings = FALSE)
+  print(paste0("Unzip release contents to ", release_dir))
 
   unzip_command <- sprintf("unzip -u %s -d %s", file_path, release_dir)
   print(unzip_command)
@@ -115,6 +119,9 @@ source_files_s3 |> lapply(function(x) {
     ## Write csv state tables by release to a "clean" subdirectory (states)
     file_name <- gsub("_us_", paste0("_", tolower(st_abbr), "_"), file_name)
     file_path <- paste0(clean_states_dir, "/", file_name)
+
+    system(paste0("touch ", file_path))
+
     result <- data.table::fwrite(dt_st, file_path)
 
     stopifnot(file.exists(file_path))
