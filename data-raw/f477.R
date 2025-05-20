@@ -85,6 +85,8 @@ source_files_s3 |> lapply(function(x) {
 
   file_path <- paste0(clean_dir, "/", file_name)
 
+  stopifnot(file.exists(file_path))
+
   print(paste0("Finished writing UTF8 version of ", file_path))
   toc()
 
@@ -97,7 +99,7 @@ source_files_s3 |> lapply(function(x) {
 
   ### Read in entire release dataset
   # dt <- data.table::fread(file_path)
-  dt <- data.table::fread(cmd = file_path,
+  dt <- data.table::fread(file = file_path,
               header = TRUE,
               sep = "\n",
               colClasses = c(FRN = "character",
@@ -243,7 +245,6 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
       )
     ) ",
 # "    TO '", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);"
-# "    TO 's3://", s3_bucket_name, "/", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);" # Error: Not implemented Error: OVERWRITE is not supported for remote file systems
 "    TO 's3://", s3_bucket_name, "/", pq_prefix, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr));" # <= Write parquet directly to S3, but FIRST you must manually delete prior data on S3
   )
 
