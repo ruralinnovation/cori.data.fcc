@@ -115,7 +115,7 @@ source_files_s3 |> lapply(function(x) {
     ## Write csv state tables by release to a "clean" subdirectory (states)
     file_name <- gsub("_us_", paste0("_", tolower(st_abbr), "_"), file_name)
     file_path <- paste0(clean_states_dir, "/", file_name)
-    result <- fwrite(dt_st, file_path)
+    result <- data.table::fwrite(dt_st, file_path)
 
     stopifnot(file.exists(file_path))
 
