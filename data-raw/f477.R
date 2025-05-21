@@ -5,6 +5,7 @@ library(data.table)
 library(dplyr)
 library(duckdb)
 library(tictoc)
+library(assertthat)
 
 
 data_dir <- "inst/ext_data" # <= Must have underscore to work with duckdb query used later
@@ -87,6 +88,8 @@ source_files_s3 |> lapply(function(x) {
 
   stopifnot(file.exists(file_path))
 
+  stopifnot(assertthat::is.readable(file_path))
+
   print(paste0("Finished writing UTF8 version of ", file_path))
   toc()
 
@@ -98,16 +101,17 @@ source_files_s3 |> lapply(function(x) {
   tic()
 
   ### Read in entire release dataset
-  # dt <- data.table::fread(file_path)
-  dt <- data.table::fread(file = file_path,
-              header = TRUE,
-              sep = "\n",
-              colClasses = c(FRN = "character",
-                             MaxAdDown = "numeric",
-                             MaxAdUp = "numeric"),
-              stringsAsFactors = FALSE)
-
-  print(head(dt))
+  dt <- data.table::fread(file_path)
+  ## TODO: To read `FRN` as correct type (not number)...
+  # dt <- data.table::fread(file = file_path,
+  #             header = TRUE,
+  #             sep = "\n",
+  #             colClasses = c(FRN = "character",
+  #                            MaxAdDown = "numeric",
+  #                            MaxAdUp = "numeric"),
+  #             stringsAsFactors = FALSE)
+  ## ... BUT, providing args for these parameters seems to cause
+  ## other issues, so easier to "fix" with leading zeros later on
 
   # states <- c("AL")
   states <- unique(dt$StateAbbr)
@@ -115,8 +119,12 @@ source_files_s3 |> lapply(function(x) {
   ### partition on state
   states |> lapply(function(st_abbr){
 
+    print(paste0("Processing state: ", st_abbr))
+
     ### Subset and clean dt
     dt_st <- dt[StateAbbr == st_abbr,,]
+
+    print(head(dt_st))
 
     ## Write csv state tables by release to a "clean" subdirectory (states)
     file_name <- gsub("_us_", paste0("_", tolower(st_abbr), "_"), file_name)
@@ -127,6 +135,8 @@ source_files_s3 |> lapply(function(x) {
     result <- data.table::fwrite(dt_st, file_path)
 
     stopifnot(file.exists(file_path))
+
+    stopifnot(assertthat::is.readable(file_path))
 
     rm(dt_st) # Remove subset data.table from the environment...
 
