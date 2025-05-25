@@ -2,44 +2,50 @@
 
 library(cori.data.fcc)
 
-dir <- "data_swamp/nbm/"
+data_dir <- "inst/ext_data/nbm"
+
+source_dir <- paste0(data_dir, "/source")
 
 release <- get_nbm_release()
 
 nbm_data <- get_nbm_available()
 
-system(sprintf("mkdir -p %s", dir))
+system(sprintf("mkdir -p %s", source_dir))
 
-# this is a big loop
-for (i in release$filing_subtype){
-  dl_nbm(
-    path_to_dl = "data_swamp/nbm",
-    release_date = i,
-    data_type = "Fixed Broadband",
-    data_category = "Nationwide")
-}
+# # this is a big loop
+# for (i in release$filing_subtype){
+#   dl_nbm(
+#     path_to_dl = source_dir,
+#     release_date = i,
+#     data_type = "Fixed Broadband",
+#     data_category = "Nationwide")
+# }
+
+source("data-raw/download_available_NBM.R")
 
 num_files <- nbm_data |>
   dplyr::filter(data_type == "Fixed Broadband" &
                   data_category == "Nationwide") |>
   nrow()
-# echking if we have all the files
-files_dl <- length(list.files(dir, pattern = "*.zip"))
+# checking if we have all the files
+num_files_dl <- length(list.files(source_dir, pattern = "*.zip"))
 
-stopifnot("we are missing some files" = identical(num_files, files_dl))
+stopifnot("we are missing some files" = identical(num_files, num_files_dl))
 
-system(sprintf("mkdir -p %sraw", dir))
+raw_dta_dir <- paste0(data_dir, "/raw")
 
-system(sprintf("unzip %s\\*.zip -d %sraw", dir, dir))
+system(sprintf("mkdir -p %s", raw_dta_dir))
 
-system(sprintf("du -sh %sraw", dir))
-# 290G    data_swamp/nbm/raw
+system(sprintf("unzip %s/\\*.zip -d %s", source_dir, raw_dta_dir))
+
+system(sprintf("du -sh %s", raw_dta_dir))
+# 290G    inst/ext_data/nbm/raw
 
 ## files name follow some nice pattern but J23 or D22 are hard to convert in sql to a Date
 # better do that in R
 
-raw_csv <- list.files(dir, pattern = "*.csv", recursive = TRUE)
-raw_csv <- paste0(dir, raw_csv)
+raw_csv <- list.files(raw_dta_dir, pattern = "*.csv", recursive = TRUE)
+raw_csv <- paste0(raw_dta_dir, "/", raw_csv)
 
 better_fcc_name <- function(file_name) {
 
@@ -71,7 +77,7 @@ con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
 ## I went overkill with that one, it is probably not needed
 DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
 
-copy_stat <- "
+copy_stat <- paste0("
 COPY
     (SELECT 
       frn, 
@@ -91,7 +97,7 @@ COPY
       strptime(split_part(filename, '_', 7), '%B%Y')::DATE as release 
     FROM 
     read_csv(
-             'data_swamp/nbm/raw/*.csv',
+             '", data_dir, "/raw/*.csv',
               types = { 
                         'frn'        : 'VARCHAR(10)',
                         'provider_id': 'TEXT',
@@ -111,6 +117,7 @@ COPY
               header=true, filename=true))
     TO 'nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology)
     );"
+)
 
 DBI::dbExecute(con, copy_stat)
 
@@ -126,10 +133,10 @@ library(duckdb)
 con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
 
 # I needed to run because FCC naming J24 can be june, january ... 
-dir <- "data_swamp/10dec2024/"
+data_dir <- "data_swamp/10dec2024/"
 
-raw_csv <- list.files(dir, pattern = "*.csv", recursive = TRUE)
-raw_csv <- paste0(dir, raw_csv)
+raw_csv <- list.files(data_dir, pattern = "*.csv", recursive = TRUE)
+raw_csv <- paste0(data_dir, raw_csv)
 
 # better names is defined above
 better_name <- vapply(raw_csv, better_fcc_name, FUN.VALUE = character(1))
