@@ -1,6 +1,7 @@
 ## code to prepare `NBM` dataset goes here
 
 library(cori.data.fcc)
+library(duckdb)
 
 data_dir <- "inst/ext_data/nbm"
 
@@ -40,14 +41,16 @@ system(sprintf("mkdir -p %s", raw_dta_dir))
 system(sprintf("unzip %s/\\*.zip -d %s", source_dir, raw_dta_dir))
 
 system(sprintf("du -sh %s", raw_dta_dir))
-# 290G    inst/ext_data/nbm/raw
+# ~~290G    inst/ext_data/nbm/raw~~
+# 585G	inst/ext_data/nbm/raw
+
 
 ## Fix some files names (from "...December20ec..." to "...December20dec...")
 
 # Get all CSV files in the source directory
 csv_files <- list.files(raw_dta_dir, pattern = "\\.csv$", full.names = TRUE)
 
-# Find files that contain the incorrect pattern
+# Find December20... files that contain the incorrect pattern
 bad_file_names <- csv_files[grepl("December20ec_", basename(csv_files))]
 
 files_renamed <- list()
@@ -59,7 +62,7 @@ for (file in bad_file_names) {
   old_name <- basename(file)
   
   # Create the new filename by replacing the incorrect pattern
-  new_name <- gsub("December20ec_", "December20dec_", old_name)
+  new_name <- gsub("December20ec_", "December20_", old_name)
   
   # Construct full paths
   old_path <- file
@@ -75,40 +78,89 @@ for (file in bad_file_names) {
 }
 
 # Check how many files were renamed
-cat("Total files renamed:", length(files_to_rename), "\n")
+cat("Total files renamed:", length(files_renamed), "\n")
+
+
+# Find "June20..." files that contain the incorrect pattern
+bad_file_names <- csv_files[grepl("June20un_", basename(csv_files))]
+
+files_renamed <- list()
+
+# Rename the files
+for (file in bad_file_names) {
+  # Get the directory and current filename
+  dir_path <- dirname(file)
+  old_name <- basename(file)
+  
+  # Create the new filename by replacing the incorrect pattern
+  new_name <- gsub("June20un_", "June20_", old_name)
+  
+  # Construct full paths
+  old_path <- file
+  new_path <- file.path(dir_path, new_name)
+  
+  # Rename the file
+  file.rename(old_path, new_path)
+
+  files_renamed[[length(files_renamed) + 1]] <- new_name
+  
+  # Print confirmation (optional)
+  cat("Renamed:", old_name, "->", new_name, "\n")
+}
+
+# Check how many files were renamed
+cat("Total files renamed:", length(files_renamed), "\n")
+
 
 ## files name follow some nice pattern but J23 or D22 are hard to convert in sql to a Date
 # better do that in R
 
-raw_csv <- list.files(raw_dta_dir, pattern = "*.csv", recursive = TRUE)
+raw_csv <- list.files(raw_dta_dir, pattern = "*.csv", recursive = FALSE)
 raw_csv <- paste0(raw_dta_dir, "/", raw_csv)
 
+files_renamed <- list()
+
 better_fcc_name <- function(file_name) {
+  print(file_name)
+  # First check if full release month is already in the file name
+  if (grepl("December", file_name) || grepl("June", file_name)) {
+    return(file_name)
+    
+  } else {
 
-  convert_date <- function(string) {
-    m <- substring(string, 1, 1)
-    y <- substring(string, 2, 3)
-    if (m == "D") month <- "December" else month <- "June"
-    year <- paste0("20", y)
-    paste0(month, year)
+    convert_date <- function(string) {
+        m <- substring(string, 1, 1)
+        y <- substring(string, 2, 3)
+        if (m == "D") month <- "December" else month <- "June"
+        year <- paste0("20", y)
+        return(paste0(month, year))
+    }
+
+    dir_name <- dirname(file_name)
+    bad_file_name <- basename(file_name)
+    split_bad_file_name <- unlist(strsplit(bad_file_name, split = "_"))
+    split_bad_file_name[6] <- convert_date(split_bad_file_name[6])
+    good_file_name <- paste(split_bad_file_name, collapse = "_")
+    good_file_path <- paste(dir_name, good_file_name, sep = "/")
+
+    print(paste0(bad_file_name, " changed to ", good_file_name))
+
+    return(good_file_path)
   }
-
-  dir_name <- dirname(file_name)
-  bad_file_name <- basename(file_name)
-  split_bad_file_name <- unlist(strsplit(bad_file_name, split = "_"))
-  split_bad_file_name[6] <- convert_date(split_bad_file_name[6])
-  good_file_name <- paste(split_bad_file_name, collapse = "_")
-  good_file_path <- paste(dir_name, good_file_name, sep = "/")
-  return(good_file_path)
 }
 
 better_name <- vapply(raw_csv, better_fcc_name, FUN.VALUE = character(1))
 
-file.rename(raw_csv, better_name)
+rename_results <- file.rename(raw_csv, better_name)
 
-library(duckdb)
+# Check how many files were renamed
+cat("Total files renamed:", sum(rename_results), "\n")
 
-con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
+
+duck_dir <- paste0(data_dir, "/duckdb")
+dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
+
+con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/nbm.duckdb"))
 
 ## I went overkill with that one, it is probably not needed
 DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
@@ -133,7 +185,7 @@ COPY
       strptime(split_part(filename, '_', 7), '%B%Y')::DATE as release 
     FROM 
     read_csv(
-             '", data_dir, "/raw/*.csv',
+             '", raw_dta_dir, "/*.csv',
               types = { 
                         'frn'        : 'VARCHAR(10)',
                         'provider_id': 'TEXT',
@@ -151,8 +203,7 @@ COPY
               delim=',', quote='\"',
               new_line='\\n', skip=0, 
               header=true, filename=true))
-    TO 'nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology)
-    );"
+    TO '", data_dir, "/nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology), OVERWRITE true);"
 )
 
 DBI::dbExecute(con, copy_stat)

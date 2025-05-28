@@ -8,7 +8,7 @@ library(tictoc)
 library(assertthat)
 
 
-data_dir <- "inst/ext_data" # <= Must have underscore to work with duckdb query used later
+data_dir <- "inst/ext_data/f477" # <= Must have underscore to work with duckdb query used later
 dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
 
 s3_bucket_name <- "cori.data.fcc"
@@ -197,7 +197,7 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
   duck_dir <- paste0(data_dir, "/duckdb")
   dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
 
-  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/f477.duckdb"), op)
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/f477.duckdb"))
   on.exit(DBI::dbDisconnect(con))
 
   duckdb::dbSendQuery(con, "INSTALL httpfs;")
