@@ -22,7 +22,7 @@ system(sprintf("mkdir -p %s", source_dir))
 #     data_category = "Nationwide")
 # }
 
-source("data-raw/download_available_NBM.R")
+source("data-raw/nbm_downloads.R")
 
 num_files <- nbm_data |>
   dplyr::filter(data_type == "Fixed Broadband" &

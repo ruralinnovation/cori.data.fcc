@@ -9,6 +9,11 @@ library(cori.db)
 library(duckdb)
 
 data_dir <- "inst/ext_data/nbm"
+data_raw <- paste0(data_dir, "/nbm_raw")
+
+if (!dir.exists(data_dir) || !dir.exists(data_raw)) {
+  source("data-raw/nbm_raw.R")
+}
 
 get_census_block <- function() {
   con <- cori.db::connect_to_db("sch_census_tiger")
