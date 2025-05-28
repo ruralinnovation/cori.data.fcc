@@ -32,6 +32,7 @@ num_files_dl <- length(list.files(source_dir, pattern = "*.zip"))
 
 stopifnot("we are missing some files" = identical(num_files, num_files_dl))
 
+
 raw_dta_dir <- paste0(data_dir, "/raw")
 
 system(sprintf("mkdir -p %s", raw_dta_dir))
@@ -40,6 +41,41 @@ system(sprintf("unzip %s/\\*.zip -d %s", source_dir, raw_dta_dir))
 
 system(sprintf("du -sh %s", raw_dta_dir))
 # 290G    inst/ext_data/nbm/raw
+
+## Fix some files names (from "...December20ec..." to "...December20dec...")
+
+# Get all CSV files in the source directory
+csv_files <- list.files(raw_dta_dir, pattern = "\\.csv$", full.names = TRUE)
+
+# Find files that contain the incorrect pattern
+bad_file_names <- csv_files[grepl("December20ec_", basename(csv_files))]
+
+files_renamed <- list()
+
+# Rename the files
+for (file in bad_file_names) {
+  # Get the directory and current filename
+  dir_path <- dirname(file)
+  old_name <- basename(file)
+  
+  # Create the new filename by replacing the incorrect pattern
+  new_name <- gsub("December20ec_", "December20dec_", old_name)
+  
+  # Construct full paths
+  old_path <- file
+  new_path <- file.path(dir_path, new_name)
+  
+  # Rename the file
+  file.rename(old_path, new_path)
+
+  files_renamed[[length(files_renamed) + 1]] <- new_name
+  
+  # Print confirmation (optional)
+  cat("Renamed:", old_name, "->", new_name, "\n")
+}
+
+# Check how many files were renamed
+cat("Total files renamed:", length(files_to_rename), "\n")
 
 ## files name follow some nice pattern but J23 or D22 are hard to convert in sql to a Date
 # better do that in R
@@ -123,73 +159,73 @@ DBI::dbExecute(con, copy_stat)
 
 DBI::dbDisconnect(con)
 
-system("aws s3 sync nbm_raw s3://cori.data.fcc/nbm_raw")
+# system("aws s3 sync nbm_raw s3://cori.data.fcc/nbm_raw")
 
-## update January 2025, adding June2024
-# assuming list of csv in data_swamp
+# ## update January 2025, adding June2024
+# # assuming list of csv in data_swamp
 
-library(duckdb)
+# library(duckdb)
 
-con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
+# con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
 
-# I needed to run because FCC naming J24 can be june, january ... 
-data_dir <- "data_swamp/10dec2024/"
+# # I needed to run because FCC naming J24 can be june, january ... 
+# data_dir <- "data_swamp/10dec2024/"
 
-raw_csv <- list.files(data_dir, pattern = "*.csv", recursive = TRUE)
-raw_csv <- paste0(data_dir, raw_csv)
+# raw_csv <- list.files(data_dir, pattern = "*.csv", recursive = TRUE)
+# raw_csv <- paste0(data_dir, raw_csv)
 
-# better names is defined above
-better_name <- vapply(raw_csv, better_fcc_name, FUN.VALUE = character(1))
+# # better names is defined above
+# better_name <- vapply(raw_csv, better_fcc_name, FUN.VALUE = character(1))
 
-file.rename(raw_csv, better_name)
+# file.rename(raw_csv, better_name)
 
 
-## I went overkill with that one, it is probably not needed
-DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
+# ## I went overkill with that one, it is probably not needed
+# DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
 
-copy_stat <- "
-COPY
-    (SELECT 
-      frn, 
-      provider_id, 
-      brand_name,
-      location_id,
-      technology,
-      max_advertised_download_speed,
-      max_advertised_upload_speed,
-      low_latency,
-      business_residential_code,
-      state_usps,
-      block_geoid as geoid_bl, 
-      substring(block_geoid, 1, 5) as geoid_co,
-      strptime(split_part(split_part(filename, '_', 8), '.', 1), '%d%b%Y')::DATE
-       as file_time_stamp,
-      strptime(split_part(filename, '_', 7), '%B%Y')::DATE as release 
-    FROM 
-    read_csv(
-             'data_swamp/10dec2024/*.csv',
-              types = { 
-                        'frn'        : 'VARCHAR(10)',
-                        'provider_id': 'TEXT',
-                        'brand_name' : 'TEXT',
-                        'location_id': 'TEXT', 
-                        'technology' : 'VARCHAR(2)', 
-                        'max_advertised_download_speed' : INTEGER,
-                        'max_advertised_upload_speed' : INTEGER,
-                        'low_latency' : 'BOOLEAN',
-                        'business_residential_code': 'VARCHAR(1)',
-                        'state_usps' : 'VARCHAR(2)',
-                        'block_geoid': 'VARCHAR(15)'  
-    },   
-              ignore_errors = true,         
-              delim=',', quote='\"',
-              new_line='\\n', skip=0, 
-              header=true, filename=true))
-    TO 'nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology)
-    );"
+# copy_stat <- "
+# COPY
+#     (SELECT 
+#       frn, 
+#       provider_id, 
+#       brand_name,
+#       location_id,
+#       technology,
+#       max_advertised_download_speed,
+#       max_advertised_upload_speed,
+#       low_latency,
+#       business_residential_code,
+#       state_usps,
+#       block_geoid as geoid_bl, 
+#       substring(block_geoid, 1, 5) as geoid_co,
+#       strptime(split_part(split_part(filename, '_', 8), '.', 1), '%d%b%Y')::DATE
+#        as file_time_stamp,
+#       strptime(split_part(filename, '_', 7), '%B%Y')::DATE as release 
+#     FROM 
+#     read_csv(
+#              'data_swamp/10dec2024/*.csv',
+#               types = { 
+#                         'frn'        : 'VARCHAR(10)',
+#                         'provider_id': 'TEXT',
+#                         'brand_name' : 'TEXT',
+#                         'location_id': 'TEXT', 
+#                         'technology' : 'VARCHAR(2)', 
+#                         'max_advertised_download_speed' : INTEGER,
+#                         'max_advertised_upload_speed' : INTEGER,
+#                         'low_latency' : 'BOOLEAN',
+#                         'business_residential_code': 'VARCHAR(1)',
+#                         'state_usps' : 'VARCHAR(2)',
+#                         'block_geoid': 'VARCHAR(15)'  
+#     },   
+#               ignore_errors = true,         
+#               delim=',', quote='\"',
+#               new_line='\\n', skip=0, 
+#               header=true, filename=true))
+#     TO 'nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology)
+#     );"
 
-DBI::dbExecute(con, copy_stat)
+# DBI::dbExecute(con, copy_stat)
 
-DBI::dbDisconnect(con)
+# DBI::dbDisconnect(con)
 
-system("aws s3 sync nbm_raw/release=2024-06-01 s3://cori.data.fcc/nbm_raw/release=2024-06-01")
+# system("aws s3 sync nbm_raw/release=2024-06-01 s3://cori.data.fcc/nbm_raw/release=2024-06-01")
