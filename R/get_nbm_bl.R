@@ -1,4 +1,4 @@
-#' Load part of NBM at Census Block from CORI s3 bucket
+#' Load part of NBM at Census Block from CORI S3 bucket
 #'
 #' Get all the data related to a states or county.
 #'
@@ -8,6 +8,7 @@
 #' Data Source: FCC Broadband Data Collection
 #'
 #' @param geoid_co a string of 5-digit numbers
+#' @param release a string with value "D23", "J24", "D24" (respectively targeting releases from December2023, June2024, December24)
 #'
 #' @return a data frame
 #'
@@ -19,7 +20,13 @@
 #'   nbm_bl <- get_nbm_bl(geoid_co = "47051")
 #' }
 
-get_nbm_bl <- function(geoid_co) {
+get_nbm_bl <- function(geoid_co, release = "latest") {
+
+  release_target <- ""
+
+  if (release %in% c("D23", "J24", "D24")) {
+    release_target <- paste0("-", release)
+  }
 
   if (nchar(geoid_co) != 5L) stop("geoid_co should be a 5-digit string")
 
@@ -30,9 +37,9 @@ get_nbm_bl <- function(geoid_co) {
 
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   statement <- sprintf(
-    "select * 
- 		  from read_parquet('s3://cori.data.fcc/nbm_block-J24/*/*.parquet')
-    where geoid_co = '%s';", geoid_co)
+    paste0("select *
+ 		  from read_parquet('s3://cori.data.fcc/nbm_block", release_target, "/*/*.parquet')
+    where geoid_co = '%s';"), geoid_co)
 
   DBI::dbGetQuery(con, statement)
 }

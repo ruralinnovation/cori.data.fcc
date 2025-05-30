@@ -13,6 +13,7 @@
 #' Data Source: FCC Broadband Data Collection
 #'
 #' @param frn a string of 10 numbers matching FCC's FRN
+#' @param release a string with value "D23", "J24", "D24" (respectively targeting releases from December2023, June2024, December24)
 #'
 #' @return a data frame
 #'
@@ -24,7 +25,13 @@
 #'  skymesh <- get_frn_nbm_bl("0027136753")
 #'}
 
-get_frn_nbm_bl <- function(frn) {
+get_frn_nbm_bl <- function(frn, release = "latest") {
+
+  release_target <- ""
+
+  if (release %in% c("D23", "J24", "D24")) {
+    release_target <- paste0("-", release)
+  }
 
   if (nchar(frn) != 10L) stop("frn should be a 10-digit string")
 
@@ -35,15 +42,15 @@ get_frn_nbm_bl <- function(frn) {
 
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   statement <- sprintf(
-   "select * 
- 		  from read_parquet('s3://cori.data.fcc/nbm_block-J24/*/*.parquet')
+   paste0("select * 
+ 		  from read_parquet('s3://cori.data.fcc/nbm_block", release_target, "/*/*.parquet')
     where 
       combo_frn in (
     							  select combo_frn 
     							  from 
-										read_parquet('s3://cori.data.fcc/rel_combo_frn-J24.parquet')
+										read_parquet('s3://cori.data.fcc/rel_combo_frn", release_target, ".parquet')
     								where frn = '%s'
-    );", frn)
+    );"), frn)
 
   DBI::dbGetQuery(con, statement)
 }

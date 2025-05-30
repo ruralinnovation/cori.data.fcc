@@ -2,6 +2,7 @@
 
 export(check_frn)
 export(dl_nbm)
+export(fcc_to_parquet)
 export(get_county_nbm_raw)
 export(get_f477)
 export(get_fcc_dictionary)
@@ -10,4 +11,5 @@ export(get_nbm_available)
 export(get_nbm_bl)
 export(get_nbm_release)
 import(DBI)
+import(duckdb)
 importFrom(stringi,stri_pad_left)

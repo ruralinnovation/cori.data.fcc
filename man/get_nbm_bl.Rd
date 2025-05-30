@@ -2,12 +2,14 @@
 % Please edit documentation in R/get_nbm_bl.R
 \name{get_nbm_bl}
 \alias{get_nbm_bl}
-\title{Load part of NBM at Census Block from CORI s3 bucket}
+\title{Load part of NBM at Census Block from CORI S3 bucket}
 \usage{
-get_nbm_bl(geoid_co)
+get_nbm_bl(geoid_co, release = "latest")
 }
 \arguments{
 \item{geoid_co}{a string of 5-digit numbers}
+
+\item{release}{a string with value "D23", "J24", "D24" (respectively targeting releases from December2023, June2024, December24)}
 }
 \value{
 a data frame
