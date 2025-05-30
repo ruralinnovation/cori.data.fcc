@@ -1,3 +1,4 @@
+#### TODO: update this code with improved functionality from data-raw/nbm_raw.R... #' @export
 #' Convert CSVs to parquet for NBM data
 #'
 #' Draft version of converting a lot of FCC NBM CSVs into a parquet file system
@@ -13,13 +14,8 @@
 #' @import DBI
 #' @import duckdb
 #'
-#' @examples
-#' \dontrun{
-#' system("unzip ~/data_swamp/\*.zip")
-#' fcc_to_parquet("june23")
-#' }
 #' @keywords internal
-#### TODO: update this code with improved functionality from data-raw/nbm_raw.R... #' @export
+#'
 nbm_csv_to_parquet <- function(parquet_name,
                            src_directory = "~/data_swamp/",
                            part_one = "state_abbr",

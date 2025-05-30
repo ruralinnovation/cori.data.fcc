@@ -27,10 +27,4 @@ nbm_csv_to_parquet(
 Draft version of converting a lot of FCC NBM CSVs into a parquet file system
 DuckDB is quite greedy on your system (but fast)
 }
-\examples{
-\dontrun{
-system("unzip ~/data_swamp/\*.zip")
-fcc_to_parquet("june23")
-}
-}
 \keyword{internal}

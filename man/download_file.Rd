@@ -17,13 +17,4 @@ path to local file
 \description{
 Download file function (replacement for download.file)
 }
-\examples{
-\dontrun{
-  system("mkdir -p  ~/data_swamp")
-  retrieved_file <- download_file(
-    "https://archive.org/offshoot_assets/assets/ia-logo-2c2c2c.03bd7e88c8814d63d0fc..svg",
-    "~/data_swamp/archive.svg")
-}
-
-
-}
+\keyword{internal}
