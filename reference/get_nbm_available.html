@@ -78,20 +78,27 @@ paste0(&quot;https://broadbandmap.fcc.gov/nbm/&quot;,
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nbm_data</span> <span class="op">&lt;-</span> <span class="fu">get_nbm_available</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nbm_data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       id       release       data_type technology_code state_fips provider_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 785375 June 30, 2023 Fixed Broadband               0         01        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 785376 June 30, 2023 Fixed Broadband               0         04        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 785377 June 30, 2023 Fixed Broadband               0         06        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 785378 June 30, 2023 Fixed Broadband               0         12        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 785379 June 30, 2023 Fixed Broadband               0         17        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 785380 June 30, 2023 Fixed Broadband               0         18        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                    file_name file_type data_category</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 bdc_01_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 bdc_04_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 bdc_06_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 bdc_12_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 bdc_17_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 bdc_18_Other_fixed_broadband_J23_01nov2024       csv    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id           release       data_type technology_code state_fips</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1089223 December 31, 2024 Fixed Broadband               0         01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1089224 December 31, 2024 Fixed Broadband               0         04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1089225 December 31, 2024 Fixed Broadband               0         06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 1089226 December 31, 2024 Fixed Broadband               0         12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 1089227 December 31, 2024 Fixed Broadband               0         17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 1089228 December 31, 2024 Fixed Broadband               0         20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   provider_id                                  file_name file_type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        &lt;NA&gt; bdc_01_Other_fixed_broadband_D24_27may2025       csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        &lt;NA&gt; bdc_04_Other_fixed_broadband_D24_27may2025       csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        &lt;NA&gt; bdc_06_Other_fixed_broadband_D24_27may2025       csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        &lt;NA&gt; bdc_12_Other_fixed_broadband_D24_27may2025       csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        &lt;NA&gt; bdc_17_Other_fixed_broadband_D24_27may2025       csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        &lt;NA&gt; bdc_20_Other_fixed_broadband_D24_27may2025       csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   data_category</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    Nationwide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    Nationwide</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -103,7 +110,7 @@ paste0(&quot;https://broadbandmap.fcc.gov/nbm/&quot;,
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

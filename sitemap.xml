@@ -11,6 +11,7 @@
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/news/index.html</loc></url>
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/check_frn.html</loc></url>
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/dl_nbm.html</loc></url>
+<url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/download_file.html</loc></url>
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/fcc_dictionary.html</loc></url>
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/fcc_provider.html</loc></url>
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/get_county_nbm_raw.html</loc></url>
@@ -21,5 +22,6 @@
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_bl.html</loc></url>
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_release.html</loc></url>
 <url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/index.html</loc></url>
+<url><loc>https://ruralinnovation.github.io/cori.data.fcc/reference/nbm_csv_to_parquet.html</loc></url>
 </urlset>
 
