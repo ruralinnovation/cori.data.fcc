@@ -37,7 +37,7 @@ get_f477 <- function(state_abbr, frn = "all") {
     statement <- sprintf("select *
                         from
                         read_parquet(
-                        's3://cori.data.fcc/f477/*/*/*.parquet')
+                        's3://cori.data.fcc/f477_with_satellite/*/*/*.parquet')
                         where StateAbbr = '%s';", state_abbr)
 
   } else {
@@ -45,8 +45,8 @@ get_f477 <- function(state_abbr, frn = "all") {
     statement <- sprintf("select *
                          from
                          read_parquet(
-                         's3://cori.data.fcc/f477/*/*/*.parquet')
-                         where StateAbbr = '%s' and frn = '%s';",
+                         's3://cori.data.fcc/f477_with_satellite/*/*/*.parquet')
+                         where StateAbbr = '%s' and FRN = '%s';",
                          state_abbr, frn)
   }
 

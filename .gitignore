@@ -2,11 +2,11 @@
 *.bak
 *.idea
 .R*
-*.R*
-cori.data.fcc.Rproj
+*.Rproj*
 docs
 data-raw/fcc_staff.R
 data_swamp/
 *.parquet
 inst/doc
+inst/ext_data
 .Rproj.user

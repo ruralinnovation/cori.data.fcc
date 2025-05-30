@@ -1,122 +1,224 @@
 ## code to prepare `f477` dataset goes here
-
-# the process to get f477 is a bit long
-library(curl)
-options(timeout = 600)
-
-# first year are easy to access
-list_url <- c(
-      "https://www.fcc.gov/form477/BroadbandData/Fixed/Dec14/Version%203/US-Fixed-without-Satellite-Dec2014.zip",
-      "https://www.fcc.gov/form477/BroadbandData/Fixed/Jun15/Version%205/US-Fixed-without-Satellite-Jun2015.zip",
-      "https://www.fcc.gov/form477/BroadbandData/Fixed/Dec15/Version%204/US-Fixed-without-Satellite-Dec2015.zip",
-      "https://transition.fcc.gov/form477/BroadbandData/Fixed/Jun16/Version%204/US-Fixed-without-Satellite-Jun2016.zip",
-      "https://www.fcc.gov/form477/BroadbandData/Fixed/Dec16/Version%202/US-Fixed-without-satellite-Dec2016.zip",
-      "https://www.fcc.gov/form477/BroadbandData/Fixed/Jun17/Version%203/US-Fixed-without-Satellite-Jun2017.zip",
-      "http://www.fcc.gov/form477/BroadbandData/Fixed/Dec17/Version%203/US-Fixed-without-satellite-Dec2017.zip",
-      "https://www.fcc.gov/form477/BroadbandData/Fixed/Jun18/Version%201/US-Fixed-without-Satellite-Jun2018.zip",
-      "http://www.fcc.gov/form477/BroadbandData/Fixed/Dec18/Version%203/US-Fixed-without-Satellite-Dec2018.zip"
-
-)
-
-dir_swamp <- "data_swamp"
-dir.create(dir_swamp)
-
-list_url[1]
-
-for (i in list_url) {
-  curl::curl_download(i, paste0(dir_swamp, "/",
-                                basename(i)))
-}
-
-# then FCC started to use box and I do not want an account here:
-# and need to be downloaded manually
-
-list_box <- c(
-  "https://www.fcc.gov/form-477-broadband-deployment-data-june-2019-version-2",
-  "https://www.fcc.gov/form-477-broadband-deployment-data-december-2019-version-1",
-  "https://www.fcc.gov/form-477-broadband-deployment-data-june-2020-version-2",
-  "https://www.fcc.gov/form-477-broadband-deployment-data-december-2020",
-  "https://www.fcc.gov/form-477-broadband-deployment-data-june-2021",
-  "https://us-fcc.box.com/v/US-without-Sat-Dec2021-v1"
-)
-
-system(sprintf("unzip data_swamp/\\*.zip -d %s", dir_swamp))
-
-# should be 15 files
-
-list.files("data_swamp/", pattern = "*.csv")
-#  [1] "fbd_us_without_satellite_dec2014_v3.csv"
-#  [2] "fbd_us_without_satellite_dec2015_v4.csv"
-#  [3] "fbd_us_without_satellite_dec2016_v2.csv"
-#  [4] "fbd_us_without_satellite_dec2017_v3.csv"
-#  [5] "fbd_us_without_satellite_dec2018_v3.csv"
-#  [6] "fbd_us_without_satellite_dec2019_v1.csv"
-#  [7] "fbd_us_without_satellite_dec2020_v1.csv"
-#  [8] "fbd_us_without_satellite_dec2021_v1.csv"
-#  [9] "fbd_us_without_satellite_jun2015_v5.csv"
-# [10] "fbd_us_without_satellite_jun2016_v4.csv"
-# [11] "fbd_us_without_satellite_jun2017_v3.csv"
-# [12] "fbd_us_without_satellite_jun2018_v1.csv"
-# [13] "fbd_us_without_satellite_jun2019_v2.csv"
-# [14] "fbd_us_without_satellite_jun2020_v2.csv"
-# [15] "fbd_us_without_satellite_jun2021_v1.csv"
-
-# weird encoding to fix
-
-encoding <- system("uchardet data_swamp/*.csv", intern = TRUE)
-
-# data_swamp/fbd_us_without_satellite_dec2014_v3.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_dec2015_v4.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_dec2016_v2.csv: UTF-8
-# data_swamp/fbd_us_without_satellite_dec2017_v3.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_dec2018_v3.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_dec2019_v1.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_dec2020_v1.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_dec2021_v1.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_jun2015_v5.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_jun2016_v4.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_jun2017_v3.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_jun2018_v1.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_jun2019_v2.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_jun2020_v2.csv: ISO-8859-2
-# data_swamp/fbd_us_without_satellite_jun2021_v1.csv: WINDOWS-1250
-
-
-system("mkdir -p data_swamp/clean/")
-
-# require iconv: https://linux.die.net/man/1/iconv
-
-convert_to_utf8 <- function(x) {
-  l_f <- unlist(strsplit(x, ":"))
-  s <- sprintf("iconv -f %s -t UTF8 %s > data_swamp/clean/%s",
-               l_f[2], l_f[1], basename(l_f[1]))
-  print(s)
-  system(s)
-}
-
-for (i in encoding) {
-  convert_to_utf8(i)
-}
-
-# Magic of duckDB
-# FCC is not always very strict in following their data type
-# lot of time spend testing and adjusting to it
-# more can be found here:
-# https://www.fcc.gov/general/explanation-broadband-deployment-data
-# https://www.fcc.gov/general/technology-codes-used-fixed-broadband-deployment-dat# require uchardet
-
+library(DBI)
+library(cori.db)
+library(data.table)
+library(dplyr)
 library(duckdb)
+library(tictoc)
+library(assertthat)
 
-con <- DBI::dbConnect(duckdb::duckdb(),  tempfile())
 
-## I went overkill with that one, it is probably not needed
-DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
+data_dir <- "inst/ext_data/f477" # <= Must have underscore to work with duckdb query used later
+dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
 
-copy_stat <- "
-COPY
-    (SELECT 
-      Provider_Id, 
-      FRN, 
+s3_bucket_name <- "cori.data.fcc"
+source_prefix <- "source"
+dir.create(paste0(data_dir, "/", source_prefix), recursive = TRUE, showWarnings = FALSE)
+
+source_files_s3 <- (
+  cori.db::list_s3_objects(bucket_name = s3_bucket_name) |>
+      dplyr::filter(grepl(source_prefix, `key`)) |>
+      # dplyr::filter(grepl('Jun2021', `key`)) |> # <= test filter
+      dplyr::filter(grepl(".zip", `key`))
+)$key
+
+### Create clean and states directories (if they don't exist)
+clean_dir <- paste0(data_dir, "/clean")
+dir.create(clean_dir, recursive = TRUE, showWarnings = FALSE)
+clean_states_dir <- paste0(clean_dir, "/states")
+dir.create(clean_states_dir, recursive = TRUE, showWarnings = FALSE)
+
+
+source_files_s3 |> lapply(function(x) {
+
+  # MAIN LOOP
+
+  print(paste0("Downloading ", x, " from s3://", s3_bucket_name))
+
+  file_name <- basename(x)
+  file_path <- paste0(data_dir, "/", source_prefix, "/", file_name)
+
+  system(paste0("touch ", file_path))
+
+  cori.db::get_s3_object(s3_bucket_name, x, file_path) # <= `x` includes source_prefix (i.e. "source")
+
+  print(paste0("Finished downloading ", file_path))
+
+  release_name <- gsub(".zip", "", basename(file_path))
+  release_dir <- paste0(data_dir, "/", release_name)
+
+  dir.create(release_dir, recursive = TRUE, showWarnings = FALSE)
+  print(paste0("Unzip release contents to ", release_dir))
+
+  unzip_command <- sprintf("unzip -u %s -d %s", file_path, release_dir)
+  print(unzip_command)
+
+  system(unzip_command)
+
+  file_name <- list.files(release_dir, pattern = ".csv", recursive = FALSE)[1]
+  file_path <- paste0(release_dir, "/", file_name)
+
+  print(file_path)
+
+  stopifnot(file.exists(file_path))
+
+  tic()
+
+  # Olivier says: weird encoding to fix
+  # If missing uchardet command, install on Mac with: brew install uchardet
+  uchardet_command <- paste0("uchardet ", file_path)
+  encoding <- system(uchardet_command, intern = TRUE)
+
+  print(list(file_name, encoding))
+
+  # fbd_us_with_satellite_jun2021_v1.csv WINDOWS-1250
+
+  # Requires iconv: https://linux.die.net/man/1/iconv
+  s <- sprintf('iconv -f %s -t UTF8 %s > %s/%s',
+              encoding, file_path, clean_dir, file_name)
+  print(s)
+  result <- system(s)
+
+  stopifnot(length(result) > 0 && result[[1]] == 0)
+
+  # Delete release dir (pre-cleaned US data set)
+  unlink(release_dir, recursive = TRUE)
+
+  file_path <- paste0(clean_dir, "/", file_name)
+
+  stopifnot(file.exists(file_path))
+
+  stopifnot(assertthat::is.readable(file_path))
+
+  print(paste0("Finished writing UTF8 version of ", file_path))
+  toc()
+
+  # Before importing to duckdb, we need to fix quote errors
+  # Ex.
+  # "Camp Fox, LLC dba ""Island Fiber"""
+  # ... shouldb be converted to "Camp Fox, LLC dba , Island Fiber, "
+
+  tic()
+
+  ### Read in entire release dataset
+  dt <- data.table::fread(file_path)
+  ## TODO: To read `FRN` as correct type (not number)...
+  # dt <- data.table::fread(file = file_path,
+  #             header = TRUE,
+  #             sep = "\n",
+  #             colClasses = c(FRN = "character",
+  #                            MaxAdDown = "numeric",
+  #                            MaxAdUp = "numeric"),
+  #             stringsAsFactors = FALSE)
+  ## ... BUT, providing args for these parameters seems to cause
+  ## other issues, so easier to "fix" with leading zeros later on
+
+  # states <- c("AL")
+  states <- unique(dt$StateAbbr)
+
+  ### partition on state
+  states |> lapply(function(st_abbr){
+
+    print(paste0("Processing state: ", st_abbr))
+
+    ### Subset and clean dt
+    dt_st <- dt[StateAbbr == st_abbr,,]
+
+    print(head(dt_st))
+
+    ## Write csv state tables by release to a "clean" subdirectory (states)
+    file_name <- gsub("_us_", paste0("_", tolower(st_abbr), "_"), file_name)
+    file_path <- paste0(clean_states_dir, "/", file_name)
+
+    system(paste0("touch ", file_path))
+
+    result <- data.table::fwrite(dt_st, file_path)
+
+    stopifnot(file.exists(file_path))
+
+    stopifnot(assertthat::is.readable(file_path))
+
+    rm(dt_st) # Remove subset data.table from the environment...
+
+    ## ... then read it back in with readLines (works)
+    old_lines <- readLines(file_path)
+
+    # Process each line to handle multiple adjacent double-quoted strings
+    process_line <- function(line) {
+      # First, identify patterns matching a double quote followed by text and then double-double quotes
+      # Keep applying the transformation until there are no more matches
+      while(grepl('"[^"]*""[^"]*"', line)) {
+        cat(paste0("Found: ", line))
+        print("")
+        # Replace patterns of the form "text1""text2" with "text1, text2,"
+        line <- gsub('"([^"]*?)""([^"]*?)"', '"\\1, \\2"', line)
+        cat(paste0("Changed: ", line))
+        print("")
+      }
+      return(line)
+    }
+
+    # Apply the function to each line
+    new_lines <- lapply(old_lines, process_line)
+
+    # Delete original file
+    unlink(file_path)
+
+    # Write results to same file name
+    writeLines(unlist(new_lines), file_path)
+
+    print(paste0("Finished cleaning ", file_path))
+
+    return(invisible(result))
+  })
+
+  # Delete clean US dataset
+  unlink(file_path)
+
+  print(paste0("Finished cleaning and writing all states for ", file_name))
+  toc()
+
+  return(invisible(result))
+
+})
+
+
+load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
+
+  pq_dir <- paste0(data_dir, "/", pq_prefix)
+
+  # Olivier says: Magic of duckDB
+  # FCC is not always very strict in following their data type
+  # lot of time spend testing and adjusting to it
+  # more can be found here:
+  # https://www.fcc.gov/general/explanation-broadband-deployment-data
+  # https://www.fcc.gov/general/technology-codes-used-fixed-broadband-deployment-dat# require uchardet
+
+  duck_dir <- paste0(data_dir, "/duckdb")
+  dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
+
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/f477.duckdb"))
+  on.exit(DBI::dbDisconnect(con))
+
+  duckdb::dbSendQuery(con, "INSTALL httpfs;")
+  duckdb::dbSendQuery(con, "LOAD httpfs;")
+  duckdb::dbSendQuery(con, "INSTALL aws;")
+  duckdb::dbSendQuery(con, "LOAD aws;")
+  duckdb::dbSendQuery(con, "CREATE OR REPLACE SECRET s3_secret (
+    TYPE S3,
+    PROVIDER CREDENTIAL_CHAIN,
+    CHAIN 'env;config'
+);")
+
+  ## I went overkill with that one, it is probably not needed
+  DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
+
+  # DuckDb will round (up) SMALLINT values, so use decimal instead
+  copy_stat <- paste0("
+  COPY
+    (SELECT
+      Provider_Id,
+      lpad(FRN, 10, '0') as FRN,
       ProviderName,
       DBAName,
       HoldingCompanyName,
@@ -129,31 +231,42 @@ COPY
       MaxAdDown,
       MaxAdUp,
       Business,
-      strptime(split_part(filename, '_', 6), '%b%Y') as Date
-    FROM 
-    read_csv(
-             'data_swamp/clean/*.csv',
-              types = { 'LogRecNo': 'BIGINT',
-                        'Provider_Id' : 'TEXT',
-                        'FRN' : 'TEXT',
-                        'ProviderName': 'VARCHAR',
-                        'DBAName' : 'VARCHAR',
-                        'HoldingCompanyName' : 'VARCHAR',
-                        'HocoNum' : 'TEXT',
-                        'HocoFinal': 'TEXT',
-                        'StateAbbr': 'CHAR(2)',
-                        'BlockCode': 'CHAR(15)',
-                        'TechCode': 'VARCHAR(2)',
-                        'Consumer': 'BOOLEAN',
-                        'MaxAdDown': 'SMALLINT',
-                        'MaxAdUp': 'SMALLINT',
-                        'Business': 'BOOLEAN'},            
-              delim=',', quote='\"',
-              new_line='\\n', skip=0, 
-              header=true, filename=true))
-    TO 'f477' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr)
-    );"
+      strptime(split_part(filename, '_', 6), '%b%Y')::DATE as Date
+      FROM read_csv(
+        '", csv_dir, "/*.csv',
+          types = { 'LogRecNo': 'BIGINT',
+                    'Provider_Id' : 'TEXT',
+                    'FRN' : 'TEXT',
+                    'ProviderName': 'VARCHAR',
+                    'DBAName' : 'VARCHAR',
+                    'HoldingCompanyName' : 'VARCHAR',
+                    'HocoNum' : 'TEXT',
+                    'HocoFinal': 'TEXT',
+                    'StateAbbr': 'CHAR(2)',
+                    'BlockCode': 'CHAR(15)',
+                    'TechCode': 'VARCHAR(2)',
+                    'Consumer': 'BOOLEAN',
+                    'MaxAdDown': 'DECIMAL(8, 3)',
+                    'MaxAdUp': 'DECIMAL(8, 3)',
+                    'Business': 'BOOLEAN'},
+          delim=',', quote='\"',
+          new_line='\\n', skip=0,
+          header=true, filename=true
+      )
+    ) ",
+# "    TO '", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);"
+"    TO 's3://", s3_bucket_name, "/", pq_prefix, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr));" # <= Write parquet directly to S3, but FIRST you must manually delete prior data on S3
+  )
 
-DBI::dbExecute(con, copy_stat)
+  cat(copy_stat)
 
-DBI::dbDisconnect(con)
+  result <- DBI::dbExecute(con, copy_stat)
+
+  # result <- cori.db::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, pq_dir) # <= This would overwrite S3 without first deleting... could be an issue for parquet
+
+  return(invisible(result))
+}
+
+parquet_prefix <- "f477_with_satellite"
+
+load_into_duckdb(s3_bucket_name, parquet_prefix, clean_states_dir)

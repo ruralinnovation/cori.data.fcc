@@ -22,3 +22,7 @@
 ^pkgdown$
 ^README\.Rmd$
 ^vignettes/articles$
+^inst/ext_data$
+^inst/ext_data/clean$
+^inst/ext_data/clean/states$
+^inst/ext_data/source$

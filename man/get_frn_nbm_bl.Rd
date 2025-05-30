@@ -4,10 +4,12 @@
 \alias{get_frn_nbm_bl}
 \title{Load part of NBM at Census Block from CORI s3 bucket}
 \usage{
-get_frn_nbm_bl(frn)
+get_frn_nbm_bl(frn, release = "latest")
 }
 \arguments{
 \item{frn}{a string of 10 numbers matching FCC's FRN}
+
+\item{release}{a string with value "D23", "J24", "D24" (respectively targeting releases from December2023, June2024, December24)}
 }
 \value{
 a data frame
