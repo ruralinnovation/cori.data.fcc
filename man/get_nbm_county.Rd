@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nbm_county.R
 \name{get_nbm_county}
 \alias{get_nbm_county}
-\title{Load part of NBM counts for givent Census County from CORI S3 bucket}
+\title{Load NBM service counts for given Census County from CORI S3 bucket}
 \usage{
 get_nbm_county(geoid_co, release = "latest")
 }

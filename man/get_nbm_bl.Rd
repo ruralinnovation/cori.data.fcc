@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nbm_bl.R
 \name{get_nbm_bl}
 \alias{get_nbm_bl}
-\title{Load part of NBM at Census Block from CORI S3 bucket}
+\title{Load NBM service counts for given Census Block from CORI S3 bucket}
 \usage{
 get_nbm_bl(geoid_co, release = "latest")
 }

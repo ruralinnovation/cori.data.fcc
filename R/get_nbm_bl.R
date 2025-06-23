@@ -1,4 +1,4 @@
-#' Load part of NBM at Census Block from CORI S3 bucket
+#' Load NBM service counts for given Census Block from CORI S3 bucket
 #'
 #' Get all the data related to a states or county.
 #'
