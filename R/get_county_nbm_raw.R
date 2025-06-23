@@ -12,7 +12,7 @@
 #'
 #' @param geoid_co a string matching a GEOID for a county
 #' @param frn a string of 10 numbers matching FCC's FRN, default is "all"
-#' @param release a date, set by default to be '2024-06-01'
+#' @param release a date, set by default to be '2024-12-01'
 #'
 #' @return a data frame
 #'
@@ -24,7 +24,7 @@
 #'  guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
 #'}
 
-get_county_nbm_raw <- function(geoid_co, frn = "all", release = "2024-06-01") {
+get_county_nbm_raw <- function(geoid_co, frn = "all", release = "2024-12-01") {
 
   # do I need a look up for county?
 

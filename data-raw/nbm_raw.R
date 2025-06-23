@@ -279,4 +279,4 @@ DBI::dbDisconnect(con)
 
 # DBI::dbDisconnect(con)
 
-# system("aws s3 sync nbm_raw/release=2024-06-01 s3://cori.data.fcc/nbm_raw/release=2024-06-01")
+# system("aws s3 sync nbm_raw/release=2024-12-01 s3://cori.data.fcc/nbm_raw/release=2024-12-01")
