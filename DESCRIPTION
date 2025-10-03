@@ -11,6 +11,16 @@ RoxygenNote: 7.3.2
 Depends: 
     R (>= 2.10)
 LazyData: true
+Config/testthat/edition: 3
+Imports:
+    DBI,
+    cori.db,
+    duckdb,
+    here,
+    jsonlite,
+    stringi
+Remotes:
+  ruralinnovation/cori.db
 Suggests:
     dplyr,
     DT,
@@ -18,12 +28,6 @@ Suggests:
     pkgdown,
     rmarkdown,
     testthat (>= 3.0.0)
-Config/testthat/edition: 3
-Imports:
-    duckdb,
-    jsonlite,
-    DBI,
-    stringi
 URL: https://ruralinnovation.github.io/cori.data.fcc/
 Config/Needs/website: rmarkdown
 VignetteBuilder: knitr
