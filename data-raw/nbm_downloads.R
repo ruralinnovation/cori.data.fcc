@@ -6,12 +6,14 @@ source_dir <- paste0(data_dir, "/source")
 
 release <- get_nbm_release()
 
+
 nbm_data <- get_nbm_available()
 
 system(sprintf("mkdir -p %s", source_dir))
 
 # this is a big loop
 for (i in release$filing_subtype){
+  print(paste0("release_date:", i))
   dl_nbm(
     path_to_dl = source_dir,
     release_date = i,

@@ -24,14 +24,25 @@ system(sprintf("mkdir -p %s", source_dir))
 
 source("data-raw/nbm_downloads.R")
 
-num_files <- nbm_data |>
+nbm_data_files <- (nbm_data |>
   dplyr::filter(data_type == "Fixed Broadband" &
-                  data_category == "Nationwide") |>
-  nrow()
-# checking if we have all the files
-num_files_dl <- length(list.files(source_dir, pattern = "*.zip"))
+                  data_category == "Nationwide")
+)$file_name
 
-stopifnot("we are missing some files" = identical(num_files, num_files_dl))
+num_files <- nbm_data_files |>
+  nrow()
+
+# checking if we have all the files
+file_dl <- unlist(list.files(source_dir, pattern = "*.zip"))
+file_names <- substring(file_dl, 1, nchar(file_dl) - 4)
+num_files_dl <- length(file_dl)
+
+missing_files <- setdiff(nbm_data_files, file_names)
+
+if (length(missing_files) > 0) {
+  stop(paste0("We are missing some files:
+  ", paste(missing_files , collapse = "\n")))
+}
 
 
 raw_dta_dir <- paste0(data_dir, "/raw")
@@ -203,8 +214,11 @@ COPY
               delim=',', quote='\"',
               new_line='\\n', skip=0, 
               header=true, filename=true))
-    TO '", data_dir, "/nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology), OVERWRITE true);"
+    TO '", data_dir, "/nbm_raw' (FORMAT 'parquet', PARTITION_BY(release, state_usps, technology), OVERWRITE true);
+    "
 )
+
+cat(copy_stat)
 
 DBI::dbExecute(con, copy_stat)
 
