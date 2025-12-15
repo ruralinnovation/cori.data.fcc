@@ -13,7 +13,7 @@
 #' Data Source: FCC Broadband Data Collection
 #'
 #' @param frn a string of 10 numbers matching FCC's FRN
-#' @param release a string with value "D23", "J24", "D24" (respectively targeting releases from December2023, June2024, December24)
+#' @param release a string with value "D23", "J24", "D24", "J25" (respectively targeting releases from December2023, June2024, December24, June2025)
 #'
 #' @return a data frame
 #'
@@ -29,7 +29,7 @@ get_frn_nbm_bl <- function(frn, release = "latest") {
 
   release_target <- ""
 
-  if (release %in% c("D23", "J24", "D24")) {
+  if (release %in% c("D23", "J24", "D24", "J25")) {
     release_target <- paste0("-", release)
   }
 

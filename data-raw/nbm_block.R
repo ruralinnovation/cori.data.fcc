@@ -10,6 +10,7 @@ library(duckdb)
 
 data_dir <- "inst/ext_data/nbm"
 data_raw <- paste0(data_dir, "/nbm_raw")
+data_block <- paste0(data_dir, "/nbm_block")
 
 # TODO: THIS WILL ONLY RUN IF `inst/ext_data/nbm/nbm_raw` IS NOT PRESENT
 if (!dir.exists(data_dir) || !dir.exists(data_raw)) {
@@ -546,7 +547,7 @@ write_parquet <- paste0("copy (
   from
   	nbm_block
   order by geoid_bl)
-TO '", data_dir, "/nbm_block' (FORMAT PARQUET, PARTITION_BY(state_abbr), CODEC 'SNAPPY', OVERWRITE_OR_IGNORE true);
+TO '", data_block, "' (FORMAT PARQUET, PARTITION_BY(state_abbr), CODEC 'SNAPPY', OVERWRITE_OR_IGNORE true);
 ")
 
 cat(write_parquet)
@@ -565,6 +566,21 @@ DBI::dbExecute(con, write_rel_combo)
 
 DBI::dbDisconnect(con)
 
-# ## TODO: Switch to latest release (currently D24) before uploading to S3..
-# system("aws s3 sync nbm_block s3://cori.data.fcc/nbm_block-J24")
-# system("aws s3 cp 'rel_combo_frn.parquet' s3://cori.data.fcc/rel_combo_frn-J24.parquet")
+## Copy nbm_raw and nbm_block(-VERSIONED) to local /data/nbm dir before upload to s3
+## TODO: Switch to latest release (currently J25) before uploading to S3..
+nbm_block_release <- "J25"
+nbm_block_release_dir <- paste0("/data/nbm/nbm_block-", nbm_block_release)
+rel_combo_frn_file <- paste0(data_dir, "/rel_combo_frn.parquet")
+rel_combo_frn_release_file <- paste0("/data/nbm/rel_combo_frn-", nbm_block_release, ".parquet")
+copy_commands <- c(
+	paste0("cp -R ", data_raw, " /data/nbm/"),
+	paste0("aws s3 sync /data/nbm/nbm_raw s3://cori.data.fcc/nbm_raw"),
+	paste0("cp -R ", data_block, " ", nbm_block_release_dir),
+	paste0("aws s3 sync ", nbm_block_release_dir, " s3://cori.data.fcc/nbm_block-", nbm_block_release),
+	paste0("cp -R ", rel_combo_frn_file, " ", rel_combo_frn_release_file),
+	paste0("aws s3 cp '", rel_combo_frn_release_file, "' s3://cori.data.fcc/rel_combo_frn-", nbm_block_release, ".parquet")
+)
+lapply(copy_commands, function(comm) {
+  print(comm)
+  system(comm)
+})

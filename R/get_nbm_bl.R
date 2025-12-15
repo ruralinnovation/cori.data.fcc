@@ -8,7 +8,7 @@
 #' Data Source: FCC Broadband Data Collection
 #'
 #' @param geoid_co a string of 5-digit numbers
-#' @param release a string with value "D23", "J24", "D24" (respectively targeting releases from December2023, June2024, December24)
+#' @param release a string with value "D23", "J24", "D24", "J25" (respectively targeting releases from December2023, June2024, December24, June2025)
 #'
 #' @return a data frame
 #'
@@ -24,7 +24,7 @@ get_nbm_bl <- function(geoid_co, release = "latest") {
 
   release_target <- ""
 
-  if (release %in% c("D23", "J24", "D24")) {
+  if (release %in% c("D23", "J24", "D24", "J25")) {
     release_target <- paste0("-", release)
   }
 
