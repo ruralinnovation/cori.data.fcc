@@ -26,3 +26,4 @@
 ^inst/ext_data/clean$
 ^inst/ext_data/clean/states$
 ^inst/ext_data/source$
+^inst$

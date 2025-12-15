@@ -2,7 +2,6 @@
 
 export(check_frn)
 export(dl_nbm)
-export(fcc_to_parquet)
 export(get_county_nbm_raw)
 export(get_f477)
 export(get_fcc_dictionary)

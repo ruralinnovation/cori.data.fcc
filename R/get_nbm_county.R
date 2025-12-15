@@ -30,7 +30,10 @@ get_nbm_county <- function(geoid_co, release = "latest") {
 
   if (release %in% c("D23", "J24", "D24")) {
     release_target <- paste0("-", release)
+  } else {
+    release_target <- "-J25"
   }
+
   s3_bucket_name <- "cori.data.fcc"
 
   nbm_release <- paste0("nbm_block", release_target)

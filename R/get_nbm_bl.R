@@ -26,6 +26,8 @@ get_nbm_bl <- function(geoid_co, release = "latest") {
 
   if (release %in% c("D23", "J24", "D24", "J25")) {
     release_target <- paste0("-", release)
+  } else {
+    release_target <- "-J25"
   }
 
   if (nchar(geoid_co) != 5L) stop("geoid_co should be a 5-digit string")

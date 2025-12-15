@@ -176,6 +176,8 @@ con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/nbm.duckdb"))
 ## I went overkill with that one, it is probably not needed
 DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
 
+## TODO: How is this filename => date conversion working?
+
 copy_stat <- paste0("
 COPY
     (SELECT 

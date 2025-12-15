@@ -6,7 +6,9 @@
 docs
 data-raw/fcc_staff.R
 data_swamp/
+nohup.out
 *.parquet
 inst/doc
 inst/ext_data
 .Rproj.user
+.vscode

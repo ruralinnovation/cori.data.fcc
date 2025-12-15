@@ -31,6 +31,8 @@ get_frn_nbm_bl <- function(frn, release = "latest") {
 
   if (release %in% c("D23", "J24", "D24", "J25")) {
     release_target <- paste0("-", release)
+  } else {
+    release_target <- "-J25"
   }
 
   if (nchar(frn) != 10L) stop("frn should be a 10-digit string")

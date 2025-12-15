@@ -36,7 +36,7 @@ stopifnot(nrow(census_blocks) == 8180866)
 
 # the latest release is '2024-12-01'
 
-release <- "2025-06-30"
+release <- "2025-06-01"
 
 ### TODO: Actually, DO NOT loop through releases...
 # ## !TODO: Turn release into a list of ...
@@ -46,7 +46,7 @@ release <- "2025-06-30"
 # # release="2023-12-01"
 # # release="2024-12-01"
 # # release="2024-12-01"
-# # release="2025-06-30"
+# # release="2025-06-01"
 # ## ... and loop on release
 
 ### TODO: ... discuss best partition of NBM parquet for ALL releases (June implementation?)...
