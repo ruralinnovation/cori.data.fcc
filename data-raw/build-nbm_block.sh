@@ -1,8 +1,21 @@
 echo "$(pwd)"
 
+## For now, this process will only complete on an EC2 instance type with 64GB or more (m5a.4xlarge)
 ## Set memory limits
 #ulimit -d 50331648 # server crash on 50331648 # 25165824 # 12582912  # Data segment size limit in kilobytes
 #ulimit -v 50331648 # server crash on 50331648  # Virtual memory limit in kilobytes
+
+nohup Rscript data-raw/nbm_block.R > process_nbm.log 2>&1 &
+
+PID=$!
+
+nohup cpulimit -p $PID -l 50 &
+
+echo "The PID of this process is: $PID" >> process_nbm.log
+echo "The PID of this process is: $PID"
+echo "Watch with: "
+echo "tail -f $(pwd)/process_nbm.log"
+echo "while true; do echo \"=== $(date) ===\"; tail -n 200 $(pwd)/process_nbm.log; free -m; echo ''; sleep 30; done"
 
 ## TODO: These are the duckdb queries that keeps killing the server:
 #  WITH FILTERED as (
@@ -101,14 +114,3 @@ echo "$(pwd)"
 # 21.       └─duckdb:::rethrow_error_from_rapi(e, call)
 # 22.         └─rlang::abort(msg, call = call)
 #Execution halted
-
-
-nohup Rscript data-raw/nbm_block.R > process_nbm.log 2>&1 &
-
-PID=$!
-
-nohup cpulimit -p $PID -l 50 &
-
-echo "The PID of this process is: $PID" >> process_nbm.log
-echo "The PID of this process is: $PID"
-echo "Watch with: tail -f $(pwd)/process_nbm.log"

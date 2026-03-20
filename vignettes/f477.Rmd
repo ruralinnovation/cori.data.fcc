@@ -1,7 +1,6 @@
 ---
 title: "FCC's Form 477"
 output: rmarkdown::html_vignette
-code_folding: hide
 vignette: >
   %\VignetteIndexEntry{FCC's Form 477}
   %\VignetteEngine{knitr::rmarkdown}

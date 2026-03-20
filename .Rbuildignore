@@ -21,9 +21,11 @@
 ^docs$
 ^pkgdown$
 ^README\.Rmd$
-^vignettes/articles$
+^inst$
 ^inst/ext_data$
 ^inst/ext_data/clean$
 ^inst/ext_data/clean/states$
 ^inst/ext_data/source$
-^inst$
+
+^R/get_nbm_county\.R$
+^vignettes$

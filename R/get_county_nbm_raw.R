@@ -29,11 +29,13 @@ get_county_nbm_raw <- function(geoid_co, frn = "all", release = "2024-12-01") {
   # do I need a look up for county?
 
   con <- DBI::dbConnect(duckdb::duckdb())
+  DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
+  DBI::dbExecute(con, "SET s3_region = 'us-east-1';")
+  DBI::dbExecute(con, "SET s3_url_style = 'path';")
+
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)
-
-  DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
 
   # slippery slopes
   if (frn == "all") {

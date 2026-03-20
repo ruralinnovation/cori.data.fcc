@@ -38,11 +38,14 @@ get_frn_nbm_bl <- function(frn, release = "latest") {
   if (nchar(frn) != 10L) stop("frn should be a 10-digit string")
 
   con <- DBI::dbConnect(duckdb::duckdb())
+  DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
+  DBI::dbExecute(con, "SET s3_region = 'us-east-1';")
+  DBI::dbExecute(con, "SET s3_url_style = 'path';")
+
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)
 
-  DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   statement <- sprintf(
    paste0("select * 
  		  from read_parquet('s3://cori.data.fcc/nbm_block", release_target, "/*/*.parquet')
