@@ -14,13 +14,9 @@ LazyData: true
 Config/testthat/edition: 3
 Imports:
     DBI,
-    cori.db,
     duckdb,
-    here,
     jsonlite,
     stringi
-Remotes:
-  ruralinnovation/cori.db
 Suggests:
     dplyr,
     DT,
