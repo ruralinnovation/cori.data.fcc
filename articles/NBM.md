@@ -1,0 +1,159 @@
+# National Broadband Map (NBM)
+
+``` r
+library(cori.data.fcc)
+```
+
+## What is the National Broadband Map (NBM) data set?
+
+### License and Attribution
+
+The license can be found [here](https://broadbandmap.fcc.gov/about):
+
+> Broadband availability data from the BDC, and data from the U.S.
+> Census Bureau that are presented on this site, are offered free and
+> not subject to copyright restriction. Data and content created by
+> government employees within the scope of their employment are not
+> subject to domestic copyright protection under 17 U.S.C. § 105. See,
+> e.g., [U.S. Government
+> Works](https://www.usa.gov/government-copyright).
+>
+> While not required, when using in your own work content, data,
+> documentation, code, and related materials from fcc.gov or
+> broadbandmap.fcc.gov, we ask that you provide proper attribution of
+> the data. Examples include:
+>
+> Source data: FCC Broadband Data Collection Map layer based on FCC BDC
+>
+> CostQuest Associates, Inc. and its third-party licensors, as
+> applicable, own all right, title, and interest, including all
+> intellectual property rights, in and to the data for locations
+> reflected in the Fabric (including the Location ID, latitude and
+> longitude, address, unit count, and building type code for each
+> location in the Fabric). CostQuest is granted certain rights to Fabric
+> correction submissions for the purpose of correcting or otherwise
+> modifying BDC Fabric data. Broadband service providers, governmental
+> entities, and other third parties are able to license Fabric data,
+> including any changes to Fabric data that have been made as a result
+> of challenges, at no cost for purposes of their participation in the
+> FCC’s Broadband Data Collection.
+
+### A Quick Introduction
+
+NBM was launched by the FCC in November 2022[¹](#fn1) and follows [Form
+477](https://ruralinnovation.github.io/cori.data.fcc/articles/f477.html).
+
+Behind the National Broadband Map, there are **two** datasets (see
+@fig-broadbanddata, below). We use the “Broadband Availability” dataset
+that is derived from the “Fabric” locations dataset (developed by
+CostQuest). The locations are determined within the Fabric locations
+data.
+
+This dataset can be derived in multiple ways: by States or by Providers.
+
+At the state level, the data can be split between summaries and “raw
+data”. The summaries available are by geographies or by technologies
+(Fixed Broadband and Mobile Broadband).
+
+For every state, you need to access the raw data by technology. In our
+work, we focused on Fixed Broadband Availability data.
+
+The NBM provides information about the scale of a “service” - a location
+covered by a provider and by a technology with a specific maximum speed.
+
+This formatting approach is one of the big changes compared to Form 477.
+We moved from a Cesus-block scale to location-based scale (See @sec-BSL
+for a definition).
+
+Every location is characterized by:
+
+- Who is providing those services (`frn`, `provider_id`, and
+  `brand_name`)
+- A description of each service (`technology`,
+  `max_advertised_download_speed`, `max_advertised_upload_speed`,
+  `low_latency`)
+- Whether the location is residential, business or both
+- Ways to localize the location (`state_abbr`, `block_geoid`,
+  `h3_res8_id`)
+
+In our ingestion, we did not keep the `h3_res8_id` property, but we
+added the date of the release and the timestamp provided in the filename
+(see `data-raw/NBM.R` to get every details).
+
+The exact coordinates of every location is only part of the Fabric
+dataset. Within the Broadband Availability data, we can only link a
+record for a location to a Census Block (2020 vintage) or H3 hexagon.
+
+![“What is on the national broadband map” Source:
+https://www.fcc.gov/BroadbandData](whats-on-the-national-broadband-map-113023-1.png)
+
+“What is on the national broadband map” Source:
+<https://www.fcc.gov/BroadbandData>
+
+#### What is a Broadband Service Location (BSL)?
+
+> A broadband serviceable location is defined as “a business or
+> residential location in the United States at which fixed broadband
+> Internet access service is, or can be, installed.” A residential BSL
+> includes all residential structures, including structures that are (or
+> contain) housing units or group quarters (as those terms are defined
+> by the United States Census Bureau).  
+> A business BSL includes “all non-residential (business, government,
+> non-profit, etc.) structures that are on property without residential
+> locations and that would expect to demand Internet access service.”
+> (source FCC[²](#fn2))
+
+#### When is this data updated?
+
+NBM has two big releases per year (June and December) and have versions
+every two weeks to take into account challenges[³](#fn3). Sometimes
+their release can be faster (more than one per week) or slower. The FCC
+did not (April 2024) provide a changelog between releases or versions
+(but the documentation has some of the major changes[⁴](#fn4)).
+
+#### What is the geographic coverage?
+
+The Broadband Availability data covers all US States, Puerto Rico, and
+the US territories.
+
+## How does cori.data.fcc help me access NBM data?
+
+`cori.data.fcc` helps you access this dataset in 3 different ways:
+
+1.  The package provides functions to list available data and download
+    it
+
+2.  We ingested all the Fixed Broadband Availability Data and are
+    providing it in a s3 bucket (for more performant data loading!)
+
+3.  We ingested all Fixed Broadband Availability data and transformed
+    all information to be available at the Census block level.
+
+#### NBM Raw Data dictionary
+
+This dataset is called “nbm_raw” and its dictionary can be accessed with
+the function `get_fcc_dictionary`:
+
+``` r
+table_with_options(get_fcc_dictionary("nbm_raw"))
+```
+
+#### NBM Block Data Dictionary
+
+This dataset is called “nbm_block”
+
+``` r
+table_with_options(get_fcc_dictionary("nbm_block"))
+```
+
+------------------------------------------------------------------------
+
+1.  <https://www.fcc.gov/news-events/notes/2022/11/18/new-broadband-maps-are-finally-here>
+
+2.  [“The Fabric
+    data”](https://help.bdc.fcc.gov/hc/en-us/articles/7412732399003-Fabric-FAQs)
+
+3.  <https://www.fcc.gov/sites/default/files/bdc-challenge-overview.pdf>
+
+4.  See “Change Log”
+    <https://us-fcc.app.box.com/v/bdc-data-downloads-output>
