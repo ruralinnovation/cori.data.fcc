@@ -187,7 +187,7 @@ This package was inspired by <https://github.com/bbcommons/bfm-explorer>
 ## NBM
 
 - [`get_nbm_bl()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_bl.md)
-  : Load NBM service counts for given Census Block from CORI S3 bucket
+  : Load part of NBM at Census Block from CORI S3 bucket
 - [`get_county_nbm_raw()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_county_nbm_raw.md)
   : Load all BSL from NBM dataset for a specific county
 - [`get_frn_nbm_bl()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_frn_nbm_bl.md)

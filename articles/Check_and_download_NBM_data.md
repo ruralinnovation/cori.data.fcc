@@ -17,14 +17,17 @@ release
     ## 1         100011    Biannual December 31, 2023
     ## 2         100015    Biannual     June 30, 2024
     ## 3         100018    Biannual December 31, 2024
+    ## 4         100055    Biannual     June 30, 2025
     ##                           process_uuid enable_bfm_link
     ## 1 8033e241-2ab4-4ff6-812e-1efb049fe87f            TRUE
     ## 2 cf58c704-0c76-40fa-845a-f0138ddded0c            TRUE
     ## 3 47e9d20b-5c4e-4c29-a6fa-65cfd2b7f62e            TRUE
+    ## 4 88b88ce5-ef1a-401d-b940-b2fcf38336b2            TRUE
     ##   enable_challenge_download
     ## 1                      TRUE
     ## 2                      TRUE
     ## 3                      TRUE
+    ## 4                      TRUE
 
 2.  Second, you can check what files are available:
 
