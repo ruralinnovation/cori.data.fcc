@@ -66,7 +66,7 @@ get_nbm_county <- function(geoid_co, release = c("latest", "D23", "J24", "D24", 
 
     dir.create(local_state_dir, recursive = TRUE, showWarnings = FALSE)
 
-    print(paste0("Downloading NBM data for ", state_abbr, "to specified dir (or temp_dir)..."))
+    print(paste0("Downloading NBM data for ", state_abbr, " to specified dir (or temp_dir)..."))
 
     s3_src <- sprintf(
       "s3://cori.data.fcc/nbm_block%s/state_abbr=%s/",
