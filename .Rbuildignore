@@ -27,5 +27,4 @@
 ^inst/ext_data/clean/states$
 ^inst/ext_data/source$
 
-^R/get_nbm_county\.R$
 ^vignettes$

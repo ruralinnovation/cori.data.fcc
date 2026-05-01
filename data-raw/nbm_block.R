@@ -44,7 +44,7 @@ release <- "2025-06-01"
 # # release="2022-12-01"
 # # release="2023-06-01"
 # # release="2023-12-01"
-# # release="2024-12-01"
+# # release="2024-06-01"
 # # release="2024-12-01"
 # # release="2025-06-01"
 # ## ... and loop on release

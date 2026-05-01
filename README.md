@@ -51,7 +51,7 @@ Key uses:
 - Access parquet files stored in a CORI s3 bucket, by county:
 
 ``` r
-guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
+guilford_cty <- get_nbm_county_raw(geoid_co = "37081")
 dplyr::glimpse(guilford_cty)
 #> Rows: 1,337,541
 #> Columns: 14

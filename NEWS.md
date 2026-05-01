@@ -40,7 +40,7 @@
 
 * `get_nbm_bl()`allows you to get all block from one county
 
-* `get_county_nbm_raws()` allows you to get raw NBM data for a specific county and for a release, by default the last one. 
+* `get_nbm_county_raws()` allows you to get raw NBM data for a specific county and for a release, by default the last one. 
 
 ### Updated functions
 
