@@ -4,7 +4,12 @@
 \alias{get_nbm_county_raw}
 \title{Load all BSL from NBM dataset for a specific county}
 \usage{
-get_nbm_county_raw(geoid_co, frn = "all", release = "2025-06-01")
+get_nbm_county_raw(
+  geoid_co,
+  frn = "all",
+  release = "2025-06-01",
+  data_dir = tempdir()
+)
 }
 \arguments{
 \item{geoid_co}{a string matching a GEOID for a county}
@@ -12,6 +17,8 @@ get_nbm_county_raw(geoid_co, frn = "all", release = "2025-06-01")
 \item{frn}{a string of 10 numbers matching FCC's FRN, default is "all"}
 
 \item{release}{a date, set by default to be '2025-06-01'}
+
+\item{data_dir}{path to download directory}
 }
 \value{
 a data frame

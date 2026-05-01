@@ -4,12 +4,18 @@
 \alias{get_nbm_county}
 \title{Load NBM Broadband Servicable Location (BSL) counts for given Census County from CORI S3 bucket}
 \usage{
-get_nbm_county(geoid_co, release = "latest")
+get_nbm_county(
+  geoid_co,
+  release = c("latest", "D23", "J24", "D24", "J25"),
+  data_dir = tempdir()
+)
 }
 \arguments{
 \item{geoid_co}{a string of 5-digit numbers}
 
 \item{release}{a string with value "D23", "J24", "D24", "J25" (respectively targeting releases from December2023, June2024, December2024, June2025)}
+
+\item{data_dir}{path to download directory}
 }
 \value{
 a data frame

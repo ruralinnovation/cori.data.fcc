@@ -12,6 +12,7 @@
 #' @param geoid_co a string matching a GEOID for a county
 #' @param frn a string of 10 numbers matching FCC's FRN, default is "all"
 #' @param release a date, set by default to be '2025-06-01'
+#' @param data_dir path to download directory
 #'
 #' @return a data frame
 #'
@@ -22,7 +23,7 @@
 #'\dontrun{
 #'  guilford_cty <- get_nbm_county_raw(geoid_co = "37081")
 #'}
-get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01") {
+get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01", data_dir = tempdir()) {
 
   con <- DBI::dbConnect(duckdb::duckdb())
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
@@ -49,8 +50,10 @@ get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01") {
 
   state_usps <- fips_to_state[[substr(geoid_co, 1, 2)]]
 
+  print(data_dir)
+
   local_state_dir <- file.path(
-    "inst/ext_data/nbm/nbm_raw",
+    data_dir,
     paste0("release=", release),
     paste0("state_usps=", state_usps)
   )
@@ -78,18 +81,18 @@ get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01") {
     statement <- sprintf("select *
                          from
                            read_parquet(
-                             'inst/ext_data/nbm/nbm_raw/*/*/*/*.parquet')
+                             '%s/*/*.parquet')
                          where geoid_co = '%s' and release = '%s';",
-                         geoid_co, release)
+                         local_state_dir, geoid_co, release)
 
   } else {
 
     statement <- sprintf("select *
                          from
                            read_parquet(
-                             'inst/ext_data/nbm/nbm_raw/*/*/*/*.parquet')
+                             '%/*/*.parquet')
                           where  geoid_co = '%s' and frn = '%s' and release = '%s';",
-                         geoid_co, frn, release)
+                         local_state_dir, geoid_co, frn, release)
   }
 
   DBI::dbGetQuery(con, statement)
