@@ -1,6 +1,7 @@
 # National Broadband Map (NBM)
 
 ``` r
+
 library(cori.data.fcc)
 ```
 
@@ -40,7 +41,7 @@ The license can be found [here](https://broadbandmap.fcc.gov/about):
 
 ### A Quick Introduction
 
-NBM was launched by the FCC in November 2022[¹](#fn1) and follows [Form
+NBM was launched by the FCC in November 2022[^1] and follows [Form
 477](https://ruralinnovation.github.io/cori.data.fcc/articles/f477.html).
 
 Behind the National Broadband Map, there are **two** datasets (see
@@ -101,15 +102,15 @@ https://www.fcc.gov/BroadbandData](whats-on-the-national-broadband-map-113023-1.
 > A business BSL includes “all non-residential (business, government,
 > non-profit, etc.) structures that are on property without residential
 > locations and that would expect to demand Internet access service.”
-> (source FCC[²](#fn2))
+> (source FCC[^2])
 
 #### When is this data updated?
 
 NBM has two big releases per year (June and December) and have versions
-every two weeks to take into account challenges[³](#fn3). Sometimes
-their release can be faster (more than one per week) or slower. The FCC
-did not (April 2024) provide a changelog between releases or versions
-(but the documentation has some of the major changes[⁴](#fn4)).
+every two weeks to take into account challenges[^3]. Sometimes their
+release can be faster (more than one per week) or slower. The FCC did
+not (April 2024) provide a changelog between releases or versions (but
+the documentation has some of the major changes[^4]).
 
 #### What is the geographic coverage?
 
@@ -135,6 +136,7 @@ This dataset is called “nbm_raw” and its dictionary can be accessed with
 the function `get_fcc_dictionary`:
 
 ``` r
+
 table_with_options(get_fcc_dictionary("nbm_raw"))
 ```
 
@@ -143,17 +145,16 @@ table_with_options(get_fcc_dictionary("nbm_raw"))
 This dataset is called “nbm_block”
 
 ``` r
+
 table_with_options(get_fcc_dictionary("nbm_block"))
 ```
 
-------------------------------------------------------------------------
+[^1]: <https://www.fcc.gov/news-events/notes/2022/11/18/new-broadband-maps-are-finally-here>
 
-1.  <https://www.fcc.gov/news-events/notes/2022/11/18/new-broadband-maps-are-finally-here>
-
-2.  [“The Fabric
+[^2]: [“The Fabric
     data”](https://help.bdc.fcc.gov/hc/en-us/articles/7412732399003-Fabric-FAQs)
 
-3.  <https://www.fcc.gov/sites/default/files/bdc-challenge-overview.pdf>
+[^3]: <https://www.fcc.gov/sites/default/files/bdc-challenge-overview.pdf>
 
-4.  See “Change Log”
+[^4]: See “Change Log”
     <https://us-fcc.app.box.com/v/bdc-data-downloads-output>

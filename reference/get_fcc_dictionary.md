@@ -1,12 +1,13 @@
 # Display FCC variables and associated descriptions
 
-Return dictionary for a all datasets. Available dataset are "f477",
-"nbm_raw" and "nbm_block".
+Return dictionary for a all datasets. Available dataset are "f477"
+(`get_f477`), "nbm_raw" (`get_nbm_county_raw`) and "nbm_block"
+(`get_nbm_bl`, `get_nbm_county`).
 
 ## Usage
 
 ``` r
-get_fcc_dictionary(dataset = "all")
+get_fcc_dictionary(dataset = c("all", "f477", "nbm_raw", "nbm_block"))
 ```
 
 ## Arguments

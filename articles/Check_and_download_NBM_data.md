@@ -1,6 +1,7 @@
 # Check and download NBM data
 
 ``` r
+
 library(cori.data.fcc)
 ```
 
@@ -9,20 +10,21 @@ This example shows a basic workflow:
 1.  First, you can inspect what releases are available:
 
 ``` r
+
 release <- get_nbm_release() # get the available releases
 release
 ```
 
     ##   filing_type_id filing_type    filing_subtype
     ## 1         100011    Biannual December 31, 2023
-    ## 2         100015    Biannual     June 30, 2024
-    ## 3         100018    Biannual December 31, 2024
+    ## 2         100018    Biannual December 31, 2024
+    ## 3         100015    Biannual     June 30, 2024
     ## 4         100055    Biannual     June 30, 2025
     ##                           process_uuid enable_bfm_link
     ## 1 8033e241-2ab4-4ff6-812e-1efb049fe87f            TRUE
-    ## 2 cf58c704-0c76-40fa-845a-f0138ddded0c            TRUE
-    ## 3 47e9d20b-5c4e-4c29-a6fa-65cfd2b7f62e            TRUE
-    ## 4 88b88ce5-ef1a-401d-b940-b2fcf38336b2            TRUE
+    ## 2 f7f93a5e-0088-4010-897e-982725369f4e            TRUE
+    ## 3 cf58c704-0c76-40fa-845a-f0138ddded0c            TRUE
+    ## 4 987851a7-3c62-416f-8bdd-9058e9ca762f            TRUE
     ##   enable_challenge_download
     ## 1                      TRUE
     ## 2                      TRUE
@@ -32,6 +34,7 @@ release
 2.  Second, you can check what files are available:
 
 ``` r
+
 nbm <- get_nbm_available() # get what data is available
 
 # if we are interested in  "Fixed Broadband" / "Nationwide" / released "June 30, 2023"
@@ -52,6 +55,7 @@ all.equal(nbm_filter, nbm_dplyr_filter)
     ## [1] TRUE
 
 ``` r
+
 #> [1] TRUE
 head(nbm_filter)
 ```

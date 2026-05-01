@@ -3,9 +3,12 @@
 ## NBM
 
 - [`get_nbm_bl()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_bl.md)
-  : Load part of NBM at Census Block from CORI S3 bucket
-- [`get_county_nbm_raw()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_county_nbm_raw.md)
+  : Load NBM service counts for given Census Block from CORI S3 bucket
+- [`get_nbm_county_raw()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_county_raw.md)
   : Load all BSL from NBM dataset for a specific county
+- [`get_nbm_county()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_county.md)
+  : Load NBM Broadband Servicable Location (BSL) counts for given Census
+  County from CORI S3 bucket
 - [`get_frn_nbm_bl()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_frn_nbm_bl.md)
   : Load part of NBM at Census Block from CORI s3 bucket
 - [`get_nbm_release()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_release.md)

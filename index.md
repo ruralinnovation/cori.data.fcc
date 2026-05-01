@@ -6,7 +6,7 @@ and use of FCC public data releases.
 The package provides access to data from the following sources:
 
 - National Broadband Map [(NBM)](https://broadbandmap.fcc.gov/home)
-  data[¹](#fn1)
+  data[^1]
 - [Form
   477](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477)
   data
@@ -17,6 +17,7 @@ You can install the development version of `cori.data.fcc` from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("ruralinnovation/cori.data.fcc")
 ```
@@ -28,6 +29,7 @@ packages: - `waldo` - `duckdb`
 ## Examples
 
 ``` r
+
 library(cori.data.fcc)
 ```
 
@@ -38,7 +40,8 @@ Key uses:
 - Access parquet files stored in a CORI s3 bucket, by county:
 
 ``` r
-guilford_cty <- get_county_nbm_raw(geoid_co = "37081")
+
+guilford_cty <- get_nbm_county_raw(geoid_co = "37081")
 dplyr::glimpse(guilford_cty)
 #> Rows: 1,337,541
 #> Columns: 14
@@ -62,6 +65,7 @@ dplyr::glimpse(guilford_cty)
   NBM release**:
 
 ``` r
+
 # get a county
 nbm_bl <- get_nbm_bl(geoid_co = "47051")
 dplyr::glimpse(nbm_bl)
@@ -122,6 +126,7 @@ dplyr::glimpse(skymesh)
 Access state data for multiple years:
 
 ``` r
+
 f477_vt <- get_f477("VT")
 dplyr::glimpse(f477_vt)
 #> Rows: 1,147,267
@@ -148,6 +153,7 @@ dplyr::glimpse(f477_vt)
 Access the dictionary for each dataset:
 
 ``` r
+
 dplyr::glimpse(get_fcc_dictionary())
 #> Rows: 50
 #> Columns: 5
@@ -161,6 +167,7 @@ dplyr::glimpse(get_fcc_dictionary())
 The package also provides a list of Provider IDs and FRNs.
 
 ``` r
+
 str(fcc_provider)
 #> 'data.frame':    4456 obs. of  5 variables:
 #>  $ provider_name : chr  "@Link Services, LLC" "1 Point Communications" "101Netlink" "123.Net, Inc" ...
@@ -174,9 +181,7 @@ str(fcc_provider)
 
 This package was inspired by <https://github.com/bbcommons/bfm-explorer>
 
-------------------------------------------------------------------------
-
-1.  This data describes what internet services are available to
+[^1]: This data describes what internet services are available to
     individual locations across the country, along with new maps of
     mobile coverage, as reported by Internet Service Providers (ISPs).
     It is part of the FCC’s ongoing [Broadband Data
