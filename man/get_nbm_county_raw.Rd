@@ -4,14 +4,14 @@
 \alias{get_nbm_county_raw}
 \title{Load all BSL from NBM dataset for a specific county}
 \usage{
-get_nbm_county_raw(geoid_co, frn = "all", release = "2024-12-01")
+get_nbm_county_raw(geoid_co, frn = "all", release = "2025-06-01")
 }
 \arguments{
 \item{geoid_co}{a string matching a GEOID for a county}
 
 \item{frn}{a string of 10 numbers matching FCC's FRN, default is "all"}
 
-\item{release}{a date, set by default to be '2024-12-01'}
+\item{release}{a date, set by default to be '2025-06-01'}
 }
 \value{
 a data frame

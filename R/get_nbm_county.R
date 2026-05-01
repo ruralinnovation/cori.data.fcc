@@ -51,7 +51,7 @@ get_nbm_county <- function(geoid_co, release = "latest") {
         WHERE geoid = '%s'
         GROUP BY geoid;"), geoid_co)
 
-  # # TODO: Download (cache) entire nbm_block dataset and make function to get opinionated county level summary
+  # # TODO: Download (cache) entire nbm_block dataset
   # statement <- c(
   #   "SELECT
   #           geoid_co as geoid,
