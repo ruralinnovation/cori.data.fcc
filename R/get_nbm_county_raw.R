@@ -50,7 +50,7 @@ get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01", da
 
   state_usps <- fips_to_state[[substr(geoid_co, 1, 2)]]
 
-  print(data_dir)
+  # print(data_dir)
 
   local_state_dir <- file.path(
     data_dir,

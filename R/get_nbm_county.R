@@ -56,7 +56,7 @@ get_nbm_county <- function(geoid_co, release = c("latest", "D23", "J24", "D24", 
 
   state_abbr <- fips_to_state[[substr(geoid_co, 1, 2)]]
 
-  print(data_dir)
+  # print(data_dir)
 
   local_state_dir <- file.path(
     data_dir,
