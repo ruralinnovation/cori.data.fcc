@@ -28,6 +28,7 @@ reference:
     contents:
     - get_nbm_bl
     - get_nbm_county_raw
+    - get_nbm_county
     - get_frn_nbm_bl
     - get_nbm_release
     - get_nbm_available
