@@ -50,8 +50,6 @@ get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01", da
 
   state_usps <- fips_to_state[[substr(geoid_co, 1, 2)]]
 
-  # print(data_dir)
-
   local_state_dir <- file.path(
     data_dir,
     paste0("release=", release),
@@ -61,6 +59,8 @@ get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01", da
   if (!dir.exists(local_state_dir)) {
     
     dir.create(local_state_dir, recursive = TRUE, showWarnings = FALSE)
+
+    print(paste0("Downloading raw NBM data for ", state_usps, "to specified dir (or temp_dir)..."))
     
     s3_src <- sprintf(
       "s3://cori.data.fcc/nbm_raw/release=%s/state_usps=%s/",
