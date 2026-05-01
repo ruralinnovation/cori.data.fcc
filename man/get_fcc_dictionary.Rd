@@ -4,7 +4,7 @@
 \alias{get_fcc_dictionary}
 \title{Display FCC variables and associated descriptions}
 \usage{
-get_fcc_dictionary(dataset = "all")
+get_fcc_dictionary(dataset = c("all", "f477", "nbm_raw", "nbm_block"))
 }
 \arguments{
 \item{dataset}{a string matching a dataset, default is "all"}
@@ -13,7 +13,7 @@ get_fcc_dictionary(dataset = "all")
 a data frame
 }
 \description{
-Return dictionary for a all datasets. Available dataset are "f477", "nbm_raw" and "nbm_block".
+Return dictionary for a all datasets. Available dataset are "f477" (\code{get_f477}), "nbm_raw" (\code{get_nbm_county_raw}) and "nbm_block" (\code{get_nbm_bl}, \code{get_nbm_county}).
 }
 \examples{
 get_fcc_dictionary("nbm_block")
