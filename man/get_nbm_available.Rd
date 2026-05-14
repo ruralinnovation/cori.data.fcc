@@ -23,6 +23,8 @@ NBM's API:
 }\if{html}{\out{</div>}}
 }
 \examples{
+\dontrun{
 nbm_data <- get_nbm_available()
 head(nbm_data)
+}
 }

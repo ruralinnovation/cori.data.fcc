@@ -1,0 +1,139 @@
+---
+title: cori.data.fcc
+description: Functions to get and process FCC data
+author: Olivier Leroy
+date: '2026-05-05'
+categories:
+  - R Package
+  - Broadband
+tags:
+  - broadband
+  - fcc
+  - nbm
+  - national-broadband-map
+  - form-477
+  - census-block
+  - isp
+package:
+  name: cori.data.fcc
+  githubUrl: https://github.com/ruralinnovation/cori.data.fcc
+  installCommand: devtools::install_github("ruralinnovation/cori.data.fcc")
+  status: stable
+  version: 1.0.0
+  maintainer: Olivier Leroy
+  featured: false
+usesDatasets:
+  - fcc-broadband
+usesResources: []
+execute:
+  echo: true
+  warning: false
+  message: false
+editor:
+  markdown:
+    wrap: 72
+---
+
+## Overview
+
+The goal of cori.data.fcc is to facilitate the discovery, analysis, and use of FCC public data releases. The package provides S3-backed access to National Broadband Map (NBM) data — both raw parquet files by county and a CORI-opinionated Census-block-level summary — as well as Form 477 broadband deployment data spanning multiple years. A built-in data dictionary and ISP provider reference table round out the package.
+
+::: callout-note
+## Why Use This Package
+
+- **S3-backed NBM access via DuckDB** - Raw NBM parquet files queryable by county without local download, powered by DuckDB
+- **CORI-opinionated block layer** - 21-column Census-block summary with technology type breakdowns (fiber, cable, copper, fixed wireless, etc.) and BEAD location counts
+- **FRN-based coverage queries** - Retrieve all Census blocks served by a specific ISP using their FCC Registration Number
+- **Form 477 multi-year data** - State-level broadband deployment records from 2014 onward
+- **Integrated data dictionary** - 50-row codebook covering f477, nbm_block, and nbm_raw field descriptions
+- **ISP provider reference** - fcc_provider data frame with 4,456 records linking provider names, FRNs, and numeric provider IDs
+:::
+
+## Installation
+
+```{r}
+#| eval: false
+
+devtools::install_github("ruralinnovation/cori.data.fcc")
+```
+
+## Quick Start
+
+```{r}
+#| eval: false
+
+library(cori.data.fcc)
+
+# Get CORI-opinionated NBM block-level data for a county
+nbm_bl <- get_nbm_bl(geoid_co = "47051")
+
+# Get raw NBM parquet data for a county
+guilford_cty <- get_nbm_county_raw(geoid_co = "37081")
+
+# Get all blocks served by a specific ISP (by FRN)
+skymesh <- get_frn_nbm_bl("0027136753")
+
+# Get Form 477 data for a state
+f477_vt <- get_f477("VT")
+```
+
+## Core Functions
+
+::: panel-tabset
+
+### Data Access
+
+| Function | Description |
+|----------|-------------|
+| `get_nbm_bl()` | CORI-opinionated NBM Census-block summary by county (21 columns) |
+| `get_nbm_county()` | NBM county-level aggregated data |
+| `get_nbm_county_raw()` | Raw NBM parquet data for a county and release via S3 |
+| `get_frn_nbm_bl()` | All Census blocks where a given FRN reported service |
+| `get_f477()` | Form 477 broadband deployment data by state |
+
+### Utility
+
+| Function | Description |
+|----------|-------------|
+| `get_nbm_available()` | List available NBM releases in the S3 store |
+| `get_nbm_release()` | NBM release metadata |
+| `dl_nbm()` | Download NBM source files |
+| `check_frn()` | Validate an FCC Registration Number (FRN) |
+| `get_fcc_dictionary()` | 50-row codebook across all package datasets |
+
+:::
+
+## Data Sources
+
+| Dataset | Role |
+|---------|------|
+| [FCC Broadband](/datasets/fcc-broadband/) | Primary |
+
+## Use Cases at CORI
+
+This package is used in:
+
+- Analyzing broadband availability at the Census-block level for a county or region
+- Identifying BEAD-eligible locations using CORI-processed NBM data
+- Querying coverage footprint for a specific ISP by FRN
+- Tracking broadband deployment trends over time using Form 477 filings
+- Building broadband gap analyses using technology-type breakdowns
+
+::: callout-tip
+## Optimization Tips
+
+Ensure the latest versions of duckdb and waldo are installed before use. The raw NBM data (parquet via S3) can be large — queries against get_nbm_county_raw() on dense counties may return over one million rows.
+:::
+
+::: callout-warning
+## Known Limitations
+
+The package accesses data stored in CORI S3 storage; AWS credentials or network access may be required. NBM data reflects ISP-reported coverage and is subject to the known limitations of self-reported broadband availability data.
+:::
+
+## Documentation
+
+- [GitHub Repository](https://github.com/ruralinnovation/cori.data.fcc)
+- [Full README](https://github.com/ruralinnovation/cori.data.fcc/blob/main/README.md)
+- [Function Documentation](https://github.com/ruralinnovation/cori.data.fcc/tree/main/man)
+
