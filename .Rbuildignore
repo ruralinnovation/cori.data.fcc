@@ -28,3 +28,5 @@
 ^inst/ext_data/source$
 
 ^vignettes$
+^\.claude$
+^index\.qmd$
