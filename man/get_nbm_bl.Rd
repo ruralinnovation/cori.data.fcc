@@ -2,20 +2,26 @@
 % Please edit documentation in R/get_nbm_bl.R
 \name{get_nbm_bl}
 \alias{get_nbm_bl}
-\title{Load NBM service counts for given Census Block from CORI S3 bucket}
+\title{Load NBM BSL counts for given Census Block from CORI S3 bucket}
 \usage{
-get_nbm_bl(geoid_co, release = "latest")
+get_nbm_bl(
+  geoid_co,
+  release = c("latest", "D23", "J24", "D24", "J25"),
+  data_dir = tempdir()
+)
 }
 \arguments{
 \item{geoid_co}{a string of 5-digit numbers}
 
 \item{release}{a string with value "D23", "J24", "D24", "J25" (respectively targeting releases from December2023, June2024, December24, June2025)}
+
+\item{data_dir}{path to download directory}
 }
 \value{
 a data frame
 }
 \description{
-Get all the data related to a states or county.
+Get all the data related to a block in a county.
 }
 \details{
 A row in this data represent a census block (2020 vintage).

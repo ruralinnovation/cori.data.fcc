@@ -96,17 +96,5 @@ get_nbm_county <- function(geoid_co, release = c("latest", "D23", "J24", "D24", 
         GROUP BY geoid;",
     local_state_dir, geoid_co)
 
-  # # TODO: Download (cache) entire nbm_block dataset
-  # statement <- c(
-  #   "SELECT
-  #           geoid_co as geoid,
-  #           sum(cnt_total_locations) as cnt_total_locations,
-  #           sum(cnt_fiber_locations) as cnt_fiber_locations,
-  #           sum(cnt_100_20) as cnt_100_20,
-  #           sum(cnt_25_3) as cnt_25_3
-  #       FROM read_parquet('inst/ext_data/nbm/nbm_block", release_target, "/*/*.parquet')
-  #   GROUP BY geoid;"
-  # )
-
   DBI::dbGetQuery(con, statement)
 }
