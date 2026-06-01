@@ -24,5 +24,7 @@ A data frame.
 ## Examples
 
 ``` r
+if (FALSE) { # \dontrun{
 nbm <- get_nbm_release()
+} # }
 ```

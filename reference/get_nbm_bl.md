@@ -1,11 +1,15 @@
-# Load NBM service counts for given Census Block from CORI S3 bucket
+# Load NBM BSL counts for given Census Block from CORI S3 bucket
 
-Get all the data related to a states or county.
+Get all the data related to a block in a county.
 
 ## Usage
 
 ``` r
-get_nbm_bl(geoid_co, release = "latest")
+get_nbm_bl(
+  geoid_co,
+  release = c("latest", "D23", "J24", "D24", "J25"),
+  data_dir = tempdir()
+)
 ```
 
 ## Arguments
@@ -18,6 +22,10 @@ get_nbm_bl(geoid_co, release = "latest")
 
   a string with value "D23", "J24", "D24", "J25" (respectively targeting
   releases from December2023, June2024, December24, June2025)
+
+- data_dir:
+
+  path to download directory
 
 ## Value
 

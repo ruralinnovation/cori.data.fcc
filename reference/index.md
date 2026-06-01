@@ -3,7 +3,7 @@
 ## NBM
 
 - [`get_nbm_bl()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_bl.md)
-  : Load NBM service counts for given Census Block from CORI S3 bucket
+  : Load NBM BSL counts for given Census Block from CORI S3 bucket
 - [`get_nbm_county_raw()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_county_raw.md)
   : Load all BSL from NBM dataset for a specific county
 - [`get_nbm_county()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_county.md)
