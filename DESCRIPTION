@@ -18,6 +18,7 @@ Imports:
     jsonlite,
     stringi
 Suggests:
+    devtools,
     dplyr,
     DT,
     knitr,

@@ -1,7 +1,8 @@
 ## code to prepare `NBM` dataset goes here
 
-library(cori.data.fcc)
 library(duckdb)
+# library(cori.data.fcc)
+devtools::load_all()
 
 data_dir <- "inst/ext_data/nbm"
 

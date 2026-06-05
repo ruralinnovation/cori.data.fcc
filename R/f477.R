@@ -28,6 +28,7 @@ get_f477 <- function(state_abbr, frn = "all") {
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   DBI::dbExecute(con, "SET s3_region = 'us-east-1';")
   DBI::dbExecute(con, "SET s3_url_style = 'path';")
+  DBI::dbExecute(con, "SET httpfs_client_implementation = 'curl';")
 
 
   DBI::dbExecute(con,

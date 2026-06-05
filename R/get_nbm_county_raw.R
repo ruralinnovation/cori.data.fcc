@@ -29,6 +29,7 @@ get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01", da
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   DBI::dbExecute(con, "SET s3_region = 'us-east-1';")
   DBI::dbExecute(con, "SET s3_url_style = 'path';")
+  DBI::dbExecute(con, "SET httpfs_client_implementation = 'curl';")
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)

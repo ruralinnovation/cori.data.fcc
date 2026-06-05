@@ -13,7 +13,7 @@
 #' Data Source: FCC Broadband Data Collection
 #'
 #' @param frn a string of 10 numbers matching FCC's FRN
-#' @param release a string with value "D23", "J24", "D24", "J25" (respectively targeting releases from December2023, June2024, December24, June2025)
+#' @param release a string with value "D23", "J24", "D24", "J25", "D25" (respectively targeting releases from December2023, June2024, December24, June2025)
 #'
 #' @return a data frame
 #'
@@ -29,10 +29,10 @@ get_frn_nbm_bl <- function(frn, release = "latest") {
 
   release_target <- ""
 
-  if (release %in% c("D23", "J24", "D24", "J25")) {
+  if (release %in% c("D23", "J24", "D24", "J25", "D25")) {
     release_target <- paste0("-", release)
   } else {
-    release_target <- "-J25"
+    release_target <- "-D25"
   }
 
   if (nchar(frn) != 10L) stop("frn should be a 10-digit string")
@@ -41,6 +41,9 @@ get_frn_nbm_bl <- function(frn, release = "latest") {
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   DBI::dbExecute(con, "SET s3_region = 'us-east-1';")
   DBI::dbExecute(con, "SET s3_url_style = 'path';")
+  DBI::dbExecute(con, "SET httpfs_client_implementation = 'curl';")
+  DBI::dbExecute(con, "SET httpfs_connection_caching = true;")
+  DBI::dbExecute(con, "SET http_timeout = 120;")
 
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
@@ -48,13 +51,13 @@ get_frn_nbm_bl <- function(frn, release = "latest") {
 
   statement <- sprintf(
    paste0("select * 
- 		  from read_parquet('s3://cori.data.fcc/nbm_block", release_target, "/*/*.parquet')
-    where 
+    from read_parquet('s3://cori.data.fcc/nbm_block", release_target, "/*/*.parquet')
+    where
       combo_frn in (
-    							  select combo_frn 
-    							  from 
-										read_parquet('s3://cori.data.fcc/rel_combo_frn", release_target, ".parquet')
-    								where frn = '%s'
+        select combo_frn
+        from
+          read_parquet('s3://cori.data.fcc/rel_combo_frn", release_target, ".parquet')
+        where frn = '%s'
     );"), frn)
 
   DBI::dbGetQuery(con, statement)

@@ -4,9 +4,10 @@
 # I used an in house dataset here but this can be replaced by tigris [TODO?]
 # or just going in the FTP of US census
 # our internal package
-library(cori.data.fcc)
 library(cori.db)
 library(duckdb)
+# library(cori.data.fcc)
+devtools::load_all()
 
 data_dir <- "inst/ext_data/nbm"
 data_raw <- paste0(data_dir, "/nbm_raw")
@@ -17,6 +18,14 @@ if (!dir.exists(data_dir) || !dir.exists(data_raw)) {
   print("Need to process nbm_raw (all releases)")
   source("data-raw/nbm_raw.R")
 }
+
+duck_dir <- paste0(data_dir, "/duckdb")
+dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
+
+con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/nbm.duckdb"))
+
+## I went overkill with that one, it is probably not needed
+DBI::dbExecute(con, "PRAGMA max_temp_directory_size='100GiB'")
 
 get_census_block <- function() {
   con <- cori.db::connect_to_db("sch_census_tiger")
@@ -29,14 +38,27 @@ get_census_block <- function() {
   DBI::dbGetQuery(con, statement_census)
 }
 
-census_blocks <- get_census_block()
+message("Distinct releases in raw source...")
 
-stopifnot(nrow(census_blocks) == 8180866)
+# message(
+# DBI::dbGetQuery(con, sprintf(
+#   "DESCRIBE SELECT release FROM read_parquet('%s/nbm_raw/*/*/*/*.parquet') LIMIT 1",
+#   data_dir
+# ))
+# )
+# # ┌─────────────┬─────────────┬──────┬─────┬─────────┬───────┐
+# # │ column_name │ column_type │ null │ key │ default │ extra │
+# # ├─────────────┼─────────────┼──────┼─────┼─────────┼───────┤
+# # │ release     │ DATE        │ YES  │ NA  │ NA      │ NA    │
+# # └─────────────┴─────────────┴──────┴─────┴─────────┴───────┘
 
+releases_in_raw <- DBI::dbGetQuery(con, sprintf("
+    SELECT DISTINCT release
+    FROM read_parquet('%s/nbm_raw/*/*/*/*.parquet')
+    ORDER BY release
+  ", data_dir))
 
-# the latest release is '2024-12-01'
-
-release <- "2025-06-01"
+message(paste(releases_in_raw$release, collapse = "\n"))
 
 ### TODO: Actually, DO NOT loop through releases...
 # ## !TODO: Turn release into a list of ...
@@ -47,20 +69,23 @@ release <- "2025-06-01"
 # # release="2024-06-01"
 # # release="2024-12-01"
 # # release="2025-06-01"
+# # release="2025-12-01"
 # ## ... and loop on release
 
-### TODO: ... discuss best partition of NBM parquet for ALL releases (June implementation?)...
-### ... considering RELEASE > STATE > COUNTY so we can pull data by specifying (release, geoid_co)
+# the latest release is '2025-12-01'
 
-message(sprintf("Release used: %s", release))
+release <- "2025-12-01"
+## TODO: Switch to latest release (currently J25) before uploading to S3..
+nbm_block_release <- "D25"
+nbm_block_release_dir <- paste0("/data/nbm/nbm_block-", nbm_block_release)
+rel_combo_frn_file <- paste0(data_dir, "/rel_combo_frn.parquet")
+rel_combo_frn_release_file <- paste0("/data/nbm/rel_combo_frn-", nbm_block_release, ".parquet")
 
-duck_dir <- paste0(data_dir, "/duckdb")
-dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
+message(sprintf("Sourece release is %s, CORI block release set to %s", release, nbm_block_release))
 
-con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/nbm.duckdb"))
+census_blocks <- get_census_block()
 
-## I went overkill with that one, it is probably not needed
-DBI::dbExecute(con, "PRAGMA max_temp_directory_size='100GiB'")
+stopifnot(nrow(census_blocks) == 8180866)
 
 message("Write blocks to duckdb database")
 
@@ -70,11 +95,43 @@ set_release <- sprintf("alter table nbm_block
 					   add column release date;
 					   update nbm_block set release = '%s'
 "
-					   , release)
+  , release)
 
 cat(set_release)
 
 DBI::dbExecute(con, set_release)
+
+message(sprintf("Starting adding count of total locations; %s", Sys.time()))
+
+nbm_count1 <- paste0("
+alter table nbm_block
+add column cnt_total_locations integer;
+
+update
+	nbm_block as t1
+set
+	cnt_total_locations = t2.cnt_total_locations
+from (
+    select geoid_bl, count(distinct location_id) as cnt_total_locations
+    from
+        read_parquet('", data_dir, "/nbm_raw/release=", release, "/*/*/*.parquet')
+    group by
+        geoid_bl
+    ) as t2
+where
+   t1.geoid_bl = t2.geoid_bl;
+")
+
+cat(nbm_count1)
+
+DBI::dbExecute(con, nbm_count1)
+
+actual_populated <- DBI::dbGetQuery(con, "SELECT COUNT(*) AS n FROM nbm_block WHERE
+  cnt_total_locations IS NOT NULL")[[1]]
+if (actual_populated < 6000000L) {
+  stop(sprintf("Expected at least 6,000,000 blocks with cnt_total_locations populated, got %d —
+  UPDATE in nbm_count1 may not have run", actual_populated))
+}
 
 message(sprintf("Creating a filtered table: %s", Sys.time()))
 
@@ -89,7 +146,8 @@ nbm_cori1 <-  "CREATE OR REPLACE TABLE staging (
                     low_latency boolean,
                     geoid_st varchar(2),
                     geoid_bl varchar(15),
-                    geoid_co varchar(5));
+                    geoid_co varchar(5),
+                    release varchar);
 "
 
 cat(nbm_cori1)
@@ -109,7 +167,8 @@ select
 	low_latency,
     state_usps as geoid_st,
     geoid_bl,
-	geoid_co
+	geoid_co,
+	release
 from
 	read_parquet('", data_dir, "/nbm_raw/*/*/*/*.parquet')
 where
@@ -123,19 +182,20 @@ where
 insert into staging (frn, provider_id, location_id, brand_name, technology,
                      max_advertised_download_speed,
                      max_advertised_upload_speed,
-                     low_latency, geoid_st,  geoid_bl, geoid_co)
+                     low_latency, geoid_st,  geoid_bl, geoid_co, release)
 select
-	frn,
-	provider_id,
-	location_id,
-	brand_name,
-	technology,
-	max_advertised_download_speed,
-	max_advertised_upload_speed,
-	low_latency,
-	geoid_st,
+    frn,
+    provider_id,
+    location_id,
+    brand_name,
+    technology,
+    max_advertised_download_speed,
+    max_advertised_upload_speed,
+    low_latency,
+    geoid_st,
     geoid_bl,
-    geoid_co
+    geoid_co,
+    release
 from
 	filtered
 where
@@ -151,35 +211,13 @@ cat(nbm_cori2)
 
 DBI::dbExecute(con, nbm_cori2)
 
+message("Distinct releases in staging...")
+releases_in_staging <- DBI::dbGetQuery(con, "SELECT DISTINCT release FROM staging ORDER BY
+  release")
+message(paste(releases_in_staging$release, collapse = "\n"))
 
-message(sprintf("Starting adding count of locations; %s", Sys.time()))
+message(sprintf("Starting adding count of bead locations; %s", Sys.time()))
 
-nbm_count1 <- sprintf(paste0("
-alter table nbm_block
-add column cnt_total_locations integer;
-update
-	nbm_block as t1
-set
-	cnt_total_locations = t2.cnt_total_locations
-from
-	(select
-	geoid_bl,
-	count(distinct location_id) as cnt_total_locations
-from
-	read_parquet('", data_dir, "/nbm_raw/*/*/*/*.parquet')
-where release = '%s'
-group by
-	geoid_bl
-) as t2
-where
-   t1.geoid_bl = t2.geoid_bl;
-"), release)
-
-cat(nbm_count1)
-
-DBI::dbExecute(con, nbm_count1)
-
-# test tes default
 nbm_count2 <- "
 alter table nbm_block
 add column cnt_bead_locations integer;
@@ -204,7 +242,12 @@ cat(nbm_count2)
 
 DBI::dbExecute(con, nbm_count2)
 
-stopifnot(ncol(DBI::dbGetQuery(con, "select * from nbm_block limit 10")) ==  4L)
+test_nbm_count <- DBI::dbGetQuery(con, "select * from nbm_block limit 0")
+actual_cols <- ncol(test_nbm_count)
+if (actual_cols != 4L) {
+  stop(sprintf("Expected 4 columns in nbm_block, got %d: %s",
+               actual_cols, paste(names(test_nbm_count), collapse = ", ")))
+}
 
 nbm_count3 <-
 	"alter table nbm_block add column cnt_fiber_locations integer;
@@ -521,6 +564,9 @@ DBI::dbExecute(con, utilities)
 
 message(sprintf("Starting to create parquet file: %s", Sys.time()))
 
+# TODO: ... discuss best partition of NBM parquet for ALL releases (June implementation?)...
+# ... considering RELEASE > STATE > COUNTY so we can pull data by specifying (release, geoid_co)
+
 write_parquet <- paste0("copy (
   select
 	geoid_bl,
@@ -567,11 +613,6 @@ DBI::dbExecute(con, write_rel_combo)
 DBI::dbDisconnect(con)
 
 ## Copy nbm_raw and nbm_block(-VERSIONED) to local /data/nbm dir before upload to s3
-## TODO: Switch to latest release (currently J25) before uploading to S3..
-nbm_block_release <- "J25"
-nbm_block_release_dir <- paste0("/data/nbm/nbm_block-", nbm_block_release)
-rel_combo_frn_file <- paste0(data_dir, "/rel_combo_frn.parquet")
-rel_combo_frn_release_file <- paste0("/data/nbm/rel_combo_frn-", nbm_block_release, ".parquet")
 copy_commands <- c(
 	paste0("cp -R ", data_raw, " /data/nbm/"),
 	paste0("aws s3 sync /data/nbm/nbm_raw s3://cori.data.fcc/nbm_raw"),
@@ -584,3 +625,7 @@ lapply(copy_commands, function(comm) {
   print(comm)
   system(comm)
 })
+
+## TODO: Manually sync latest release to nbm_block and rel_combo_frn.parquet on S3
+#$ aws s3 sync inst/ext_data/nbm/nbm_block s3://cori.data.fcc/nbm_block
+#$ aws s3 cp inst/ext_data/nbm/rel_combo_frn.parquet s3://cori.data.fcc/rel_combo_frn.parquet
