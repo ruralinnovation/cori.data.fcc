@@ -17,8 +17,8 @@ get_frn_nbm_bl(frn, release = "latest")
 
 - release:
 
-  a string with value "D23", "J24", "D24", "J25" (respectively targeting
-  releases from December2023, June2024, December24, June2025)
+  a string with value "D23", "J24", "D24", "J25", "D25" (respectively
+  targeting releases from December2023, June2024, December24, June2025)
 
 ## Value
 
