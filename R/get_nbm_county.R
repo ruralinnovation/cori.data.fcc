@@ -7,7 +7,7 @@
 #' Data Source: FCC Broadband Data Collection
 #'
 #' @param geoid_co a string of 5-digit numbers
-#' @param release a string with value "D23", "J24", "D24", "J25" (respectively targeting releases from December2023, June2024, December2024, June2025)
+#' @param release a string with value "D23", "J24", "D24", "J25", "D25" (respectively targeting releases from December2023, June2024, December2024, June2025)
 #' @param data_dir path to download directory
 #'
 #' @return a data frame
@@ -19,14 +19,14 @@
 #' \dontrun{
 #'   nbm_bl <- get_nbm_county(geoid_co = "47051")
 #' }
-get_nbm_county <- function(geoid_co, release = c("latest", "D23", "J24", "D24", "J25"), data_dir = tempdir()) {
+get_nbm_county <- function(geoid_co, release = c("latest", "D23", "J24", "D24", "J25", "D25"), data_dir = tempdir()) {
 
   release <- match.arg(release)
 
-  if (release %in% c("D23", "J24", "D24", "J25")) {
+  if (release %in% c("D23", "J24", "D24", "J25", "D25")) {
     release_target <- paste0("-", release)
   } else {
-    release_target <- "-J25"
+    release_target <- "-D25"
   }
 
   if (nchar(geoid_co) != 5L) stop("geoid_co should be a 5-digit string")
@@ -35,6 +35,7 @@ get_nbm_county <- function(geoid_co, release = c("latest", "D23", "J24", "D24", 
   DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
   DBI::dbExecute(con, "SET s3_region = 'us-east-1';")
   DBI::dbExecute(con, "SET s3_url_style = 'path';")
+  DBI::dbExecute(con, "SET httpfs_client_implementation = 'curl';")
   DBI::dbExecute(con,
                  sprintf("SET temp_directory ='%s';", tempdir()))
   on.exit(DBI::dbDisconnect(con), add = TRUE)

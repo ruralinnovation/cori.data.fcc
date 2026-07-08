@@ -202,6 +202,7 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
 
   duckdb::dbSendQuery(con, "INSTALL httpfs;")
   duckdb::dbSendQuery(con, "LOAD httpfs;")
+  duckdb::dbSendQuery(con, "SET httpfs_client_implementation = 'curl';")
   duckdb::dbSendQuery(con, "INSTALL aws;")
   duckdb::dbSendQuery(con, "LOAD aws;")
   duckdb::dbSendQuery(con, "CREATE OR REPLACE SECRET s3_secret (

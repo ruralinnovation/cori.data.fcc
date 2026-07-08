@@ -15,7 +15,7 @@ echo "The PID of this process is: $PID" >> process_nbm.log
 echo "The PID of this process is: $PID"
 echo "Watch with: "
 echo "tail -f $(pwd)/process_nbm.log"
-echo "while true; do echo \"=== $(date) ===\"; tail -n 200 $(pwd)/process_nbm.log; free -m; echo ''; sleep 30; done"
+echo "while true; do echo \"=== $(date) ===\"; tail -n 200 $(pwd)/process_nbm.log; echo ''; free -m; ps -ef | grep $PID; sleep 30; done"
 
 ## TODO: These are the duckdb queries that keeps killing the server:
 #  WITH FILTERED as (

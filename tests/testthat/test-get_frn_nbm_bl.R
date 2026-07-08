@@ -2,20 +2,24 @@ test_that("FRN should be 10-digit string", {
   expect_error(get_frn_nbm_bl("bob"))
 })
 
-# could change in different release
-# they had a 0/0 location
+# Could change in different release; they had a 0/0 locations in June 2024
 test_that("Check nrow on Cogent", {
   expect_equal(nrow(get_frn_nbm_bl("0019066034", release = "J24")), 1212)
 })
 
-# number of location went down in December 2024 release
+# Number of location went down in December 2024 release
 test_that("Check nrow on Cogent - D24", {
   expect_equal(nrow(get_frn_nbm_bl("0019066034", release = "D24")), 1190)
 })
 
-# June 2025 release has different data
-test_that("Check nrow on Cogent - J25 (latest)", {
-  expect_equal(nrow(get_frn_nbm_bl("0019066034")), 828)
+# June 2025 release has different data -> 828
+test_that("Check nrow on Cogent - J25", {
+  expect_equal(nrow(get_frn_nbm_bl("0019066034", release = "J25")), 828)
+})
+
+# ... and so does December 2025 -> 818
+test_that("Check nrow on Cogent (latest)", {
+  expect_equal(nrow(get_frn_nbm_bl("0019066034")), 818)
 })
 
 # could change in different release

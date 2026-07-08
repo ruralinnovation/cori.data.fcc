@@ -1,11 +1,11 @@
-library(cori.data.fcc)
+# library(cori.data.fcc)
+devtools::load_all()
 
 data_dir <- "inst/ext_data/nbm"
 
 source_dir <- paste0(data_dir, "/source")
 
 release <- get_nbm_release()
-
 
 nbm_data <- get_nbm_available()
 
