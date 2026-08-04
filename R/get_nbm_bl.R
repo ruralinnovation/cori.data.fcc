@@ -20,7 +20,7 @@
 #' \dontrun{
 #'   nbm_bl <- get_nbm_bl(geoid_co = "47051")
 #' }
-
+# TODO: convert geoid_co to variable that indicates level of summary aggregation (county, state, national, block) and returns **all** data
 get_nbm_bl <- function(geoid_co, release = c("latest", "D23", "J24", "D24", "J25", "D25"), data_dir = tempdir()) {
 
   release <- match.arg(release)
@@ -71,18 +71,12 @@ get_nbm_bl <- function(geoid_co, release = c("latest", "D23", "J24", "D24", "J25
 
     print(paste0("Downloading NBM data for ", state_abbr, " to specified dir (or temp_dir)..."))
 
-    s3_src <- sprintf(
-      "s3://cori.data.fcc/nbm_block%s/state_abbr=%s/",
-      release_target, state_abbr
+    s3_prefix <- sprintf("nbm_block%s/state_abbr=%s/", release_target, state_abbr)
+    cori.data::sync_s3_to_local(
+      bucket = "cori.data.fcc",
+      prefix = s3_prefix,
+      local_path = local_state_dir
     )
-    s3_sync_results <- system2(
-      "aws",
-      args = c("s3", "sync", s3_src, local_state_dir),
-      stdout = TRUE, stderr = TRUE
-    )
-    if (!is.null(attr(s3_sync_results, "status")) && attr(s3_sync_results, "status") != 0) {
-      stop("aws s3 sync failed: ", paste(s3_sync_results, collapse = "\n"))
-    }
   }
 
   statement <- sprintf(

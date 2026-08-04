@@ -1,6 +1,6 @@
 ## code to prepare `f477` dataset goes here
 library(DBI)
-library(cori.db)
+library(cori.data)
 library(data.table)
 library(dplyr)
 library(duckdb)
@@ -16,7 +16,7 @@ source_prefix <- "source"
 dir.create(paste0(data_dir, "/", source_prefix), recursive = TRUE, showWarnings = FALSE)
 
 source_files_s3 <- (
-  cori.db::list_s3_objects(bucket_name = s3_bucket_name) |>
+  cori.data::list_s3_objects(bucket_name = s3_bucket_name) |>
       dplyr::filter(grepl(source_prefix, `key`)) |>
       # dplyr::filter(grepl('Jun2021', `key`)) |> # <= test filter
       dplyr::filter(grepl(".zip", `key`))
@@ -40,7 +40,7 @@ source_files_s3 |> lapply(function(x) {
 
   system(paste0("touch ", file_path))
 
-  cori.db::get_s3_object(s3_bucket_name, x, file_path) # <= `x` includes source_prefix (i.e. "source")
+  cori.data::get_s3_object(s3_bucket_name, x, file_path) # <= `x` includes source_prefix (i.e. "source")
 
   print(paste0("Finished downloading ", file_path))
 
@@ -263,7 +263,7 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
 
   result <- DBI::dbExecute(con, copy_stat)
 
-  # result <- cori.db::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, pq_dir) # <= This would overwrite S3 without first deleting... could be an issue for parquet
+  # result <- cori.data::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, pq_dir) # <= This would overwrite S3 without first deleting... could be an issue for parquet
 
   return(invisible(result))
 }

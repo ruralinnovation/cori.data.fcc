@@ -63,18 +63,12 @@ get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01", da
 
     print(paste0("Downloading raw NBM data for ", state_usps, " to specified dir (or temp_dir)..."))
     
-    s3_src <- sprintf(
-      "s3://cori.data.fcc/nbm_raw/release=%s/state_usps=%s/",
-      release, state_usps
+    s3_prefix <- sprintf("nbm_raw/release=%s/state_usps=%s/", release, state_usps)
+    cori.data::sync_s3_to_local(
+      bucket = "cori.data.fcc",
+      prefix = s3_prefix,
+      local_path = local_state_dir
     )
-    s3_sync_results <- system2(
-      "aws",
-      args = c("s3", "sync", s3_src, local_state_dir),
-      stdout = TRUE, stderr = TRUE
-    )
-    if (!is.null(attr(s3_sync_results, "status")) && attr(s3_sync_results, "status") != 0) {
-      stop("aws s3 sync failed: ", paste(s3_sync_results, collapse = "\n"))
-    }
   }
 
   if (frn == "all") {
