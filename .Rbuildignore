@@ -30,3 +30,4 @@
 ^vignettes$
 ^\.claude$
 ^index\.qmd$
+^doc$

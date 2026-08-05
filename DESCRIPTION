@@ -24,6 +24,7 @@ Suggests:
     devtools,
     dplyr,
     DT,
+    httr,
     knitr,
     pkgdown,
     rmarkdown,

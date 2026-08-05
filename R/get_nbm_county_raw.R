@@ -85,7 +85,7 @@ get_nbm_county_raw <- function(geoid_co, frn = "all", release = "2025-06-01", da
     statement <- sprintf("select *
                          from
                            read_parquet(
-                             '%/*/*.parquet')
+                             '%s/*/*.parquet')
                           where  geoid_co = '%s' and frn = '%s' and release = '%s';",
                          local_state_dir, geoid_co, frn, release)
   }

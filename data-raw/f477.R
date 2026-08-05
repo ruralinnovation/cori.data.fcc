@@ -36,11 +36,17 @@ source_files_s3 |> lapply(function(x) {
   print(paste0("Downloading ", x, " from s3://", s3_bucket_name))
 
   file_name <- basename(x)
-  file_path <- paste0(data_dir, "/", source_prefix, "/", file_name)
+  key_prefix <- dirname(x)
+  if (identical(key_prefix, ".")) key_prefix <- ""
+  local_source_dir <- paste0(data_dir, "/", source_prefix)
+  file_path <- paste0(local_source_dir, "/", file_name)
 
-  system(paste0("touch ", file_path))
+  cori.data::get_s3_object(s3_bucket_name, file_name, local_source_dir, key_path = key_prefix)
 
-  cori.data::get_s3_object(s3_bucket_name, x, file_path) # <= `x` includes source_prefix (i.e. "source")
+  stopifnot(
+    "Download did not produce a file" = file.exists(file_path),
+    "Downloaded file is empty" = file.size(file_path) > 0
+  )
 
   print(paste0("Finished downloading ", file_path))
 
@@ -55,8 +61,9 @@ source_files_s3 |> lapply(function(x) {
 
   system(unzip_command)
 
-  file_name <- list.files(release_dir, pattern = ".csv", recursive = FALSE)[1]
-  file_path <- paste0(release_dir, "/", file_name)
+  csv_rel_path <- list.files(release_dir, pattern = ".csv", recursive = TRUE)[1]
+  file_path <- paste0(release_dir, "/", csv_rel_path)
+  file_name <- basename(csv_rel_path)
 
   print(file_path)
 
@@ -197,19 +204,14 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
   duck_dir <- paste0(data_dir, "/duckdb")
   dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
 
-  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = paste0(duck_dir, "/f477.duckdb"))
-  on.exit(DBI::dbDisconnect(con))
+  con <- cori.data::connect_to_s3(
+    s3_bucket_name,
+    require_local = TRUE,
+    dbdir = paste0(duck_dir, "/f477.duckdb")
+  )
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
 
-  duckdb::dbSendQuery(con, "INSTALL httpfs;")
-  duckdb::dbSendQuery(con, "LOAD httpfs;")
   duckdb::dbSendQuery(con, "SET httpfs_client_implementation = 'curl';")
-  duckdb::dbSendQuery(con, "INSTALL aws;")
-  duckdb::dbSendQuery(con, "LOAD aws;")
-  duckdb::dbSendQuery(con, "CREATE OR REPLACE SECRET s3_secret (
-    TYPE S3,
-    PROVIDER CREDENTIAL_CHAIN,
-    CHAIN 'env;config'
-);")
 
   ## I went overkill with that one, it is probably not needed
   DBI::dbExecute(con, "PRAGMA max_temp_directory_size='10GiB'")
@@ -255,8 +257,8 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
           header=true, filename=true
       )
     ) ",
-# "    TO '", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);"
-"    TO 's3://", s3_bucket_name, "/", pq_prefix, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr));" # <= Write parquet directly to S3, but FIRST you must manually delete prior data on S3
+"    TO '", pq_dir, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr), OVERWRITE true);"
+# "    TO 's3://", s3_bucket_name, "/", pq_prefix, "' (FORMAT 'parquet', PARTITION_BY(Date, StateAbbr));" # <= Write parquet directly to S3, but FIRST you must manually delete prior data on S3
   )
 
   cat(copy_stat)
