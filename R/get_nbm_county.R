@@ -70,7 +70,7 @@ get_nbm_county <- function(geoid_co, release = c("latest", "D23", "J24", "D24", 
     print(paste0("Downloading NBM data for ", state_abbr, " to specified dir (or temp_dir)..."))
 
     s3_prefix <- sprintf("nbm_block%s/state_abbr=%s/", release_target, state_abbr)
-    cori.data::sync_s3_to_local(
+    cori.data.s3::sync_s3_to_local(
       bucket = "cori.data.fcc",
       prefix = s3_prefix,
       local_path = local_state_dir

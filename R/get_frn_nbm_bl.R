@@ -37,7 +37,7 @@ get_frn_nbm_bl <- function(frn, release = "latest") {
 
   if (nchar(frn) != 10L) stop("frn should be a 10-digit string")
 
-  con <- cori.data::connect_to_s3("cori.data.fcc")
+  con <- cori.data.s3::connect_to_s3("cori.data.fcc")
   on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
   DBI::dbExecute(con, sprintf("SET temp_directory ='%s';", tempdir()))
   DBI::dbExecute(con, "SET httpfs_client_implementation = 'curl';")

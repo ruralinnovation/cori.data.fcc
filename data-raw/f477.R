@@ -1,6 +1,6 @@
 ## code to prepare `f477` dataset goes here
 library(DBI)
-library(cori.data)
+library(cori.data.s3)
 library(data.table)
 library(dplyr)
 library(duckdb)
@@ -16,7 +16,7 @@ source_prefix <- "source"
 dir.create(paste0(data_dir, "/", source_prefix), recursive = TRUE, showWarnings = FALSE)
 
 source_files_s3 <- (
-  cori.data::list_s3_objects(bucket_name = s3_bucket_name) |>
+  cori.data.s3::list_s3_objects(bucket_name = s3_bucket_name) |>
       dplyr::filter(grepl(source_prefix, `key`)) |>
       # dplyr::filter(grepl('Jun2021', `key`)) |> # <= test filter
       dplyr::filter(grepl(".zip", `key`))
@@ -41,7 +41,7 @@ source_files_s3 |> lapply(function(x) {
   local_source_dir <- paste0(data_dir, "/", source_prefix)
   file_path <- paste0(local_source_dir, "/", file_name)
 
-  cori.data::get_s3_object(s3_bucket_name, file_name, local_source_dir, key_path = key_prefix)
+  cori.data.s3::get_s3_object(s3_bucket_name, file_name, local_source_dir, key_path = key_prefix)
 
   stopifnot(
     "Download did not produce a file" = file.exists(file_path),
@@ -204,7 +204,7 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
   duck_dir <- paste0(data_dir, "/duckdb")
   dir.create(duck_dir, recursive = TRUE, showWarnings = FALSE)
 
-  con <- cori.data::connect_to_s3(
+  con <- cori.data.s3::connect_to_s3(
     s3_bucket_name,
     require_local = TRUE,
     dbdir = paste0(duck_dir, "/f477.duckdb")
@@ -265,7 +265,7 @@ load_into_duckdb <- function (s3_bucket_name, pq_prefix, csv_dir) {
 
   result <- DBI::dbExecute(con, copy_stat)
 
-  # result <- cori.data::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, pq_dir) # <= This would overwrite S3 without first deleting... could be an issue for parquet
+  # result <- cori.data.s3::put_s3_objects_recursive(s3_bucket_name, parquet_prefix, pq_dir) # <= This would overwrite S3 without first deleting... could be an issue for parquet
 
   return(invisible(result))
 }

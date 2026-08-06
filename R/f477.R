@@ -24,7 +24,7 @@ get_f477 <- function(state_abbr, frn = "all") {
 
   state_abbr <- state_abbr_lookup(state_abbr)
 
-  con <- cori.data::connect_to_s3("cori.data.fcc")
+  con <- cori.data.s3::connect_to_s3("cori.data.fcc")
   on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
   DBI::dbExecute(con, sprintf("SET temp_directory ='%s';", tempdir()))
   DBI::dbExecute(con, "SET httpfs_client_implementation = 'curl';")
