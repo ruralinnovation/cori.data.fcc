@@ -23,11 +23,10 @@ get_nbm_county <- function(geoid_co, release = c("latest", "D23", "J24", "D24", 
 
   release <- match.arg(release)
 
-  if (release %in% c("D23", "J24", "D24", "J25", "D25")) {
-    release_target <- paste0("-", release)
-  } else {
-    release_target <- "-D25"
+  if (release == "latest") {
+    release <- latest_fcc_vintage()
   }
+  release_target <- paste0("-", release)
 
   if (nchar(geoid_co) != 5L) stop("geoid_co should be a 5-digit string")
 

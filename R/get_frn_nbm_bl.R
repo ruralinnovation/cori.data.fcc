@@ -25,15 +25,14 @@
 #'  skymesh <- get_frn_nbm_bl("0027136753")
 #'}
 
-get_frn_nbm_bl <- function(frn, release = "latest") {
+get_frn_nbm_bl <- function(frn, release = c("latest", "D23", "J24", "D24", "J25", "D25")) {
 
-  release_target <- ""
+  release <- match.arg(release)
 
-  if (release %in% c("D23", "J24", "D24", "J25", "D25")) {
-    release_target <- paste0("-", release)
-  } else {
-    release_target <- "-D25"
+  if (release == "latest") {
+    release <- latest_fcc_vintage()
   }
+  release_target <- paste0("-", release)
 
   if (nchar(frn) != 10L) stop("frn should be a 10-digit string")
 
