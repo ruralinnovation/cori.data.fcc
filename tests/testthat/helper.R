@@ -7,6 +7,11 @@ skip_if_fcc_down <- function() {
     error = function(e) e
   )
 
-  ok <- !inherits(res, "error") && file.exists(probe_file) && file.size(probe_file) > 0
-  if (!ok) skip("broadbandmap.fcc.gov unreachable")
+  parsed <- if (!inherits(res, "error") && file.exists(probe_file) && file.size(probe_file) > 0) {
+    tryCatch(jsonlite::fromJSON(probe_file), error = function(e) e)
+  } else {
+    simpleError("no content downloaded")
+  }
+
+  if (inherits(parsed, "error")) skip("broadbandmap.fcc.gov unreachable or blocking requests")
 }

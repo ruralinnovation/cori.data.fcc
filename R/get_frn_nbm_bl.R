@@ -25,29 +25,22 @@
 #'  skymesh <- get_frn_nbm_bl("0027136753")
 #'}
 
-get_frn_nbm_bl <- function(frn, release = "latest") {
+get_frn_nbm_bl <- function(frn, release = c("latest", "D23", "J24", "D24", "J25", "D25")) {
 
-  release_target <- ""
+  release <- match.arg(release)
 
-  if (release %in% c("D23", "J24", "D24", "J25", "D25")) {
-    release_target <- paste0("-", release)
-  } else {
-    release_target <- "-D25"
+  if (release == "latest") {
+    release <- latest_fcc_vintage()
   }
+  release_target <- paste0("-", release)
 
   if (nchar(frn) != 10L) stop("frn should be a 10-digit string")
 
-  con <- DBI::dbConnect(duckdb::duckdb())
-  DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
-  DBI::dbExecute(con, "SET s3_region = 'us-east-1';")
-  DBI::dbExecute(con, "SET s3_url_style = 'path';")
+  con <- cori.data.s3::connect_to_s3("cori.data.fcc")
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+  DBI::dbExecute(con, sprintf("SET temp_directory ='%s';", tempdir()))
   DBI::dbExecute(con, "SET httpfs_client_implementation = 'curl';")
   DBI::dbExecute(con, "SET httpfs_connection_caching = true;")
-  DBI::dbExecute(con, "SET http_timeout = 120;")
-
-  DBI::dbExecute(con,
-                 sprintf("SET temp_directory ='%s';", tempdir()))
-  on.exit(DBI::dbDisconnect(con), add = TRUE)
 
   statement <- sprintf(
    paste0("select * 

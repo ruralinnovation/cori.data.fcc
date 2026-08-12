@@ -24,16 +24,10 @@ get_f477 <- function(state_abbr, frn = "all") {
 
   state_abbr <- state_abbr_lookup(state_abbr)
 
-  con <- DBI::dbConnect(duckdb::duckdb())
-  DBI::dbExecute(con, "INSTALL httpfs;LOAD httpfs")
-  DBI::dbExecute(con, "SET s3_region = 'us-east-1';")
-  DBI::dbExecute(con, "SET s3_url_style = 'path';")
+  con <- cori.data.s3::connect_to_s3("cori.data.fcc")
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+  DBI::dbExecute(con, sprintf("SET temp_directory ='%s';", tempdir()))
   DBI::dbExecute(con, "SET httpfs_client_implementation = 'curl';")
-
-
-  DBI::dbExecute(con,
-                 sprintf("SET temp_directory ='%s';", tempdir()))
-  on.exit(DBI::dbDisconnect(con), add = TRUE)
 
   # slippery slopes
   if (frn == "all") {

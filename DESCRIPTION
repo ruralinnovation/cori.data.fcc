@@ -13,14 +13,18 @@ Depends:
 LazyData: true
 Config/testthat/edition: 3
 Imports:
+    cori.data.s3,
     DBI,
     duckdb,
     jsonlite,
     stringi
+Remotes:
+    ruralinnovation/cori.data.s3
 Suggests:
     devtools,
     dplyr,
     DT,
+    httr,
     knitr,
     pkgdown,
     rmarkdown,

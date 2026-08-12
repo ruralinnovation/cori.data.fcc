@@ -4,7 +4,7 @@
 \alias{get_frn_nbm_bl}
 \title{Load part of NBM at Census Block from CORI s3 bucket}
 \usage{
-get_frn_nbm_bl(frn, release = "latest")
+get_frn_nbm_bl(frn, release = c("latest", "D23", "J24", "D24", "J25", "D25"))
 }
 \arguments{
 \item{frn}{a string of 10 numbers matching FCC's FRN}

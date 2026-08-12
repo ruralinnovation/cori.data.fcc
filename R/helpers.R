@@ -1,4 +1,24 @@
 
+# Resolve the current latest NBM release from the _LATEST S3 pointer.
+# Returns a release code string (e.g. "D25").
+latest_fcc_vintage <- function(s3_bucket = "cori.data.fcc") {
+  con <- cori.data.s3::connect_to_s3(s3_bucket)
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+
+  tag <- tryCatch(
+    DBI::dbGetQuery(con, sprintf(
+      "SELECT column0 AS tag FROM read_csv('s3://%s/_LATEST', header = false);",
+      s3_bucket
+    ))$tag,
+    error = function(e) stop(sprintf(
+      "Could not read _LATEST from s3://%s/_LATEST. Has the latest NBM release been published?",
+      s3_bucket
+    ), call. = FALSE)
+  )
+
+  trimws(tag[1])
+}
+
 state_abbr_lookup <- function(state_abbr) {
 
   stopifnot("state_abbr need to be a scalar" = length(state_abbr) == 1)

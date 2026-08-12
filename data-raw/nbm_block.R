@@ -626,6 +626,11 @@ lapply(copy_commands, function(comm) {
   system(comm)
 })
 
+## Publish _LATEST pointer so latest_fcc_vintage() resolves to this release
+latest_file <- tempfile()
+writeLines(nbm_block_release, latest_file)
+system2("aws", c("s3", "cp", latest_file, "s3://cori.data.fcc/_LATEST"))
+
 ## TODO: Manually sync latest release to nbm_block and rel_combo_frn.parquet on S3
 #$ aws s3 sync inst/ext_data/nbm/nbm_block s3://cori.data.fcc/nbm_block
 #$ aws s3 cp inst/ext_data/nbm/rel_combo_frn.parquet s3://cori.data.fcc/rel_combo_frn.parquet
