@@ -1,10 +1,9 @@
 
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-> *Note: DO NOT EDIT `README.md` TO CHANGE THE CONTENT OF THIS README.
-> It is generated from [`README.Rmd`](README.Rmd):* <br />
-> `quarto render README.Rmd --to gfm --output README.md`
+<!--
+  -- *Note: DO NOT EDIT `README.md` TO CHANGE THE CONTENT OF THIS README. It is generated from [`README.Rmd`](README.Rmd):*
+  -- `quarto render README.Rmd --to gfm --output README.md`
+  -->
 
 # cori.data.fcc
 
