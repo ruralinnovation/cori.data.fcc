@@ -66,11 +66,13 @@
 <p>The goal of <code>cori.data.fcc</code> is to facilitate the discovery, analysis, and use of FCC public data releases.</p>
 <p>The package provides access to data from the following sources:</p>
 <ul>
-<li>National Broadband Map <a href="https://broadbandmap.fcc.gov/home" class="external-link">(NBM)</a> data<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;This data describes what internet services are available to individual locations across the country, along with new maps of mobile coverage, as reported by Internet Service Providers (ISPs). It is part of the FCC’s ongoing &lt;a href="https://broadbandmap.fcc.gov/data-download/nationwide-data" class="external-link"&gt;Broadband Data Collection&lt;/a&gt;).&lt;/p&gt;'><sup>1</sup></a>
+<li>
+<a href="https://broadbandmap.fcc.gov/home" class="external-link">National Broadband Map (NBM)</a> data<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;This data describes what internet services are available to individual locations across the country, along with new maps of mobile coverage, as reported by Internet Service Providers (ISPs). It is part of the FCC’s ongoing &lt;a href="https://broadbandmap.fcc.gov/data-download/nationwide-data" class="external-link"&gt;Broadband Data Collection&lt;/a&gt;).&lt;/p&gt;'><sup>1</sup></a>
 </li>
 <li>
 <a href="https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477" class="external-link">Form 477</a> data</li>
 </ul>
+<p>See <a href="https://ruralinnovation.github.io/blog/posts/12_fcc-data/" class="external-link"><strong>Democratizing analytics on FCC’s (big) data</strong></a> for more info about the different ways we are using this data.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -595,101 +597,7 @@
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section level2">
-<h2 id="incorporating-the-bdc-public-data-api">Incorporating the BDC Public Data API<a class="anchor" aria-label="anchor" href="#incorporating-the-bdc-public-data-api"></a>
-</h2>
-<p>The FCC’s National Broadband Map exposes a public REST API (documented at <a href="https://us-fcc.app.box.com/v/bdc-public-data-api-swagger" class="external-link uri">https://us-fcc.app.box.com/v/bdc-public-data-api-swagger</a>) that offers a more structured alternative to the bulk download workflow currently implemented in <code>data-raw/</code>. Three endpoints are directly relevant to the ingestion pipeline.</p>
-<p><code>GET /api/public/map/listAsOfDates</code> returns every available release date for both availability and challenge data types. This is a programmatic replacement for <code><a href="reference/get_nbm_release.html">get_nbm_release()</a></code>, which currently scrapes a separate filing endpoint.</p>
-<p><code>GET /api/public/map/downloads/listAvailabilityData/{as_of_date}</code> returns a full manifest for a given release — including a stable numeric <code>file_id</code>, <code>file_name</code>, <code>record_count</code>, <code>state_fips</code>, <code>provider_id</code>, and category metadata for every downloadable file. This replaces <code><a href="reference/get_nbm_available.html">get_nbm_available()</a></code> and, crucially, provides the information currently reconstructed by hand from inconsistent FCC filename patterns (the 100-line normalization block in <code>data-raw/nbm_raw.R</code> that repairs <code>December20ec_</code>, <code>June20un_</code>, and abbreviated date codes like <code>D22</code>/<code>J23</code>).</p>
-<p><code>GET /api/public/map/downloads/downloadFile/availability/{file_id}/1</code> downloads a file by its stable numeric ID rather than by a constructed URL. Combined with the manifest’s <code>as_of_date</code> field, the release date embedded in the DuckDB <code>strptime(split_part(filename, '_', 7), '%B%Y')</code> expression could simply be passed in directly, eliminating all filename-based date parsing.</p>
-<p>The manifest’s <code>record_count</code> field also enables a more meaningful post-download validation than the current file-presence check: row counts loaded into DuckDB can be compared against the API’s declared counts before committing a partition. Because the manifest is date-scoped, comparing it against already-ingested parquet partitions makes incremental ingestion (downloading only new releases) straightforward to implement.</p>
-<p>All API endpoints require a <code>username</code> and <code>hash_value</code> request header. The token is generated once via the NBM web interface at <a href="https://broadbandmap.fcc.gov/login" class="external-link uri">https://broadbandmap.fcc.gov/login</a> under Manage API Access, and the recommended approach for storing it in R is <code>keyring</code>. The <code>fcc_provider</code> table (currently fetched from a hardcoded Box URL in <code>data-raw/fcc_provider.R</code>) is not exposed through the BDC API and would remain unchanged.</p>
-</div>
-<div class="section level2">
-<h2 id="inspiration">Inspiration<a class="anchor" aria-label="anchor" href="#inspiration"></a>
-</h2>
-<p>This package was inspired by <a href="https://github.com/bbcommons/bfm-explorer" class="external-link uri">https://github.com/bbcommons/bfm-explorer</a></p>
-</div>
-<div class="section level2">
-<h2 id="duckdb-httpfs-configuration--changelog-and-notes">DuckDB httpfs Configuration — Changelog and Notes<a class="anchor" aria-label="anchor" href="#duckdb-httpfs-configuration--changelog-and-notes"></a>
-</h2>
-<div class="section level3">
-<h3 id="background-ssl-error-with-dot-named-s3-buckets">Background: SSL error with dot-named S3 buckets<a class="anchor" aria-label="anchor" href="#background-ssl-error-with-dot-named-s3-buckets"></a>
-</h3>
-<p>In late 2025, the <code>duckdb</code> R package began producing SSL certificate errors when reading parquet files from S3 buckets whose names contain dots (e.g., <code>cori.data.bds</code>). The root cause is a hostname mismatch: AWS’s virtual-hosted URL style turns <code>cori.data.bds</code> into the subdomain <code>cori.data.bds.s3.us-east-1.amazonaws.com</code>, which has too many labels for AWS’s wildcard TLS certificate (<code>*.s3.us-east-1.amazonaws.com</code> covers only one subdomain level). The error surfaced as:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>SSL peer certificate or SSH remote key was not OK error <span class="cf">for</span> HTTP GET to</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="st">'https://cori.data.bds.s3.us-east-1.amazonaws.com/...'</span></span></code></pre></div>
-<p>The fix is one DuckDB setting that switches URL construction from virtual-hosted style to path style, routing requests as <code>https://s3.us-east-1.amazonaws.com/&lt;bucket&gt;/...</code> instead:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SET s3_url_style = 'path';"</span><span class="op">)</span></span></code></pre></div>
-<p>Although <code>cori.data.fcc</code> (no dots in the bucket name) was not directly affected by this SSL error, the same setting was applied across all functions in this package for consistency with the rest of the coriverse.</p>
-</div>
-<div class="section level3">
-<h3 id="background-http-timeout-failures-in-duckdb-144">Background: HTTP timeout failures in DuckDB 1.4.4+<a class="anchor" aria-label="anchor" href="#background-http-timeout-failures-in-duckdb-144"></a>
-</h3>
-<p>After applying the SSL fix, a new class of errors appeared in the test suite for functions that query S3 directly via DuckDB’s httpfs extension (primarily <code>get_frn_nbm_bl</code>, which scans all state-level parquet partitions to find rows matching a given FRN):</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>IO Error<span class="sc">:</span> Timeout was reached error <span class="cf">for</span> HTTP GET to</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="st">'https://s3.us-east-1.amazonaws.com/cori.data.fcc/nbm_block-J24/state_abbr=AR/data_0.parquet'</span></span></code></pre></div>
-<p>The <code>http_timeout</code> setting defaults to 30 seconds and applies per HTTP request, not per query. Reading a single large state parquet file from S3 requires multiple HTTP range requests (footer metadata, then individual row groups), and with DuckDB 1.4.4 the behaviour of the built-in <code>httplib</code> HTTP client changed in ways that increased per-request latency — particularly documented in duckdb/duckdb-java#548 (<a href="https://github.com/duckdb/duckdb-java/issues/548" class="external-link uri">https://github.com/duckdb/duckdb-java/issues/548</a>). Additionally, <code>httpfs_connection_caching</code> defaults to <code>false</code>, meaning every range request opens a fresh TCP + TLS connection to <code>s3.us-east-1.amazonaws.com</code> rather than reusing an already-negotiated session.</p>
-</div>
-<div class="section level3">
-<h3 id="changes-applied-to-all-httpfs-connections-in-this-package">Changes applied to all httpfs connections in this package<a class="anchor" aria-label="anchor" href="#changes-applied-to-all-httpfs-connections-in-this-package"></a>
-</h3>
-<p>Three settings are now explicitly configured on every DuckDB connection that uses the httpfs extension:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SET httpfs_client_implementation = 'curl';"</span><span class="op">)</span></span>
-<span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SET http_timeout = 120;"</span><span class="op">)</span></span>
-<span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SET httpfs_connection_caching = true;"</span><span class="op">)</span></span></code></pre></div>
-<p><code>httpfs_client_implementation = 'curl'</code> switches DuckDB from its built-in <code>httplib</code> implementation to libcurl, which has a different and in this case more reliable code path for S3 range requests. The system <code>curl</code> binary was already being used successfully elsewhere in this package (in <code>download_file</code>) so the underlying library is known to work in this network environment.</p>
-<p><code>http_timeout = 120</code> gives each individual HTTP range request up to 120 seconds before timing out, up from the 30-second default. This is a backstop for genuinely slow responses rather than a fix on its own.</p>
-<p><code>httpfs_connection_caching = true</code> enables connection pooling, so sequential range requests to the same S3 host reuse an already-established TLS session. Without this, each of the 100+ HTTP range requests across a full state partition scan incurs a full TCP handshake and TLS negotiation, adding hundreds of milliseconds of overhead per request.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="handling-broadbandmapfccgov-outages-in-tests">Handling <code>broadbandmap.fcc.gov</code> Outages in Tests<a class="anchor" aria-label="anchor" href="#handling-broadbandmapfccgov-outages-in-tests"></a>
-</h2>
-<p><code><a href="reference/get_nbm_release.html">get_nbm_release()</a></code> and <code><a href="reference/get_nbm_available.html">get_nbm_available()</a></code> both call live endpoints on <code>broadbandmap.fcc.gov</code>. When that host is unreachable — including during the Akamai-fronted outage observed in August 2026 — the functions fail with a curl exit code 92 (HTTP/2 stream reset) or simply hang on HTTP/1.1.</p>
-<div class="section level3">
-<h3 id="same-host-same-edge--both-old-and-bdc-api-paths-are-affected">Same host, same edge — both old and BDC API paths are affected<a class="anchor" aria-label="anchor" href="#same-host-same-edge--both-old-and-bdc-api-paths-are-affected"></a>
-</h3>
-<p>An important constraint: both the legacy map API paths and the BDC Public Data API paths are served from the same host behind the same Akamai CDN edge:</p>
-<ul>
-<li>Legacy: <code>https://broadbandmap.fcc.gov/nbm/map/api/published/filing</code>
-</li>
-<li>BDC API: <code>https://broadbandmap.fcc.gov/api/public/map/listAsOfDates</code>
-</li>
-</ul>
-<p>When the Akamai edge cannot reach the FCC origin, it resets HTTP/2 streams with <code>INTERNAL_ERROR</code> on all paths simultaneously. Switching from the legacy endpoint to the BDC API endpoint does not mitigate a host-level outage because both resolve to the same Akamai IP, go through the same TLS termination, and fail identically when the backend is unavailable. (TCP connects, TLS succeeds, ALPN negotiates <code>h2</code> — the failure happens at the HTTP layer when the edge tries and fails to reach the FCC origin.)</p>
-</div>
-<div class="section level3">
-<h3 id="recommended-fix-skip-tests-when-the-host-is-unreachable">Recommended fix: skip tests when the host is unreachable<a class="anchor" aria-label="anchor" href="#recommended-fix-skip-tests-when-the-host-is-unreachable"></a>
-</h3>
-<p>The tests already use <code>skip_on_cran()</code> and <code>skip_on_ci()</code>, but have no guard against external service outages. A lightweight helper resolves this:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">skip_if_fcc_down</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">ok</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/system2.html" class="external-link">system2</a></span><span class="op">(</span><span class="st">"curl"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--silent"</span>, <span class="st">"--max-time"</span>, <span class="st">"5"</span>, <span class="st">"--head"</span>,</span>
-<span>                      <span class="st">"https://broadbandmap.fcc.gov/"</span><span class="op">)</span>,</span>
-<span>            stdout <span class="op">=</span> <span class="cn">FALSE</span>, stderr <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span></span>
-<span>  <span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">ok</span><span class="op">)</span> <span class="fu">skip</span><span class="op">(</span><span class="st">"broadbandmap.fcc.gov unreachable"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>Each affected test adds one line:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">test_that</span><span class="op">(</span><span class="st">"get_nbm_release return a data frame"</span>, <span class="op">{</span></span>
-<span>  <span class="fu">skip_on_cran</span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="fu">skip_on_ci</span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="fu">skip_if_fcc_down</span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="fu">expect_equal</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="fu"><a href="reference/get_nbm_release.html">get_nbm_release</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<p>This converts a hard <code>FAIL</code> into a <code>SKIP</code> whenever the service is down — the correct outcome for a test whose failure reflects an external dependency, not a code defect. The BDC API migration (replacing the legacy endpoints with <code>listAsOfDates</code> and <code>listAvailabilityData</code>) remains worthwhile for long-term stability, but does not eliminate the need for this guard, since both endpoint families share the same host.</p>
-</div>
-<div class="section level3">
-<h3 id="why-queries-are-still-slower-than-they-were-in-mid-2025">Why queries are still slower than they were in mid-2025<a class="anchor" aria-label="anchor" href="#why-queries-are-still-slower-than-they-were-in-mid-2025"></a>
-</h3>
-<p>Even with the above settings applied, S3 queries via httpfs are noticeably slower than they were roughly six months prior. There are several likely contributing factors. DuckDB’s httpfs extension has been updated repeatedly across the v1.4 and v1.5 release series (bumped in v1.5.2 and v1.5.3 release notes), and the default HTTP client implementation has changed in ways that affect connection setup and range request behaviour. The BDC data releases themselves have grown — D25 parquet files are larger than J24 files as FCC adds more reported locations each cycle — which directly increases the amount of data DuckDB must read per state partition. Finally, <code>get_frn_nbm_bl</code> performs a full scan across all 57 state and territory partitions (<code>s3://cori.data.fcc/nbm_block-{release}/*/*.parquet</code>) because FRN does not map to a partition key, so every new row of data added to any partition adds incremental cost to every call. The local-cache pattern used by <code>get_nbm_bl</code> and <code>get_nbm_county</code> (syncing only the relevant state via <code>aws s3 sync</code> before querying from disk) avoids this problem entirely and is the recommended approach for repeated or latency-sensitive queries.</p>
+<p><a href="DEVELOPMENT.MD">Development notes</a>.</p>
 </div>
 </div>
 </div>
