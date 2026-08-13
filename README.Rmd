@@ -27,10 +27,12 @@ The goal of `cori.data.fcc` is to facilitate the discovery, analysis, and use of
 
 The package provides access to data from the following sources:
 
-  -  National Broadband Map [(NBM)](https://broadbandmap.fcc.gov/home) data[^bdc]
+  -  [National Broadband Map (NBM)](https://broadbandmap.fcc.gov/home) data[^bdc]
   -  [Form 477](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) data
 
 [^bdc]: This data describes what internet services are available to individual locations across the country, along with new maps of mobile coverage, as reported by Internet Service Providers (ISPs). It is part of the FCC’s ongoing [Broadband Data Collection](https://broadbandmap.fcc.gov/data-download/nationwide-data)).
+
+See [**Democratizing analytics on FCC’s (big) data**](https://ruralinnovation.github.io/blog/posts/12_fcc-data/) for more info about the different ways we are using this data.
 
 ## Installation
 

@@ -31,3 +31,4 @@
 ^\.claude$
 ^index\.qmd$
 ^doc$
+^DEVELOPMENT\.MD$

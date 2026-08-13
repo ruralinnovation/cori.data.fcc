@@ -1,3 +1,13 @@
+# cori.data.fcc 1.0.0
+
+## Major changes
+
+* Updated raw data with December 2025 FCC release
+
+* S3 operations now use cori.data.s3 package
+
+* Added local caching for `get_nbm_county()` and `get_nbm_block()`
+
 # cori.data.fcc 0.2.1
 
 ## Major changes

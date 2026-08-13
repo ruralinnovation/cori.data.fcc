@@ -1,8 +1,21 @@
 Package: cori.data.fcc
 Title: Process FCC data 
 Version: 1.0.0
-Authors@R: 
-    person(given="Olivier", family="Leroy", email="olivier.leroy@ruralinnovation.us", role = c("aut", "cre"))
+Authors@R: c(
+    person(
+      "Olivier", "Leroy",
+      role = c("aut")
+    ),
+    person(
+      "Camden", "Blatchly",
+      role = c("ctb")
+    ),
+    person(
+      "John", "Hall",
+      email = "john.hall@ruralinnovation.us",
+      role = c("aut", "cre")
+    )
+  )
 Description: Functions to get and process FCC data.
 License: MIT + file LICENSE
 Encoding: UTF-8
