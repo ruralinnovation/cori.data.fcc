@@ -16,15 +16,15 @@ release
 ```
 
     ##   filing_type_id filing_type    filing_subtype
-    ## 1         100058    Biannual December 31, 2025
+    ## 1         100018    Biannual December 31, 2024
     ## 2         100055    Biannual     June 30, 2025
-    ## 3         100015    Biannual     June 30, 2024
-    ## 4         100018    Biannual December 31, 2024
+    ## 3         100058    Biannual December 31, 2025
+    ## 4         100015    Biannual     June 30, 2024
     ##                           process_uuid enable_bfm_link
-    ## 1 8c672e4b-9442-44ee-8da7-3f352fc8d946            TRUE
-    ## 2 dff14441-3733-431c-9aa5-45f3fc6f3a8f            TRUE
-    ## 3 1d2b790d-11bc-42b6-b9e0-db7fae757006            TRUE
-    ## 4 89fb08b0-999e-4aa2-b9d1-da66de338795            TRUE
+    ## 1 057df9ac-5625-4e30-900f-3df00757d9fd            TRUE
+    ## 2 7b3bfe22-ec03-4686-ace4-60def8208111            TRUE
+    ## 3 16495d87-e2f6-49a8-96db-e50394a743e2            TRUE
+    ## 4 cc56c227-49dd-4b9a-ad74-8da5f3653787            TRUE
     ##   enable_challenge_download
     ## 1                      TRUE
     ## 2                      TRUE

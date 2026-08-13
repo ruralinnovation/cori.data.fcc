@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright © 2025 Center On Rural Innovation
+Copyright © 2026 Center On Rural Innovation
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the

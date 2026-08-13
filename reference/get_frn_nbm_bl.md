@@ -6,7 +6,7 @@ block (2020 vintage).
 ## Usage
 
 ``` r
-get_frn_nbm_bl(frn, release = "latest")
+get_frn_nbm_bl(frn, release = c("latest", "D23", "J24", "D24", "J25", "D25"))
 ```
 
 ## Arguments

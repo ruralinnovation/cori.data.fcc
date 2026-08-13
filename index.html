@@ -76,8 +76,8 @@
 </h2>
 <p>You can install the development version of <code>cori.data.fcc</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ruralinnovation/cori.data.fcc"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ruralinnovation/cori.data.fcc"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -96,21 +96,86 @@
 <span><span class="co">#&gt; [1] "Downloading raw NBM data for NC to specified dir (or temp_dir)..."</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">guilford_cty</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 1,427,284</span></span>
-<span><span class="co">#&gt; Columns: 14</span></span>
-<span><span class="co">#&gt; $ frn                           &lt;chr&gt; "0001857952", "0001857952", "0001857952"…</span></span>
-<span><span class="co">#&gt; $ provider_id                   &lt;chr&gt; "130077", "130077", "130077", "130077", …</span></span>
-<span><span class="co">#&gt; $ brand_name                    &lt;chr&gt; "AT&amp;T", "AT&amp;T", "AT&amp;T", "AT&amp;T", "AT&amp;T", …</span></span>
-<span><span class="co">#&gt; $ location_id                   &lt;chr&gt; "1344957580", "1344971629", "1344978794"…</span></span>
-<span><span class="co">#&gt; $ max_advertised_download_speed &lt;int&gt; 75, 10, 0, 10, 10, 10, 0, 0, 0, 0, 0, 10…</span></span>
-<span><span class="co">#&gt; $ max_advertised_upload_speed   &lt;int&gt; 20, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, …</span></span>
-<span><span class="co">#&gt; $ low_latency                   &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE…</span></span>
-<span><span class="co">#&gt; $ business_residential_code     &lt;chr&gt; "X", "X", "X", "X", "X", "X", "X", "X", …</span></span>
-<span><span class="co">#&gt; $ geoid_bl                      &lt;chr&gt; "370810160062003", "370810160051032", "3…</span></span>
-<span><span class="co">#&gt; $ geoid_co                      &lt;chr&gt; "37081", "37081", "37081", "37081", "370…</span></span>
-<span><span class="co">#&gt; $ file_time_stamp               &lt;date&gt; 2026-04-29, 2026-04-29, 2026-04-29, 202…</span></span>
-<span><span class="co">#&gt; $ release                       &lt;date&gt; 2025-06-01, 2025-06-01, 2025-06-01, 202…</span></span>
-<span><span class="co">#&gt; $ state_usps                    &lt;chr&gt; "NC", "NC", "NC", "NC", "NC", "NC", "NC"…</span></span>
-<span><span class="co">#&gt; $ technology                    &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, …</span></span></code></pre></div>
+<span><span class="co">#&gt; Columns: 14</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>frn</code></td>
+<td>chr</td>
+<td>“0001857952”</td>
+</tr>
+<tr>
+<td><code>provider_id</code></td>
+<td>chr</td>
+<td>“130077”</td>
+</tr>
+<tr>
+<td><code>brand_name</code></td>
+<td>chr</td>
+<td>“AT&amp;T”</td>
+</tr>
+<tr>
+<td><code>location_id</code></td>
+<td>chr</td>
+<td>“1344957580”</td>
+</tr>
+<tr>
+<td><code>max_advertised_download_speed</code></td>
+<td>int</td>
+<td>75</td>
+</tr>
+<tr>
+<td><code>max_advertised_upload_speed</code></td>
+<td>int</td>
+<td>20</td>
+</tr>
+<tr>
+<td><code>low_latency</code></td>
+<td>lgl</td>
+<td>TRUE</td>
+</tr>
+<tr>
+<td><code>business_residential_code</code></td>
+<td>chr</td>
+<td>“X”</td>
+</tr>
+<tr>
+<td><code>geoid_bl</code></td>
+<td>chr</td>
+<td>“370810160062003”</td>
+</tr>
+<tr>
+<td><code>geoid_co</code></td>
+<td>chr</td>
+<td>“37081”</td>
+</tr>
+<tr>
+<td><code>file_time_stamp</code></td>
+<td>date</td>
+<td>2026-04-29</td>
+</tr>
+<tr>
+<td><code>release</code></td>
+<td>date</td>
+<td>2025-06-01</td>
+</tr>
+<tr>
+<td><code>state_usps</code></td>
+<td>chr</td>
+<td>“NC”</td>
+</tr>
+<tr>
+<td><code>technology</code></td>
+<td>dbl</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
 <ul>
 <li>Access a CORI-opinionated, Census-block level version of the <strong>latest NBM release</strong>:</li>
 </ul>
@@ -120,103 +185,416 @@
 <span><span class="co">#&gt; [1] "Downloading NBM data for TN to specified dir (or temp_dir)..."</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">nbm_bl</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 2,146</span></span>
-<span><span class="co">#&gt; Columns: 21</span></span>
-<span><span class="co">#&gt; $ geoid_bl                                &lt;chr&gt; "470519601001000", "4705196010…</span></span>
-<span><span class="co">#&gt; $ geoid_st                                &lt;chr&gt; "47", "47", "47", "47", "47", …</span></span>
-<span><span class="co">#&gt; $ geoid_co                                &lt;chr&gt; "47051", "47051", "47051", "47…</span></span>
-<span><span class="co">#&gt; $ cnt_total_locations                     &lt;int&gt; NA, NA, NA, NA, 5, NA, 8, 3, 1…</span></span>
-<span><span class="co">#&gt; $ cnt_bead_locations                      &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 2, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_copper_locations                    &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_cable_locations                     &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_fiber_locations                     &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_other_locations                     &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_unlicensed_fixed_wireless_locations &lt;int&gt; NA, NA, NA, NA, 4, NA, 8, 3, 1…</span></span>
-<span><span class="co">#&gt; $ cnt_licensed_fixed_wireless_locations   &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 2, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_LBR_fixed_wireless_locations        &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_terrestrial_locations               &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 2, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_25_3                                &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 2, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_100_20                              &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_100_100                             &lt;int&gt; NA, NA, NA, NA, 0, NA, 0, 0, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_distcint_frn                        &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, 1,…</span></span>
-<span><span class="co">#&gt; $ array_frn                               &lt;list&gt; &lt;NULL&gt;, &lt;NULL&gt;, &lt;NULL&gt;, &lt;NULL…</span></span>
-<span><span class="co">#&gt; $ combo_frn                               &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, 1.…</span></span>
-<span><span class="co">#&gt; $ release                                 &lt;date&gt; 2025-12-01, 2025-12-01, 2025-…</span></span>
-<span><span class="co">#&gt; $ state_abbr                              &lt;chr&gt; "TN", "TN", "TN", "TN", "TN", …</span></span>
-<span></span>
-<span><span class="co"># get census block covered by an ISP identified by their FRN</span></span>
+<span><span class="co">#&gt; Columns: 21</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>geoid_bl</code></td>
+<td>chr</td>
+<td>“470519601001000”</td>
+</tr>
+<tr>
+<td><code>geoid_st</code></td>
+<td>chr</td>
+<td>“47”</td>
+</tr>
+<tr>
+<td><code>geoid_co</code></td>
+<td>chr</td>
+<td>“47051”</td>
+</tr>
+<tr>
+<td><code>cnt_total_locations</code></td>
+<td>int</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>cnt_bead_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_copper_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_cable_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_fiber_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_other_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_unlicensed_fixed_wireless_locations</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>cnt_licensed_fixed_wireless_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_LBR_fixed_wireless_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_terrestrial_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_25_3</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_100_20</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_100_100</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_distcint_frn</code></td>
+<td>int</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>array_frn</code></td>
+<td>list</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td><code>combo_frn</code></td>
+<td>dbl</td>
+<td>1.xxx</td>
+</tr>
+<tr>
+<td><code>release</code></td>
+<td>date</td>
+<td>2025-12-01</td>
+</tr>
+<tr>
+<td><code>state_abbr</code></td>
+<td>chr</td>
+<td>“TN”</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># get census block covered by an ISP identified by their FRN</span></span>
 <span><span class="va">skymesh</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_frn_nbm_bl.html">get_frn_nbm_bl</a></span><span class="op">(</span><span class="st">"0027136753"</span><span class="op">)</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">skymesh</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 12</span></span>
-<span><span class="co">#&gt; Columns: 21</span></span>
-<span><span class="co">#&gt; $ geoid_bl                                &lt;chr&gt; "391093401001009", "3910934500…</span></span>
-<span><span class="co">#&gt; $ geoid_st                                &lt;chr&gt; "39", "39", "39", "39", "39", …</span></span>
-<span><span class="co">#&gt; $ geoid_co                                &lt;chr&gt; "39109", "39109", "39109", "39…</span></span>
-<span><span class="co">#&gt; $ cnt_total_locations                     &lt;int&gt; 4, 22, 14, 58, 12, 15, 19, 5, …</span></span>
-<span><span class="co">#&gt; $ cnt_bead_locations                      &lt;int&gt; 4, 22, 14, 58, 12, 15, 19, 5, …</span></span>
-<span><span class="co">#&gt; $ cnt_copper_locations                    &lt;int&gt; 3, 2, 0, 9, 11, 14, 3, 1, 2, 0…</span></span>
-<span><span class="co">#&gt; $ cnt_cable_locations                     &lt;int&gt; 4, 20, 14, 55, 9, 11, 0, 0, 13…</span></span>
-<span><span class="co">#&gt; $ cnt_fiber_locations                     &lt;int&gt; 2, 22, 14, 55, 12, 15, 6, 3, 1…</span></span>
-<span><span class="co">#&gt; $ cnt_other_locations                     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …</span></span>
-<span><span class="co">#&gt; $ cnt_unlicensed_fixed_wireless_locations &lt;int&gt; 4, 21, 0, 1, 0, 0, 11, 1, 16, …</span></span>
-<span><span class="co">#&gt; $ cnt_licensed_fixed_wireless_locations   &lt;int&gt; 3, 22, 13, 57, 12, 15, 18, 5, …</span></span>
-<span><span class="co">#&gt; $ cnt_LBR_fixed_wireless_locations        &lt;int&gt; 0, 0, 1, 36, 8, 7, 15, 0, 16, …</span></span>
-<span><span class="co">#&gt; $ cnt_terrestrial_locations               &lt;int&gt; 4, 22, 14, 58, 12, 15, 19, 5, …</span></span>
-<span><span class="co">#&gt; $ cnt_25_3                                &lt;int&gt; 4, 22, 14, 58, 12, 15, 19, 5, …</span></span>
-<span><span class="co">#&gt; $ cnt_100_20                              &lt;int&gt; 4, 22, 14, 58, 12, 15, 17, 5, …</span></span>
-<span><span class="co">#&gt; $ cnt_100_100                             &lt;int&gt; 3, 22, 14, 56, 12, 15, 6, 3, 1…</span></span>
-<span><span class="co">#&gt; $ cnt_distcint_frn                        &lt;int&gt; 4, 7, 7, 7, 8, 8, 7, 6, 9, 6, …</span></span>
-<span><span class="co">#&gt; $ array_frn                               &lt;list&gt; &lt;"0018506568", "0025646373", …</span></span>
-<span><span class="co">#&gt; $ combo_frn                               &lt;dbl&gt; 8.639537e+18, 1.599437e+19, 7.…</span></span>
-<span><span class="co">#&gt; $ release                                 &lt;date&gt; 2025-12-01, 2025-12-01, 2025-…</span></span>
-<span><span class="co">#&gt; $ state_abbr                              &lt;chr&gt; "OH", "OH", "OH", "OH", "OH", …</span></span></code></pre></div>
+<span><span class="co">#&gt; Columns: 21</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>geoid_bl</code></td>
+<td>chr</td>
+<td>“391093401001009”</td>
+</tr>
+<tr>
+<td><code>geoid_st</code></td>
+<td>chr</td>
+<td>“39”</td>
+</tr>
+<tr>
+<td><code>geoid_co</code></td>
+<td>chr</td>
+<td>“39109”</td>
+</tr>
+<tr>
+<td><code>cnt_total_locations</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>cnt_bead_locations</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>cnt_copper_locations</code></td>
+<td>int</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>cnt_cable_locations</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>cnt_fiber_locations</code></td>
+<td>int</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>cnt_other_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_unlicensed_fixed_wireless_locations</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>cnt_licensed_fixed_wireless_locations</code></td>
+<td>int</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>cnt_LBR_fixed_wireless_locations</code></td>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cnt_terrestrial_locations</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>cnt_25_3</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>cnt_100_20</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>cnt_100_100</code></td>
+<td>int</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>cnt_distcint_frn</code></td>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>array_frn</code></td>
+<td>list</td>
+<td>&lt;“0018506568”, “0025646373”, …&gt;</td>
+</tr>
+<tr>
+<td><code>combo_frn</code></td>
+<td>dbl</td>
+<td>8.639537e+18</td>
+</tr>
+<tr>
+<td><code>release</code></td>
+<td>date</td>
+<td>2025-12-01</td>
+</tr>
+<tr>
+<td><code>state_abbr</code></td>
+<td>chr</td>
+<td>“OH”</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
 <h3 id="form-477">Form 477<a class="anchor" aria-label="anchor" href="#form-477"></a>
 </h3>
 <p>Access state data for multiple years:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f477_vt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_f477.html">get_f477</a></span><span class="op">(</span><span class="st">"VT"</span><span class="op">)</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">f477_vt</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 2,753,817</span></span>
-<span><span class="co">#&gt; Columns: 15</span></span>
-<span><span class="co">#&gt; $ Provider_Id        &lt;chr&gt; "7095", "7095", "7095", "7095", "7095", "7095", "70…</span></span>
-<span><span class="co">#&gt; $ FRN                &lt;chr&gt; "0017631540", "0017631540", "0017631540", "00176315…</span></span>
-<span><span class="co">#&gt; $ ProviderName       &lt;chr&gt; "Kingdom Connection", "Kingdom Connection", "Kingdo…</span></span>
-<span><span class="co">#&gt; $ DBAName            &lt;chr&gt; "Kingdom Connection", "Kingdom Connection", "Kingdo…</span></span>
-<span><span class="co">#&gt; $ HoldingCompanyName &lt;chr&gt; "Merrill Information Systems", "Merrill Information…</span></span>
-<span><span class="co">#&gt; $ HocoNum            &lt;chr&gt; "130808", "130808", "130808", "130808", "130808", "…</span></span>
-<span><span class="co">#&gt; $ HocoFinal          &lt;chr&gt; "Merrill Information Systems", "Merrill Information…</span></span>
-<span><span class="co">#&gt; $ BlockCode          &lt;chr&gt; "500059570001002", "500059570001003", "500059570001…</span></span>
-<span><span class="co">#&gt; $ TechCode           &lt;chr&gt; "70", "70", "70", "70", "70", "70", "70", "70", "70…</span></span>
-<span><span class="co">#&gt; $ Consumer           &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…</span></span>
-<span><span class="co">#&gt; $ MaxAdDown          &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, …</span></span>
-<span><span class="co">#&gt; $ MaxAdUp            &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, …</span></span>
-<span><span class="co">#&gt; $ Business           &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…</span></span>
-<span><span class="co">#&gt; $ Date               &lt;date&gt; 2014-12-01, 2014-12-01, 2014-12-01, 2014-12-01, 20…</span></span>
-<span><span class="co">#&gt; $ StateAbbr          &lt;chr&gt; "VT", "VT", "VT", "VT", "VT", "VT", "VT", "VT", "VT…</span></span></code></pre></div>
+<span><span class="co">#&gt; Columns: 15</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>Provider_Id</code></td>
+<td>chr</td>
+<td>“7095”</td>
+</tr>
+<tr>
+<td><code>FRN</code></td>
+<td>chr</td>
+<td>“0017631540”</td>
+</tr>
+<tr>
+<td><code>ProviderName</code></td>
+<td>chr</td>
+<td>“Kingdom Connection”</td>
+</tr>
+<tr>
+<td><code>DBAName</code></td>
+<td>chr</td>
+<td>“Kingdom Connection”</td>
+</tr>
+<tr>
+<td><code>HoldingCompanyName</code></td>
+<td>chr</td>
+<td>“Merrill Information Systems”</td>
+</tr>
+<tr>
+<td><code>HocoNum</code></td>
+<td>chr</td>
+<td>“130808”</td>
+</tr>
+<tr>
+<td><code>HocoFinal</code></td>
+<td>chr</td>
+<td>“Merrill Information Systems”</td>
+</tr>
+<tr>
+<td><code>BlockCode</code></td>
+<td>chr</td>
+<td>“500059570001002”</td>
+</tr>
+<tr>
+<td><code>TechCode</code></td>
+<td>chr</td>
+<td>“70”</td>
+</tr>
+<tr>
+<td><code>Consumer</code></td>
+<td>lgl</td>
+<td>TRUE</td>
+</tr>
+<tr>
+<td><code>MaxAdDown</code></td>
+<td>dbl</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>MaxAdUp</code></td>
+<td>dbl</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>Business</code></td>
+<td>lgl</td>
+<td>TRUE</td>
+</tr>
+<tr>
+<td><code>Date</code></td>
+<td>date</td>
+<td>2014-12-01</td>
+</tr>
+<tr>
+<td><code>StateAbbr</code></td>
+<td>chr</td>
+<td>“VT”</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
 <h3 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a>
 </h3>
 <p>Access the dictionary for each dataset:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="fu"><a href="reference/get_fcc_dictionary.html">get_fcc_dictionary</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 50</span></span>
-<span><span class="co">#&gt; Columns: 5</span></span>
-<span><span class="co">#&gt; $ dataset         &lt;chr&gt; "f477", "f477", "f477", "f477", "f477", "f477", "f477"…</span></span>
-<span><span class="co">#&gt; $ var_name        &lt;chr&gt; "Provider_Id", "FRN", "ProviderName", "DBAName", "Hold…</span></span>
-<span><span class="co">#&gt; $ var_type        &lt;chr&gt; "TEXT", "TEXT", "VARCHAR", "VARCHAR", "VARCHAR", "TEXT…</span></span>
-<span><span class="co">#&gt; $ var_description &lt;chr&gt; "filing number (assigned by FCC)", "FCC registration n…</span></span>
-<span><span class="co">#&gt; $ var_example     &lt;chr&gt; "8026", "0001570936", "Arctic Slope Telephone Associat…</span></span></code></pre></div>
+<span><span class="co">#&gt; Columns: 5</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>dataset</code></td>
+<td>chr</td>
+<td>“f477”</td>
+</tr>
+<tr>
+<td><code>var_name</code></td>
+<td>chr</td>
+<td>“Provider_Id”</td>
+</tr>
+<tr>
+<td><code>var_type</code></td>
+<td>chr</td>
+<td>“TEXT”</td>
+</tr>
+<tr>
+<td><code>var_description</code></td>
+<td>chr</td>
+<td>“filing number (assigned by FCC)”</td>
+</tr>
+<tr>
+<td><code>var_example</code></td>
+<td>chr</td>
+<td>“8026”</td>
+</tr>
+</tbody>
+</table>
 <p>The package also provides a list of Provider IDs and FRNs.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">fcc_provider</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    4456 obs. of  5 variables:</span></span>
-<span><span class="co">#&gt;  $ provider_name : chr  "@Link Services, LLC" "1 Point Communications" "101Netlink" "123.Net, Inc" ...</span></span>
-<span><span class="co">#&gt;  $ affiliation   : chr  "AtLink Services, LLC" "1 Point Communications" "101Netlink" "123.Net, Inc." ...</span></span>
-<span><span class="co">#&gt;  $ operation_type: chr  "Non-ILEC" "Non-ILEC" "Non-ILEC" "Non-ILEC" ...</span></span>
-<span><span class="co">#&gt;  $ frn           : chr  "0016085920" "0021352968" "0018247254" "0008590846" ...</span></span>
-<span><span class="co">#&gt;  $ provider_id   : num  290004 270002 190002 460000 490000 ...</span></span></code></pre></div>
+<span><span class="co">#&gt; 'data.frame':    4456 obs. of  5 variables:</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>provider_name</code></td>
+<td>chr</td>
+<td>“@Link Services, LLC”</td>
+</tr>
+<tr>
+<td><code>affiliation</code></td>
+<td>chr</td>
+<td>“AtLink Services, LLC”</td>
+</tr>
+<tr>
+<td><code>operation_type</code></td>
+<td>chr</td>
+<td>“Non-ILEC”</td>
+</tr>
+<tr>
+<td><code>frn</code></td>
+<td>chr</td>
+<td>“0016085920”</td>
+</tr>
+<tr>
+<td><code>provider_id</code></td>
+<td>num</td>
+<td>290004</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section level2">
@@ -241,10 +619,10 @@
 <h3 id="background-ssl-error-with-dot-named-s3-buckets">Background: SSL error with dot-named S3 buckets<a class="anchor" aria-label="anchor" href="#background-ssl-error-with-dot-named-s3-buckets"></a>
 </h3>
 <p>In late 2025, the <code>duckdb</code> R package began producing SSL certificate errors when reading parquet files from S3 buckets whose names contain dots (e.g., <code>cori.data.bds</code>). The root cause is a hostname mismatch: AWS’s virtual-hosted URL style turns <code>cori.data.bds</code> into the subdomain <code>cori.data.bds.s3.us-east-1.amazonaws.com</code>, which has too many labels for AWS’s wildcard TLS certificate (<code>*.s3.us-east-1.amazonaws.com</code> covers only one subdomain level). The error surfaced as:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>SSL peer certificate or SSH remote key was not OK error <span class="cf">for</span> HTTP GET to</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="st">'https://cori.data.bds.s3.us-east-1.amazonaws.com/...'</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>SSL peer certificate or SSH remote key was not OK error <span class="cf">for</span> HTTP GET to</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="st">'https://cori.data.bds.s3.us-east-1.amazonaws.com/...'</span></span></code></pre></div>
 <p>The fix is one DuckDB setting that switches URL construction from virtual-hosted style to path style, routing requests as <code>https://s3.us-east-1.amazonaws.com/&lt;bucket&gt;/...</code> instead:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SET s3_url_style = 'path';"</span><span class="op">)</span></span></code></pre></div>
 <p>Although <code>cori.data.fcc</code> (no dots in the bucket name) was not directly affected by this SSL error, the same setting was applied across all functions in this package for consistency with the rest of the coriverse.</p>
 </div>
@@ -252,21 +630,61 @@
 <h3 id="background-http-timeout-failures-in-duckdb-144">Background: HTTP timeout failures in DuckDB 1.4.4+<a class="anchor" aria-label="anchor" href="#background-http-timeout-failures-in-duckdb-144"></a>
 </h3>
 <p>After applying the SSL fix, a new class of errors appeared in the test suite for functions that query S3 directly via DuckDB’s httpfs extension (primarily <code>get_frn_nbm_bl</code>, which scans all state-level parquet partitions to find rows matching a given FRN):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>IO Error<span class="sc">:</span> Timeout was reached error <span class="cf">for</span> HTTP GET to</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="st">'https://s3.us-east-1.amazonaws.com/cori.data.fcc/nbm_block-J24/state_abbr=AR/data_0.parquet'</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>IO Error<span class="sc">:</span> Timeout was reached error <span class="cf">for</span> HTTP GET to</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="st">'https://s3.us-east-1.amazonaws.com/cori.data.fcc/nbm_block-J24/state_abbr=AR/data_0.parquet'</span></span></code></pre></div>
 <p>The <code>http_timeout</code> setting defaults to 30 seconds and applies per HTTP request, not per query. Reading a single large state parquet file from S3 requires multiple HTTP range requests (footer metadata, then individual row groups), and with DuckDB 1.4.4 the behaviour of the built-in <code>httplib</code> HTTP client changed in ways that increased per-request latency — particularly documented in duckdb/duckdb-java#548 (<a href="https://github.com/duckdb/duckdb-java/issues/548" class="external-link uri">https://github.com/duckdb/duckdb-java/issues/548</a>). Additionally, <code>httpfs_connection_caching</code> defaults to <code>false</code>, meaning every range request opens a fresh TCP + TLS connection to <code>s3.us-east-1.amazonaws.com</code> rather than reusing an already-negotiated session.</p>
 </div>
 <div class="section level3">
 <h3 id="changes-applied-to-all-httpfs-connections-in-this-package">Changes applied to all httpfs connections in this package<a class="anchor" aria-label="anchor" href="#changes-applied-to-all-httpfs-connections-in-this-package"></a>
 </h3>
 <p>Three settings are now explicitly configured on every DuckDB connection that uses the httpfs extension:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SET httpfs_client_implementation = 'curl';"</span><span class="op">)</span></span>
 <span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SET http_timeout = 120;"</span><span class="op">)</span></span>
 <span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SET httpfs_connection_caching = true;"</span><span class="op">)</span></span></code></pre></div>
 <p><code>httpfs_client_implementation = 'curl'</code> switches DuckDB from its built-in <code>httplib</code> implementation to libcurl, which has a different and in this case more reliable code path for S3 range requests. The system <code>curl</code> binary was already being used successfully elsewhere in this package (in <code>download_file</code>) so the underlying library is known to work in this network environment.</p>
 <p><code>http_timeout = 120</code> gives each individual HTTP range request up to 120 seconds before timing out, up from the 30-second default. This is a backstop for genuinely slow responses rather than a fix on its own.</p>
 <p><code>httpfs_connection_caching = true</code> enables connection pooling, so sequential range requests to the same S3 host reuse an already-established TLS session. Without this, each of the 100+ HTTP range requests across a full state partition scan incurs a full TCP handshake and TLS negotiation, adding hundreds of milliseconds of overhead per request.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="handling-broadbandmapfccgov-outages-in-tests">Handling <code>broadbandmap.fcc.gov</code> Outages in Tests<a class="anchor" aria-label="anchor" href="#handling-broadbandmapfccgov-outages-in-tests"></a>
+</h2>
+<p><code><a href="reference/get_nbm_release.html">get_nbm_release()</a></code> and <code><a href="reference/get_nbm_available.html">get_nbm_available()</a></code> both call live endpoints on <code>broadbandmap.fcc.gov</code>. When that host is unreachable — including during the Akamai-fronted outage observed in August 2026 — the functions fail with a curl exit code 92 (HTTP/2 stream reset) or simply hang on HTTP/1.1.</p>
+<div class="section level3">
+<h3 id="same-host-same-edge--both-old-and-bdc-api-paths-are-affected">Same host, same edge — both old and BDC API paths are affected<a class="anchor" aria-label="anchor" href="#same-host-same-edge--both-old-and-bdc-api-paths-are-affected"></a>
+</h3>
+<p>An important constraint: both the legacy map API paths and the BDC Public Data API paths are served from the same host behind the same Akamai CDN edge:</p>
+<ul>
+<li>Legacy: <code>https://broadbandmap.fcc.gov/nbm/map/api/published/filing</code>
+</li>
+<li>BDC API: <code>https://broadbandmap.fcc.gov/api/public/map/listAsOfDates</code>
+</li>
+</ul>
+<p>When the Akamai edge cannot reach the FCC origin, it resets HTTP/2 streams with <code>INTERNAL_ERROR</code> on all paths simultaneously. Switching from the legacy endpoint to the BDC API endpoint does not mitigate a host-level outage because both resolve to the same Akamai IP, go through the same TLS termination, and fail identically when the backend is unavailable. (TCP connects, TLS succeeds, ALPN negotiates <code>h2</code> — the failure happens at the HTTP layer when the edge tries and fails to reach the FCC origin.)</p>
+</div>
+<div class="section level3">
+<h3 id="recommended-fix-skip-tests-when-the-host-is-unreachable">Recommended fix: skip tests when the host is unreachable<a class="anchor" aria-label="anchor" href="#recommended-fix-skip-tests-when-the-host-is-unreachable"></a>
+</h3>
+<p>The tests already use <code>skip_on_cran()</code> and <code>skip_on_ci()</code>, but have no guard against external service outages. A lightweight helper resolves this:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">skip_if_fcc_down</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ok</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/system2.html" class="external-link">system2</a></span><span class="op">(</span><span class="st">"curl"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--silent"</span>, <span class="st">"--max-time"</span>, <span class="st">"5"</span>, <span class="st">"--head"</span>,</span>
+<span>                      <span class="st">"https://broadbandmap.fcc.gov/"</span><span class="op">)</span>,</span>
+<span>            stdout <span class="op">=</span> <span class="cn">FALSE</span>, stderr <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span></span>
+<span>  <span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">ok</span><span class="op">)</span> <span class="fu">skip</span><span class="op">(</span><span class="st">"broadbandmap.fcc.gov unreachable"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Each affected test adds one line:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">test_that</span><span class="op">(</span><span class="st">"get_nbm_release return a data frame"</span>, <span class="op">{</span></span>
+<span>  <span class="fu">skip_on_cran</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">skip_on_ci</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">skip_if_fcc_down</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">expect_equal</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="fu"><a href="reference/get_nbm_release.html">get_nbm_release</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>This converts a hard <code>FAIL</code> into a <code>SKIP</code> whenever the service is down — the correct outcome for a test whose failure reflects an external dependency, not a code defect. The BDC API migration (replacing the legacy endpoints with <code>listAsOfDates</code> and <code>listAvailabilityData</code>) remains worthwhile for long-term stability, but does not eliminate the need for this guard, since both endpoint families share the same host.</p>
 </div>
 <div class="section level3">
 <h3 id="why-queries-are-still-slower-than-they-were-in-mid-2025">Why queries are still slower than they were in mid-2025<a class="anchor" aria-label="anchor" href="#why-queries-are-still-slower-than-they-were-in-mid-2025"></a>
@@ -296,14 +714,15 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Olivier Leroy <br><small class="roles"> Author, maintainer </small>   </li>
+<li>Olivier Leroy <br><small class="roles"> Author </small>   </li>
+<li>John Hall <br><small class="roles"> Author, maintainer </small>   </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://app.codecov.io/gh/ruralinnovation/cori.data.fcc?branch=main" class="external-link"><img src="https://codecov.io/gh/ruralinnovation/cori.data.fcc/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
@@ -313,7 +732,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Olivier Leroy.</p>
+  <p>Developed by Olivier Leroy, John Hall.</p>
 </div>
 
 <div class="pkgdown-footer-right">

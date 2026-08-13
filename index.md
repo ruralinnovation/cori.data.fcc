@@ -18,8 +18,8 @@ You can install the development version of `cori.data.fcc` from
 
 ``` r
 
-# install.packages("devtools")
-devtools::install_github("ruralinnovation/cori.data.fcc")
+# install.packages("remotes")
+remotes::install_github("ruralinnovation/cori.data.fcc")
 ```
 
 ## Examples
@@ -42,21 +42,24 @@ guilford_cty <- get_nbm_county_raw(geoid_co = "37081")
 dplyr::glimpse(guilford_cty)
 #> Rows: 1,427,284
 #> Columns: 14
-#> $ frn                           <chr> "0001857952", "0001857952", "0001857952"…
-#> $ provider_id                   <chr> "130077", "130077", "130077", "130077", …
-#> $ brand_name                    <chr> "AT&T", "AT&T", "AT&T", "AT&T", "AT&T", …
-#> $ location_id                   <chr> "1344957580", "1344971629", "1344978794"…
-#> $ max_advertised_download_speed <int> 75, 10, 0, 10, 10, 10, 0, 0, 0, 0, 0, 10…
-#> $ max_advertised_upload_speed   <int> 20, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, …
-#> $ low_latency                   <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE…
-#> $ business_residential_code     <chr> "X", "X", "X", "X", "X", "X", "X", "X", …
-#> $ geoid_bl                      <chr> "370810160062003", "370810160051032", "3…
-#> $ geoid_co                      <chr> "37081", "37081", "37081", "37081", "370…
-#> $ file_time_stamp               <date> 2026-04-29, 2026-04-29, 2026-04-29, 202…
-#> $ release                       <date> 2025-06-01, 2025-06-01, 2025-06-01, 202…
-#> $ state_usps                    <chr> "NC", "NC", "NC", "NC", "NC", "NC", "NC"…
-#> $ technology                    <dbl> 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, …
 ```
+
+| Column                          | Type | Example           |
+|---------------------------------|------|-------------------|
+| `frn`                           | chr  | “0001857952”      |
+| `provider_id`                   | chr  | “130077”          |
+| `brand_name`                    | chr  | “AT&T”            |
+| `location_id`                   | chr  | “1344957580”      |
+| `max_advertised_download_speed` | int  | 75                |
+| `max_advertised_upload_speed`   | int  | 20                |
+| `low_latency`                   | lgl  | TRUE              |
+| `business_residential_code`     | chr  | “X”               |
+| `geoid_bl`                      | chr  | “370810160062003” |
+| `geoid_co`                      | chr  | “37081”           |
+| `file_time_stamp`               | date | 2026-04-29        |
+| `release`                       | date | 2025-06-01        |
+| `state_usps`                    | chr  | “NC”              |
+| `technology`                    | dbl  | 10                |
 
 - Access a CORI-opinionated, Census-block level version of the **latest
   NBM release**:
@@ -69,55 +72,64 @@ nbm_bl <- get_nbm_bl(geoid_co = "47051")
 dplyr::glimpse(nbm_bl)
 #> Rows: 2,146
 #> Columns: 21
-#> $ geoid_bl                                <chr> "470519601001000", "4705196010…
-#> $ geoid_st                                <chr> "47", "47", "47", "47", "47", …
-#> $ geoid_co                                <chr> "47051", "47051", "47051", "47…
-#> $ cnt_total_locations                     <int> NA, NA, NA, NA, 5, NA, 8, 3, 1…
-#> $ cnt_bead_locations                      <int> NA, NA, NA, NA, 0, NA, 0, 2, 0…
-#> $ cnt_copper_locations                    <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
-#> $ cnt_cable_locations                     <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
-#> $ cnt_fiber_locations                     <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
-#> $ cnt_other_locations                     <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
-#> $ cnt_unlicensed_fixed_wireless_locations <int> NA, NA, NA, NA, 4, NA, 8, 3, 1…
-#> $ cnt_licensed_fixed_wireless_locations   <int> NA, NA, NA, NA, 0, NA, 0, 2, 0…
-#> $ cnt_LBR_fixed_wireless_locations        <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
-#> $ cnt_terrestrial_locations               <int> NA, NA, NA, NA, 0, NA, 0, 2, 0…
-#> $ cnt_25_3                                <int> NA, NA, NA, NA, 0, NA, 0, 2, 0…
-#> $ cnt_100_20                              <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
-#> $ cnt_100_100                             <int> NA, NA, NA, NA, 0, NA, 0, 0, 0…
-#> $ cnt_distcint_frn                        <int> NA, NA, NA, NA, NA, NA, NA, 1,…
-#> $ array_frn                               <list> <NULL>, <NULL>, <NULL>, <NULL…
-#> $ combo_frn                               <dbl> NA, NA, NA, NA, NA, NA, NA, 1.…
-#> $ release                                 <date> 2025-12-01, 2025-12-01, 2025-…
-#> $ state_abbr                              <chr> "TN", "TN", "TN", "TN", "TN", …
+```
+
+| Column                                    | Type | Example           |
+|-------------------------------------------|------|-------------------|
+| `geoid_bl`                                | chr  | “470519601001000” |
+| `geoid_st`                                | chr  | “47”              |
+| `geoid_co`                                | chr  | “47051”           |
+| `cnt_total_locations`                     | int  | 5                 |
+| `cnt_bead_locations`                      | int  | 0                 |
+| `cnt_copper_locations`                    | int  | 0                 |
+| `cnt_cable_locations`                     | int  | 0                 |
+| `cnt_fiber_locations`                     | int  | 0                 |
+| `cnt_other_locations`                     | int  | 0                 |
+| `cnt_unlicensed_fixed_wireless_locations` | int  | 4                 |
+| `cnt_licensed_fixed_wireless_locations`   | int  | 0                 |
+| `cnt_LBR_fixed_wireless_locations`        | int  | 0                 |
+| `cnt_terrestrial_locations`               | int  | 0                 |
+| `cnt_25_3`                                | int  | 0                 |
+| `cnt_100_20`                              | int  | 0                 |
+| `cnt_100_100`                             | int  | 0                 |
+| `cnt_distcint_frn`                        | int  | 1                 |
+| `array_frn`                               | list | NULL              |
+| `combo_frn`                               | dbl  | 1.xxx             |
+| `release`                                 | date | 2025-12-01        |
+| `state_abbr`                              | chr  | “TN”              |
+
+``` r
 
 # get census block covered by an ISP identified by their FRN
 skymesh <- get_frn_nbm_bl("0027136753")
 dplyr::glimpse(skymesh)
 #> Rows: 12
 #> Columns: 21
-#> $ geoid_bl                                <chr> "391093401001009", "3910934500…
-#> $ geoid_st                                <chr> "39", "39", "39", "39", "39", …
-#> $ geoid_co                                <chr> "39109", "39109", "39109", "39…
-#> $ cnt_total_locations                     <int> 4, 22, 14, 58, 12, 15, 19, 5, …
-#> $ cnt_bead_locations                      <int> 4, 22, 14, 58, 12, 15, 19, 5, …
-#> $ cnt_copper_locations                    <int> 3, 2, 0, 9, 11, 14, 3, 1, 2, 0…
-#> $ cnt_cable_locations                     <int> 4, 20, 14, 55, 9, 11, 0, 0, 13…
-#> $ cnt_fiber_locations                     <int> 2, 22, 14, 55, 12, 15, 6, 3, 1…
-#> $ cnt_other_locations                     <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-#> $ cnt_unlicensed_fixed_wireless_locations <int> 4, 21, 0, 1, 0, 0, 11, 1, 16, …
-#> $ cnt_licensed_fixed_wireless_locations   <int> 3, 22, 13, 57, 12, 15, 18, 5, …
-#> $ cnt_LBR_fixed_wireless_locations        <int> 0, 0, 1, 36, 8, 7, 15, 0, 16, …
-#> $ cnt_terrestrial_locations               <int> 4, 22, 14, 58, 12, 15, 19, 5, …
-#> $ cnt_25_3                                <int> 4, 22, 14, 58, 12, 15, 19, 5, …
-#> $ cnt_100_20                              <int> 4, 22, 14, 58, 12, 15, 17, 5, …
-#> $ cnt_100_100                             <int> 3, 22, 14, 56, 12, 15, 6, 3, 1…
-#> $ cnt_distcint_frn                        <int> 4, 7, 7, 7, 8, 8, 7, 6, 9, 6, …
-#> $ array_frn                               <list> <"0018506568", "0025646373", …
-#> $ combo_frn                               <dbl> 8.639537e+18, 1.599437e+19, 7.…
-#> $ release                                 <date> 2025-12-01, 2025-12-01, 2025-…
-#> $ state_abbr                              <chr> "OH", "OH", "OH", "OH", "OH", …
 ```
+
+| Column | Type | Example |
+|----|----|----|
+| `geoid_bl` | chr | “391093401001009” |
+| `geoid_st` | chr | “39” |
+| `geoid_co` | chr | “39109” |
+| `cnt_total_locations` | int | 4 |
+| `cnt_bead_locations` | int | 4 |
+| `cnt_copper_locations` | int | 3 |
+| `cnt_cable_locations` | int | 4 |
+| `cnt_fiber_locations` | int | 2 |
+| `cnt_other_locations` | int | 0 |
+| `cnt_unlicensed_fixed_wireless_locations` | int | 4 |
+| `cnt_licensed_fixed_wireless_locations` | int | 3 |
+| `cnt_LBR_fixed_wireless_locations` | int | 0 |
+| `cnt_terrestrial_locations` | int | 4 |
+| `cnt_25_3` | int | 4 |
+| `cnt_100_20` | int | 4 |
+| `cnt_100_100` | int | 3 |
+| `cnt_distcint_frn` | int | 4 |
+| `array_frn` | list | \<“0018506568”, “0025646373”, …\> |
+| `combo_frn` | dbl | 8.639537e+18 |
+| `release` | date | 2025-12-01 |
+| `state_abbr` | chr | “OH” |
 
 ### Form 477
 
@@ -129,22 +141,25 @@ f477_vt <- get_f477("VT")
 dplyr::glimpse(f477_vt)
 #> Rows: 2,753,817
 #> Columns: 15
-#> $ Provider_Id        <chr> "7095", "7095", "7095", "7095", "7095", "7095", "70…
-#> $ FRN                <chr> "0017631540", "0017631540", "0017631540", "00176315…
-#> $ ProviderName       <chr> "Kingdom Connection", "Kingdom Connection", "Kingdo…
-#> $ DBAName            <chr> "Kingdom Connection", "Kingdom Connection", "Kingdo…
-#> $ HoldingCompanyName <chr> "Merrill Information Systems", "Merrill Information…
-#> $ HocoNum            <chr> "130808", "130808", "130808", "130808", "130808", "…
-#> $ HocoFinal          <chr> "Merrill Information Systems", "Merrill Information…
-#> $ BlockCode          <chr> "500059570001002", "500059570001003", "500059570001…
-#> $ TechCode           <chr> "70", "70", "70", "70", "70", "70", "70", "70", "70…
-#> $ Consumer           <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…
-#> $ MaxAdDown          <dbl> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, …
-#> $ MaxAdUp            <dbl> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, …
-#> $ Business           <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…
-#> $ Date               <date> 2014-12-01, 2014-12-01, 2014-12-01, 2014-12-01, 20…
-#> $ StateAbbr          <chr> "VT", "VT", "VT", "VT", "VT", "VT", "VT", "VT", "VT…
 ```
+
+| Column               | Type | Example                       |
+|----------------------|------|-------------------------------|
+| `Provider_Id`        | chr  | “7095”                        |
+| `FRN`                | chr  | “0017631540”                  |
+| `ProviderName`       | chr  | “Kingdom Connection”          |
+| `DBAName`            | chr  | “Kingdom Connection”          |
+| `HoldingCompanyName` | chr  | “Merrill Information Systems” |
+| `HocoNum`            | chr  | “130808”                      |
+| `HocoFinal`          | chr  | “Merrill Information Systems” |
+| `BlockCode`          | chr  | “500059570001002”             |
+| `TechCode`           | chr  | “70”                          |
+| `Consumer`           | lgl  | TRUE                          |
+| `MaxAdDown`          | dbl  | 2                             |
+| `MaxAdUp`            | dbl  | 2                             |
+| `Business`           | lgl  | TRUE                          |
+| `Date`               | date | 2014-12-01                    |
+| `StateAbbr`          | chr  | “VT”                          |
 
 ### Utilities
 
@@ -155,12 +170,15 @@ Access the dictionary for each dataset:
 dplyr::glimpse(get_fcc_dictionary())
 #> Rows: 50
 #> Columns: 5
-#> $ dataset         <chr> "f477", "f477", "f477", "f477", "f477", "f477", "f477"…
-#> $ var_name        <chr> "Provider_Id", "FRN", "ProviderName", "DBAName", "Hold…
-#> $ var_type        <chr> "TEXT", "TEXT", "VARCHAR", "VARCHAR", "VARCHAR", "TEXT…
-#> $ var_description <chr> "filing number (assigned by FCC)", "FCC registration n…
-#> $ var_example     <chr> "8026", "0001570936", "Arctic Slope Telephone Associat…
 ```
+
+| Column            | Type | Example                           |
+|-------------------|------|-----------------------------------|
+| `dataset`         | chr  | “f477”                            |
+| `var_name`        | chr  | “Provider_Id”                     |
+| `var_type`        | chr  | “TEXT”                            |
+| `var_description` | chr  | “filing number (assigned by FCC)” |
+| `var_example`     | chr  | “8026”                            |
 
 The package also provides a list of Provider IDs and FRNs.
 
@@ -168,12 +186,15 @@ The package also provides a list of Provider IDs and FRNs.
 
 str(fcc_provider)
 #> 'data.frame':    4456 obs. of  5 variables:
-#>  $ provider_name : chr  "@Link Services, LLC" "1 Point Communications" "101Netlink" "123.Net, Inc" ...
-#>  $ affiliation   : chr  "AtLink Services, LLC" "1 Point Communications" "101Netlink" "123.Net, Inc." ...
-#>  $ operation_type: chr  "Non-ILEC" "Non-ILEC" "Non-ILEC" "Non-ILEC" ...
-#>  $ frn           : chr  "0016085920" "0021352968" "0018247254" "0008590846" ...
-#>  $ provider_id   : num  290004 270002 190002 460000 490000 ...
 ```
+
+| Column           | Type | Example                |
+|------------------|------|------------------------|
+| `provider_name`  | chr  | “@Link Services, LLC”  |
+| `affiliation`    | chr  | “AtLink Services, LLC” |
+| `operation_type` | chr  | “Non-ILEC”             |
+| `frn`            | chr  | “0016085920”           |
+| `provider_id`    | num  | 290004                 |
 
 ## Incorporating the BDC Public Data API
 
@@ -310,6 +331,71 @@ already-established TLS session. Without this, each of the 100+ HTTP
 range requests across a full state partition scan incurs a full TCP
 handshake and TLS negotiation, adding hundreds of milliseconds of
 overhead per request.
+
+## Handling `broadbandmap.fcc.gov` Outages in Tests
+
+[`get_nbm_release()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_release.md)
+and
+[`get_nbm_available()`](https://ruralinnovation.github.io/cori.data.fcc/reference/get_nbm_available.md)
+both call live endpoints on `broadbandmap.fcc.gov`. When that host is
+unreachable — including during the Akamai-fronted outage observed in
+August 2026 — the functions fail with a curl exit code 92 (HTTP/2 stream
+reset) or simply hang on HTTP/1.1.
+
+### Same host, same edge — both old and BDC API paths are affected
+
+An important constraint: both the legacy map API paths and the BDC
+Public Data API paths are served from the same host behind the same
+Akamai CDN edge:
+
+- Legacy: `https://broadbandmap.fcc.gov/nbm/map/api/published/filing`
+- BDC API: `https://broadbandmap.fcc.gov/api/public/map/listAsOfDates`
+
+When the Akamai edge cannot reach the FCC origin, it resets HTTP/2
+streams with `INTERNAL_ERROR` on all paths simultaneously. Switching
+from the legacy endpoint to the BDC API endpoint does not mitigate a
+host-level outage because both resolve to the same Akamai IP, go through
+the same TLS termination, and fail identically when the backend is
+unavailable. (TCP connects, TLS succeeds, ALPN negotiates `h2` — the
+failure happens at the HTTP layer when the edge tries and fails to reach
+the FCC origin.)
+
+### Recommended fix: skip tests when the host is unreachable
+
+The tests already use `skip_on_cran()` and `skip_on_ci()`, but have no
+guard against external service outages. A lightweight helper resolves
+this:
+
+``` r
+
+skip_if_fcc_down <- function() {
+  ok <- tryCatch({
+    system2("curl", c("--silent", "--max-time", "5", "--head",
+                      "https://broadbandmap.fcc.gov/"),
+            stdout = FALSE, stderr = FALSE) == 0
+  }, error = function(e) FALSE)
+  if (!ok) skip("broadbandmap.fcc.gov unreachable")
+}
+```
+
+Each affected test adds one line:
+
+``` r
+
+test_that("get_nbm_release return a data frame", {
+  skip_on_cran()
+  skip_on_ci()
+  skip_if_fcc_down()
+  expect_equal(isTRUE(is.data.frame(get_nbm_release())), TRUE)
+})
+```
+
+This converts a hard `FAIL` into a `SKIP` whenever the service is down —
+the correct outcome for a test whose failure reflects an external
+dependency, not a code defect. The BDC API migration (replacing the
+legacy endpoints with `listAsOfDates` and `listAvailabilityData`)
+remains worthwhile for long-term stability, but does not eliminate the
+need for this guard, since both endpoint families share the same host.
 
 ### Why queries are still slower than they were in mid-2025
 
