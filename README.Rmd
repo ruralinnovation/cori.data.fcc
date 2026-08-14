@@ -2,10 +2,12 @@
 output: github_document
 ---
 
+```{=html}
 <!--
   -- *Note: DO NOT EDIT `README.md` TO CHANGE THE CONTENT OF THIS README. It is generated from [`README.Rmd`](README.Rmd):*
   -- `quarto render README.Rmd --to gfm --output README.md`
   -->
+```
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -20,17 +22,19 @@ knitr::opts_chunk$set(
 # cori.data.fcc
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 The goal of `cori.data.fcc` is to facilitate the discovery, analysis, and use of FCC public data releases.
 
 The package provides access to data from the following sources:
 
-  -  [National Broadband Map (NBM)](https://broadbandmap.fcc.gov/home) data[^bdc]
-  -  [Form 477](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) data
+-   [National Broadband Map (NBM)](https://broadbandmap.fcc.gov/home) data[^1]
+-   [Form 477](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) data
 
-[^bdc]: This data describes what internet services are available to individual locations across the country, along with new maps of mobile coverage, as reported by Internet Service Providers (ISPs). It is part of the FCC’s ongoing [Broadband Data Collection](https://broadbandmap.fcc.gov/data-download/nationwide-data)).
+[^1]: This data describes what internet services are available to individual locations across the country, along with new maps of mobile coverage, as reported by Internet Service Providers (ISPs). It is part of the FCC’s ongoing [Broadband Data Collection](https://broadbandmap.fcc.gov/data-download/nationwide-data)).
 
 See [**Democratizing analytics on FCC’s (big) data**](https://ruralinnovation.github.io/blog/posts/12_fcc-data/) for more info about the different ways we are using this data.
 
@@ -53,7 +57,7 @@ library(cori.data.fcc)
 
 Key uses:
 
-- Access parquet files stored in a CORI s3 bucket, by county:
+-   Access parquet files stored in a CORI s3 bucket, by county:
 
 ```{r nbm_raw}
 guilford_cty <- get_nbm_county_raw(geoid_co = "37081")
@@ -63,24 +67,24 @@ dplyr::glimpse(guilford_cty)
 #> Columns: 14
 ```
 
-| Column | Type | Example |
-|---|---|---|
-| `frn` | chr | "0001857952" |
-| `provider_id` | chr | "130077" |
-| `brand_name` | chr | "AT&T" |
-| `location_id` | chr | "1344957580" |
-| `max_advertised_download_speed` | int | 75 |
-| `max_advertised_upload_speed` | int | 20 |
-| `low_latency` | lgl | TRUE |
-| `business_residential_code` | chr | "X" |
-| `geoid_bl` | chr | "370810160062003" |
-| `geoid_co` | chr | "37081" |
-| `file_time_stamp` | date | 2026-04-29 |
-| `release` | date | 2025-06-01 |
-| `state_usps` | chr | "NC" |
-| `technology` | dbl | 10 |
+| Column                          | Type | Example           |
+|---------------------------------|------|-------------------|
+| `frn`                           | chr  | "0001857952"      |
+| `provider_id`                   | chr  | "130077"          |
+| `brand_name`                    | chr  | "AT&T"            |
+| `location_id`                   | chr  | "1344957580"      |
+| `max_advertised_download_speed` | int  | 75                |
+| `max_advertised_upload_speed`   | int  | 20                |
+| `low_latency`                   | lgl  | TRUE              |
+| `business_residential_code`     | chr  | "X"               |
+| `geoid_bl`                      | chr  | "370810160062003" |
+| `geoid_co`                      | chr  | "37081"           |
+| `file_time_stamp`               | date | 2026-04-29        |
+| `release`                       | date | 2025-06-01        |
+| `state_usps`                    | chr  | "NC"              |
+| `technology`                    | dbl  | 10                |
 
-- Access a CORI-opinionated, Census-block level version of the **latest NBM release**:
+-   Access a CORI-opinionated, Census-block level version of the **latest NBM release**:
 
 ```{r nbm_block}
 # get a county
@@ -91,29 +95,29 @@ dplyr::glimpse(nbm_bl)
 #> Columns: 21
 ```
 
-| Column | Type | Example |
-|---|---|---|
-| `geoid_bl` | chr | "470519601001000" |
-| `geoid_st` | chr | "47" |
-| `geoid_co` | chr | "47051" |
-| `cnt_total_locations` | int | 5 |
-| `cnt_bead_locations` | int | 0 |
-| `cnt_copper_locations` | int | 0 |
-| `cnt_cable_locations` | int | 0 |
-| `cnt_fiber_locations` | int | 0 |
-| `cnt_other_locations` | int | 0 |
-| `cnt_unlicensed_fixed_wireless_locations` | int | 4 |
-| `cnt_licensed_fixed_wireless_locations` | int | 0 |
-| `cnt_LBR_fixed_wireless_locations` | int | 0 |
-| `cnt_terrestrial_locations` | int | 0 |
-| `cnt_25_3` | int | 0 |
-| `cnt_100_20` | int | 0 |
-| `cnt_100_100` | int | 0 |
-| `cnt_distcint_frn` | int | 1 |
-| `array_frn` | list | NULL |
-| `combo_frn` | dbl | 1.xxx |
-| `release` | date | 2025-12-01 |
-| `state_abbr` | chr | "TN" |
+| Column                                    | Type | Example           |
+|-------------------------------------------|------|-------------------|
+| `geoid_bl`                                | chr  | "470519601001000" |
+| `geoid_st`                                | chr  | "47"              |
+| `geoid_co`                                | chr  | "47051"           |
+| `cnt_total_locations`                     | int  | 5                 |
+| `cnt_bead_locations`                      | int  | 0                 |
+| `cnt_copper_locations`                    | int  | 0                 |
+| `cnt_cable_locations`                     | int  | 0                 |
+| `cnt_fiber_locations`                     | int  | 0                 |
+| `cnt_other_locations`                     | int  | 0                 |
+| `cnt_unlicensed_fixed_wireless_locations` | int  | 4                 |
+| `cnt_licensed_fixed_wireless_locations`   | int  | 0                 |
+| `cnt_LBR_fixed_wireless_locations`        | int  | 0                 |
+| `cnt_terrestrial_locations`               | int  | 0                 |
+| `cnt_25_3`                                | int  | 0                 |
+| `cnt_100_20`                              | int  | 0                 |
+| `cnt_100_100`                             | int  | 0                 |
+| `cnt_distcint_frn`                        | int  | 1                 |
+| `array_frn`                               | list | NULL              |
+| `combo_frn`                               | dbl  | 1.xxx             |
+| `release`                                 | date | 2025-12-01        |
+| `state_abbr`                              | chr  | "TN"              |
 
 ```{r nbm_block_frn}
 # get census block covered by an ISP identified by their FRN
@@ -124,7 +128,7 @@ dplyr::glimpse(skymesh)
 ```
 
 | Column | Type | Example |
-|---|---|---|
+|----|----|----|
 | `geoid_bl` | chr | "391093401001009" |
 | `geoid_st` | chr | "39" |
 | `geoid_co` | chr | "39109" |
@@ -142,7 +146,7 @@ dplyr::glimpse(skymesh)
 | `cnt_100_20` | int | 4 |
 | `cnt_100_100` | int | 3 |
 | `cnt_distcint_frn` | int | 4 |
-| `array_frn` | list | <"0018506568", "0025646373", …> |
+| `array_frn` | list | \<"0018506568", "0025646373", …\> |
 | `combo_frn` | dbl | 8.639537e+18 |
 | `release` | date | 2025-12-01 |
 | `state_abbr` | chr | "OH" |
@@ -158,23 +162,23 @@ dplyr::glimpse(f477_vt)
 #> Columns: 15
 ```
 
-| Column | Type | Example |
-|---|---|---|
-| `Provider_Id` | chr | "7095" |
-| `FRN` | chr | "0017631540" |
-| `ProviderName` | chr | "Kingdom Connection" |
-| `DBAName` | chr | "Kingdom Connection" |
-| `HoldingCompanyName` | chr | "Merrill Information Systems" |
-| `HocoNum` | chr | "130808" |
-| `HocoFinal` | chr | "Merrill Information Systems" |
-| `BlockCode` | chr | "500059570001002" |
-| `TechCode` | chr | "70" |
-| `Consumer` | lgl | TRUE |
-| `MaxAdDown` | dbl | 2 |
-| `MaxAdUp` | dbl | 2 |
-| `Business` | lgl | TRUE |
-| `Date` | date | 2014-12-01 |
-| `StateAbbr` | chr | "VT" |
+| Column               | Type | Example                       |
+|----------------------|------|-------------------------------|
+| `Provider_Id`        | chr  | "7095"                        |
+| `FRN`                | chr  | "0017631540"                  |
+| `ProviderName`       | chr  | "Kingdom Connection"          |
+| `DBAName`            | chr  | "Kingdom Connection"          |
+| `HoldingCompanyName` | chr  | "Merrill Information Systems" |
+| `HocoNum`            | chr  | "130808"                      |
+| `HocoFinal`          | chr  | "Merrill Information Systems" |
+| `BlockCode`          | chr  | "500059570001002"             |
+| `TechCode`           | chr  | "70"                          |
+| `Consumer`           | lgl  | TRUE                          |
+| `MaxAdDown`          | dbl  | 2                             |
+| `MaxAdUp`            | dbl  | 2                             |
+| `Business`           | lgl  | TRUE                          |
+| `Date`               | date | 2014-12-01                    |
+| `StateAbbr`          | chr  | "VT"                          |
 
 ### Utilities
 
@@ -186,14 +190,13 @@ dplyr::glimpse(get_fcc_dictionary())
 #> Columns: 5
 ```
 
-| Column | Type | Example |
-|---|---|---|
-| `dataset` | chr | "f477" |
-| `var_name` | chr | "Provider_Id" |
-| `var_type` | chr | "TEXT" |
-| `var_description` | chr | "filing number (assigned by FCC)" |
-| `var_example` | chr | "8026" |
-
+| Column            | Type | Example                           |
+|-------------------|------|-----------------------------------|
+| `dataset`         | chr  | "f477"                            |
+| `var_name`        | chr  | "Provider_Id"                     |
+| `var_type`        | chr  | "TEXT"                            |
+| `var_description` | chr  | "filing number (assigned by FCC)" |
+| `var_example`     | chr  | "8026"                            |
 
 The package also provides a list of Provider IDs and FRNs.
 
@@ -202,13 +205,12 @@ str(fcc_provider)
 #> 'data.frame':    4456 obs. of  5 variables:
 ```
 
-| Column | Type | Example |
-|---|---|---|
-| `provider_name` | chr | "@Link Services, LLC" |
-| `affiliation` | chr | "AtLink Services, LLC" |
-| `operation_type` | chr | "Non-ILEC" |
-| `frn` | chr | "0016085920" |
-| `provider_id` | num | 290004 |
-
+| Column           | Type | Example                |
+|------------------|------|------------------------|
+| `provider_name`  | chr  | "@Link Services, LLC"  |
+| `affiliation`    | chr  | "AtLink Services, LLC" |
+| `operation_type` | chr  | "Non-ILEC"             |
+| `frn`            | chr  | "0016085920"           |
+| `provider_id`    | num  | 290004                 |
 
 [Development notes](DEVELOPMENT.MD).
