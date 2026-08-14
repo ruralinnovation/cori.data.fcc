@@ -10,6 +10,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ruralinnovation/cori.data.fcc/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 The goal of `cori.data.fcc` is to facilitate the discovery, analysis,
